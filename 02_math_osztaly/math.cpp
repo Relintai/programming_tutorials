@@ -48,11 +48,11 @@ int Math::rand() {
 }
 
 float Math::randf() {
-	return rand() / RANDOM_32BIT_MAX;
+	return rand() / static_cast<float>(RANDOM_32BIT_MAX);
 }
 
 double Math::randd() {
-	return rand() / RANDOM_32BIT_MAX;
+	return rand() / static_cast<double>(RANDOM_32BIT_MAX);
 }
 
 int rand(const int m) {
