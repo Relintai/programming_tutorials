@@ -4,6 +4,9 @@ rev 3: Hozzáadtam vector és float-os közötti szorzás operátorokat mindkét
 rev 4: Vector length képlet hozzáadva.
 rev 5: Vector dot() képletben hiányzott egy .y
 rev 6: lenght_squared -> length_squared
+rev 7: Rect2 is_equal_approx paraméter típus kijavítva.
+rev 8: Rect2 grow, shrink visszatérési érték javítva (Már nincs)
+rev 9: intersects_include_borders typo javítva
 
 1. Implementáld az alábbi 2ds matematikai vektor osztályt:
 
@@ -108,9 +111,9 @@ rev 6: lenght_squared -> length_squared
 | + encloses(b : Rect2) : bool                        |  -> Lejjebb
 | + has_no_area() : bool                              |
 | + has_point(x : float, y : float) : bool            |  
-| + is_equal_approx(b : Vector3) : bool               |  
-| + grow(by : float) : Rect2                          |  -> x, y, csökkent, w,h növel by-al
-| + shrink(by : float) : Rect2                        |  -> x, y, növel, w,h csökkent by-al
+| + is_equal_approx(b : Rect2) : bool                 |  
+| + grow(by : float)                                  |  -> x, y, csökkent, w,h növel by-al
+| + shrink(by : float)                                |  -> x, y, növel, w,h csökkent by-al
 | + operator+=(b: Rect2)                              | 
 | + operator-=(b: Rect2)                              |
 | + operator+(a: Rect2, b: Rect2) : Rect2             |
@@ -122,22 +125,6 @@ rev 6: lenght_squared -> length_squared
 | + Rect2(x : float, y : float)                       |
 | + Rect2(x : float, y : float, w : float, h : float) |
 ------------------------------------------------------|
-
-intersects_include_borders:
-	if (x > (b.x + b.w))
-		return false;
-
-	if ((x + w) < b.x)
-		return false;
-
-	if (y > (b.z + b.h))
-		return false;
-
-	if ((y + h) < b.y)
-		return false;
-
-     return true;
-
 
 intersects:
 	if (x >= (b.x + b.w))
@@ -153,7 +140,21 @@ intersects:
 		return false;
 
     return true;
-}
+
+intersects_include_borders:
+	if (x > (b.x + b.w))
+		return false;
+
+	if ((x + w) < b.x)
+		return false;
+
+	if (y > (b.y + b.h))
+		return false;
+
+	if ((y + h) < b.y)
+		return false;
+
+     return true;
 
 Encloses:
 
