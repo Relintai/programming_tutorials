@@ -3,10 +3,11 @@ rev 2: abs() képlet hozzáadva.
 rev 3: Hozzáadtam vector és float-os közötti szorzás operátorokat mindkét vektorhoz.
 rev 4: Vector length képlet hozzáadva.
 rev 5: Vector dot() képletben hiányzott egy .y
-rev 6: lenght_squared -> length_squared
+rev 6: lenght_squared -> length_squared.
 rev 7: Rect2 is_equal_approx paraméter típus kijavítva.
-rev 8: Rect2 grow, shrink visszatérési érték javítva (Már nincs)
-rev 9: intersects_include_borders typo javítva
+rev 8: Rect2 grow, shrink visszatérési érték javítva (Már nincs).
+rev 9: intersects_include_borders typo javítva.
+rev 10: IntVectorba pop_back metódus hozzáadva.
 
 1. Implementáld az alábbi 2ds matematikai vektor osztályt:
 
@@ -169,6 +170,7 @@ return (b.x >= x) && (b.y >= y) &&
 |  class IntVector                                    |
 |-----------------------------------------------------|
 | + push_back(element : int)                          | 
+| + pop_back()                                        | -> utolsó elem törlése
 | + remove(index : int)                               |  
 | + erase(element : int)                              | 
 | + clear()                                           |  
@@ -198,6 +200,9 @@ return (b.x >= x) && (b.y >= y) &&
 ------------------------------------------------------|
 
 5. A 4. feladatban elékszített IntVektor osztályból csinálj egy templatekkel általánosított Vector osztályt.
+
+Fontos! A templatelt tagfüggvényeket implementációját vector.h-ba kell rakni! Vagy bele az osztályba, vagy a vector.h aljára!
+Enélkül undefined reference hibákat fog dobmi a fordító!
 
 Eddíg pl:
 
