@@ -1,4 +1,7 @@
 
+.vscode
+.vscode/**
+
 obj
 bin
 obj/**
