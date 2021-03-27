@@ -32,8 +32,8 @@
 | + operator-=(b: Vector2)                      |
 | + operator+(a: Vector2, b: Vector2) : Vector2 |
 | + operator-(a: Vector2, b: Vector2) : Vector2 |
-| + operator==(b: Vector2) : bool               |
-| + operator!=(b: Vector2) : bool               |
+| + operator==(b: Vector2, b: Vector2) : bool   |
+| + operator!=(b: Vector2, b: Vector2) : bool   |
 | + Vector2()                                   |
 | + Vector2(b : Vector2)                        |
 | + Vector2(x : float, y : float)               |
@@ -73,8 +73,8 @@
 | + operator-=(b: Vector3)                      |
 | + operator+(a: Vector3, b: Vector3) : Vector3 |
 | + operator-(a: Vector3, b: Vector3) : Vector3 |
-| + operator==(b: Vector3) : bool               |
-| + operator!=(b: Vector3) : bool               |
+| + operator==(b: Vector3, b: Vector2) : bool   |
+| + operator!=(b: Vector3, b: Vector2) : bool   |
 | + Vector3()                                   |
 | + Vector3(b : Vector3)                        |
 | + Vector3(x : float, y : float, z : float)    |
