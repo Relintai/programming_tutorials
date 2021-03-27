@@ -1,4 +1,4 @@
-rev 1: 
+rev 1: Néhány képlet hozzáadva / javítva. Néhány elírás javítva.
 rev 2: abs() képlet hozzáadva.
 rev 3: Hozzáadtam vector és float-os közötti szorzás operátorokat mindkét vektorhoz.
 rev 4: Vector length képlet hozzáadva.
@@ -284,7 +284,8 @@ int main() {
 7. Valamelyik vektor osztályból készíts egy saját String osztályt. (Vector<char> -al ekvivalens), de készítsd el
    template nélkül, illetve adj hozzá általad hasznosnak ítélt függvényeket.
    néhány ötlet: to_float(), to_double(), to_int(), trim(), replace(), find(val : String), begins_with(str : String) : bool, ends_with(), 
-   sub_str(int from, int num = -1), c_str(), operator==, operator!=, operator=, operator+=, operator+, remove(str : String), etc.
+   sub_str(int from, int num = -1), c_str(), operator==, operator!=, operator=, operator+=, operator+, remove(str : String),
+   print(), format(), etc.
 
 8. Az előző feladatokban sok helyen meg lehet jelölni paramétereket konstansként, illetve pl. konstans referenciává lehet alakítani őket.
    Menj végig az előző osztályokon, és mindenhol, ahol van értelme, ezeket add hozzá.
