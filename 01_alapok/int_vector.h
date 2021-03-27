@@ -1,5 +1,5 @@
-#ifndef IntVector_H
-#define IntVector_H
+#ifndef INT_VECTOR_H
+#define INT_VECTOR_H
 
 class IntVector {
 
