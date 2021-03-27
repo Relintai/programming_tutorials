@@ -78,13 +78,13 @@ float Math::atan2(float a, float b) {
     return ::atan2(a, b);
 }
 
-Akkor a feladat:
+Akkor a feladatok:
 
 1. Írd meg az alábbi segédosztályt:
 
 (Az includeok: #include <math.h>, #include <stdlib.h>, #include <time.h>, #include <cstdint>)
 
-Defineok a tetejére:
+Defineok a header tetejére:
 
 #define MATH_PI 3.1415926535897932384626433833
 #define EPSILON 0.00001
@@ -110,8 +110,8 @@ UML:
 | + acos(x : double) : double { static }                     |  -> return ::acos(x);
 | + atan(x : float) : float { static }                       |  -> return ::atanf(x);
 | + atan(x : double) : double { static }                     |  -> return ::atan(x);
-| + atan2(x : float) : float { static }                      |  -> return ::atan2f(x);
-| + atan2(x : double) : double { static }                    |  -> return ::atan2(x);
+| + atan2(x : float, y : float) : float { static }           |  -> return ::atan2f(x, y);
+| + atan2(x : double, y : double) : double { static }        |  -> return ::atan2(x, y);
 |                                                            |
 | + sqrt(x : float) : float { static }                       |  -> return ::sqrtf(x);
 | + sqrt(x : double) : double { static }                     |  -> return ::sqrt(x);
@@ -126,30 +126,36 @@ UML:
 | + log(x : float) : float { static }                        |  -> return ::logf(x);
 | + log(x : double) : double { static }                      |  -> return ::log(x);
 |                                                            |
-| + inv_sqrt(x : float) : float { static }                   |  -> return (float)(1.0 / ::sqrt(x));
-| + fast_inv_sqrt(x : float) : float { static }              |  -> Implementáció lejjebb
+| + inv_sqrt(x : float) : float { static }                   |  -> return (float)(1.0 / ::sqrtf(x));
+| + fast_inv_sqrt(number : float) : float { static }         |  -> Implementáció lejjebb
 |                                                            |
-| + abs(x : float) : float { static }                        |  -> return absd(x);
-| + abs(x : double) : double { static }                      |  -> return absf(x);
+| + abs(x : float) : float { static }                        |  -> return x > 0 ? x : -x;
+| + abs(x : double) : double { static }                      |  -> return x > 0 ? x : -x;
 | + abs(x : int) : int { static }                            |  -> return x > 0 ? x : -x;
 |                                                            |
+| + deg2rad(x : float) : float { static }                    |  -> return x * MATH_PI / 180.0;
 | + deg2rad(x : double) : double { static }                  |  -> return x * MATH_PI / 180.0;
 | + deg2rad(x : int) : int { static }                        |  -> return x * MATH_PI / 180.0;
+|                                                            |
+| + rad2deg(x : float) : float { static }                    |  -> return x * 180.0 / MATH_PI;
 | + rad2deg(x : double) : double { static }                  |  -> return x * 180.0 / MATH_PI;
 | + rad2deg(x : int) : int { static }                        |  -> return x * 180.0 / MATH_PI;
 |                                                            |
-| + is_equal_approx(float a, float b) : bool { static }      |  -> mint vektorban
-| + is_zero_approx(float a) : bool { static }                | 
+| + is_equal_approx(a : float, b : float) : bool { static }  |  -> mint vektorban
+| + is_zero_approx(a : float) : bool { static }              | 
 |                                                            |
-| + seed(unsigned int s) { static }                          |  -> srand(s);
+| + seed(s : unsigned int) { static }                        |  -> srand(s);
 | + randomize() { static }                                   |  -> srand(time(NULL));
 |                                                            |
 | + rand() : int { static }                                  |  -> return rand();
 | + randf() : float { static }                               |  -> return rand() / RANDOM_32BIT_MAX;
 | + randd() : float { static }                               |  -> return rand() / RANDOM_32BIT_MAX;
 |                                                            |
-| + rand(float from, float to) : float { static }            |  -> return randf() * to + from;
-| + rand(double from, double to) : double { static }         |  -> return randd() * to + from;
+| + rand(int m) : int { static }                             |  -> return rand() % m;
+|                                                            |
+| + rand(from : int, to : int) : int { static }              |  -> return (rand() % (to - from)) + from;
+| + rand(from : float, to : float) : float { static }        |  -> return randf() * (to - from) + from;
+| + rand(from : double, to : double) : double { static }     |  -> return randd() * (to - from) + from;
 |------------------------------------------------------------|
 
 fast_inv_sqrt:
@@ -189,4 +195,9 @@ Egyéb:
 Megj: Ezek a random (ranf, randd) függvények nem a leggyorsabbak, nagyon sokat lehet rajtuk gyorsítani 
 alapszinű /low level/ hardwares ismeretekkel, és matematikával. Akit érdekel érdemes kürölnézni nagyobb
 projektekben, hogy hogy vannak ilyenek implementálva.
+
+
+2. Most, hogy már kész a Math osztályod, menj visza a Vector2, Vector3, és Rect2 osztályokba,
+nézd végig a függvényeiket, és cserélj le mindent amit lehet, Math osztálybelire.
+
 
