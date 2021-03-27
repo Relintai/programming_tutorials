@@ -5,14 +5,14 @@ Ilyen még nem volt az órán se.
 Amit szeretnénk, ha lenne egy a matematikai függvényeket magába foglaló osztály.
 
 Több okból:
-Egyrészt például ha megpróbáljátok használni a cmath headerben lévő abs()
-függvényt a vektor abs() függvényében, akkor látni fogjátok, hogy így kell csinálni: ::abs(x);
+Egyrészt: például ha megpróbáljátok használni a cmath headerben lévő abs()
+függvényt a vektor abs() függvényében, akkor látni fogjátok, hogy így kell csinálni: ::abs(x);,
+ami nyilván nem ideális.
 
-Illetve így elég egy header filet includeolni a programban, ha például tangens 
+Sőt, így elég lesz egy header filet include-olni a programban, ha például tangens 
 függvényre van szükség, nem kell mindenhol megkeresni a neten, hogy hol van.
 (Elképzelhető az is, hogy egy bizonyos függvényt máshogy kell elérni
-más platformokon, így ez a kód is csak egyszer fog előfordulni.)
-
+más platformokon, így ez a választó kód is csak egyszer fog előfordulni.)
 
 Alapból jelenleg így tudnánk ezt az osztályt megcsinálni:
 
@@ -57,8 +57,8 @@ int main() {
 
 Látni, hogy nincs szükség létrehozni Math objektumot, a függvény meghívható csak így önmagában.
 
-Úgy érdemes rá gondolni, mintha egy "Math::atan2" nevű globális függvényt kapnánk.
-(Annyi a +, hogy ha van statikusnak megjelölt változó az osztályban, akkor azt el tudják érni,
+Úgy érdemes rá gondolni, mintha egy "Math::atan2" nevű globális függvényt hoznánk létre.
+(Annyi a +, hogy ha van statikusnak megjelölt változó az osztályban, akkor azt is el lehet belőle érni,
 a normál változókat nem. -> Nem érhető el bennük a this pointer se.)
 
 
@@ -82,9 +82,9 @@ Akkor a feladatok:
 
 1. Írd meg az alábbi segédosztályt:
 
-(Az includeok: #include <math.h>, #include <stdlib.h>, #include <time.h>, #include <cstdint>)
+Az includeok: #include <math.h>, #include <stdlib.h>, #include <time.h>, #include <cstdint>
 
-Defineok a header tetejére:
+Defineok a header tetejére (Includeok utánra szokás rakni):
 
 #define MATH_PI 3.1415926535897932384626433833
 #define EPSILON 0.00001
@@ -175,14 +175,16 @@ float fast_inv_sqrt(float number) {
     return y;
 }
 
-Ez az algoritmus a Quake 3 forráskódjában talált implementációjáról híresült el.
+Note:
+
+Ez az algoritmus a Quake 3 forráskódjában talált implementációja miatt híresült el.
 Érdekességnek raktam bele, ha bármi probléma van vele, hagyjátok ki.
-Érdemes megnéyni a matematikai hátterét (pl a youtube vid, vagy a wikipédia cikk első pár paragrafusa)!
+Érdemes megnézni a matematikai hátterét (pl a youtube vid, vagy a wikipédia cikk első pár paragrafusa)!
 
 Wikipédia:
 https://en.wikipedia.org/wiki/Fast_inverse_square_root
 
-Youtube vid, ahol a Nemean elmagyarázza, hogy hogyan is működik:
+Youtube vid: Nemean elmagyarázza, hogy hogyan is működik:
 https://www.youtube.com/watch?v=p8u_k2LIZyo  -  Fast Inverse Square Root — A Quake III Algorithm
 
 Stack overflow:
@@ -190,9 +192,7 @@ https://stackoverflow.com/questions/1349542/john-carmacks-unusual-fast-inverse-s
 
 64 bitre (double-hoz): https://stackoverflow.com/questions/11644441/fast-inverse-square-root-on-x64#11644533
 
-Egyéb:
-
-Megj: Ezek a random (ranf, randd) függvények nem a leggyorsabbak, nagyon sokat lehet rajtuk gyorsítani 
+Egyéb megj: Ezek a random (ranf, randd) függvények nem a leggyorsabbak, nagyon sokat lehet rajtuk gyorsítani 
 alapszinű /low level/ hardwares ismeretekkel, és matematikával. Akit érdekel érdemes kürölnézni nagyobb
 projektekben, hogy hogy vannak ilyenek implementálva.
 
