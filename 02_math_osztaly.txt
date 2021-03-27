@@ -1,0 +1,192 @@
+
+Ez a feladat kicsit különbözik a többitől, ugyanis most egy új dolgot kell csinálni.
+Ilyen még nem volt az órán se.
+
+Amit szeretnénk, ha lenne egy a matematikai függvényeket magába foglaló osztály.
+
+Több okból:
+Egyrészt például ha megpróbáljátok használni a cmath headerben lévő abs()
+függvényt a vektor abs() függvényében, akkor látni fogjátok, hogy így kell csinálni: ::abs(x);
+
+Illetve így elég egy header filet includeolni a programban, ha például tangens 
+függvényre van szükség, nem kell mindenhol megkeresni a neten, hogy hol van.
+(Elképzelhető az is, hogy egy bizonyos függvényt máshogy kell elérni
+más platformokon, így ez a kód is csak egyszer fog előfordulni.)
+
+
+Alapból jelenleg így tudnánk ezt az osztályt megcsinálni:
+
+class Math {
+public:
+    float atan2(float a, float b) {
+        return ::atan2(a, b);
+    }
+
+    //etc
+};
+
+És így kellene használni:
+
+int main() {
+
+    Math m;
+
+    float t = m.atan2(1.32, 33.41);
+
+    return 0;
+}
+
+Nyilván, itt fölöslegesen hozunk létre egy objektumot, mert nincsenek belső változói.
+
+Szerencsére van erre megoldás, méghozzá a statikus függvények:
+
+class Math {
+public:
+    static float atan2(float a, float b) {
+        return ::atan2(a, b);
+    }
+
+    //etc
+};
+
+int main() {
+    float t = Math::atan2(1.32, 33.41);
+
+    return 0;
+}
+
+Látni, hogy nincs szükség létrehozni Math objektumot, a függvény meghívható csak így önmagában.
+
+Úgy érdemes rá gondolni, mintha egy "Math::atan2" nevű globális függvényt kapnánk.
+(Annyi a +, hogy ha van statikusnak megjelölt változó az osztályban, akkor azt el tudják érni,
+a normál változókat nem. -> Nem érhető el bennük a this pointer se.)
+
+
+Így kell őket 2 fájlra szétszedni:
+
+math.h:
+
+class Math {
+public:
+    static float atan2(float a, float b);
+};
+
+math.cpp:
+
+//nem kell a static szó a cpp fájlba!
+float Math::atan2(float a, float b) {
+    return ::atan2(a, b);
+}
+
+Akkor a feladat:
+
+1. Írd meg az alábbi segédosztályt:
+
+(Az includeok: #include <math.h>, #include <stdlib.h>, #include <time.h>, #include <cstdint>)
+
+Defineok a tetejére:
+
+#define MATH_PI 3.1415926535897932384626433833
+#define EPSILON 0.00001
+
+UML:
+
+|------------------------------------------------------------|
+| class Math                                                 |
+|------------------------------------------------------------|
+|                                                            |
+| + uint64_t RANDOM_32BIT_MAX;  { static, const }            |  -> static const uint64_t RANDOM_32BIT_MAX = 0xFFFFFFFF;
+|                                                            |
+| + sin(x : float) : float { static }                        |  -> return ::sinf(x);
+| + sin(x : double) : double { static }                      |  -> return ::sin(x);
+| + cos(x : float) : float { static }                        |  -> return ::cosf(x);
+| + cos(x : double) : double { static }                      |  -> return ::cos(x);
+| + tan(x : float) : float { static }                        |  -> return ::tanf(x);
+| + tan(x : double) : double { static }                      |  -> return ::tan(x);
+|                                                            |
+| + asin(x : float) : float { static }                       |  -> return ::asinf(x);
+| + asin(x : double) : double { static }                     |  -> return ::asin(x);
+| + acos(x : float) : float { static }                       |  -> return ::acosf(x);
+| + acos(x : double) : double { static }                     |  -> return ::acos(x);
+| + atan(x : float) : float { static }                       |  -> return ::atanf(x);
+| + atan(x : double) : double { static }                     |  -> return ::atan(x);
+| + atan2(x : float) : float { static }                      |  -> return ::atan2f(x);
+| + atan2(x : double) : double { static }                    |  -> return ::atan2(x);
+|                                                            |
+| + sqrt(x : float) : float { static }                       |  -> return ::sqrtf(x);
+| + sqrt(x : double) : double { static }                     |  -> return ::sqrt(x);
+| + fmod(x : float, y : float) : float { static }            |  -> return ::fmodf(x, y);
+| + fmod(x : double, y : float) : double { static }          |  -> return ::fmod(x, y);
+| + floor(x : float) : float { static }                      |  -> return ::floorf(x);
+| + floor(x : double) : double { static }                    |  -> return ::floor(x);
+| + ceil(x : float) : float { static }                       |  -> return ::ceilf(x);
+| + ceil(x : double) : double { static }                     |  -> return ::ceil(x);
+| + pow(x : float, y : float) : float { static }             |  -> return ::powf(x, y);
+| + pow(x : double, y : float) : double { static }           |  -> return ::pow(x, y);
+| + log(x : float) : float { static }                        |  -> return ::logf(x);
+| + log(x : double) : double { static }                      |  -> return ::log(x);
+|                                                            |
+| + inv_sqrt(x : float) : float { static }                   |  -> return (float)(1.0 / ::sqrt(x));
+| + fast_inv_sqrt(x : float) : float { static }              |  -> Implementáció lejjebb
+|                                                            |
+| + abs(x : float) : float { static }                        |  -> return absd(x);
+| + abs(x : double) : double { static }                      |  -> return absf(x);
+| + abs(x : int) : int { static }                            |  -> return x > 0 ? x : -x;
+|                                                            |
+| + deg2rad(x : double) : double { static }                  |  -> return x * MATH_PI / 180.0;
+| + deg2rad(x : int) : int { static }                        |  -> return x * MATH_PI / 180.0;
+| + rad2deg(x : double) : double { static }                  |  -> return x * 180.0 / MATH_PI;
+| + rad2deg(x : int) : int { static }                        |  -> return x * 180.0 / MATH_PI;
+|                                                            |
+| + is_equal_approx(float a, float b) : bool { static }      |  -> mint vektorban
+| + is_zero_approx(float a) : bool { static }                | 
+|                                                            |
+| + seed(unsigned int s) { static }                          |  -> srand(s);
+| + randomize() { static }                                   |  -> srand(time(NULL));
+|                                                            |
+| + rand() : int { static }                                  |  -> return rand();
+| + randf() : float { static }                               |  -> return rand() / RANDOM_32BIT_MAX;
+| + randd() : float { static }                               |  -> return rand() / RANDOM_32BIT_MAX;
+|                                                            |
+| + rand(float from, float to) : float { static }            |  -> return randf() * to + from;
+| + rand(double from, double to) : double { static }         |  -> return randd() * to + from;
+|------------------------------------------------------------|
+
+fast_inv_sqrt:
+
+float fast_inv_sqrt(float number) {
+    long i;
+    float x2, y;
+    const float threehalfs = 1.5F;
+
+    x2 = number * 0.5F;
+    y  = number;
+    i  = * ( long * ) &y;
+    i  = 0x5f3759df - ( i >> 1 );
+    y  = * ( float * ) &i;
+    y  = y * ( threehalfs - ( x2 * y * y ) );
+
+    return y;
+}
+
+Ez az algoritmus a Quake 3 forráskódjában talált implementációjáról híresült el.
+Érdekességnek raktam bele, ha bármi probléma van vele, hagyjátok ki.
+Érdemes megnéyni a matematikai hátterét (pl a youtube vid, vagy a wikipédia cikk első pár paragrafusa)!
+
+Wikipédia:
+https://en.wikipedia.org/wiki/Fast_inverse_square_root
+
+Youtube vid, ahol a Nemean elmagyarázza, hogy hogyan is működik:
+https://www.youtube.com/watch?v=p8u_k2LIZyo  -  Fast Inverse Square Root — A Quake III Algorithm
+
+Stack overflow:
+https://stackoverflow.com/questions/1349542/john-carmacks-unusual-fast-inverse-square-root-quake-iii
+
+64 bitre (double-hoz): https://stackoverflow.com/questions/11644441/fast-inverse-square-root-on-x64#11644533
+
+Egyéb:
+
+Megj: Ezek a random (ranf, randd) függvények nem a leggyorsabbak, nagyon sokat lehet rajtuk gyorsítani 
+alapszinű /low level/ hardwares ismeretekkel, és matematikával. Akit érdekel érdemes kürölnézni nagyobb
+projektekben, hogy hogy vannak ilyenek implementálva.
+
