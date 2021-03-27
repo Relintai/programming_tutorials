@@ -1,3 +1,9 @@
+rev 1: 
+rev 2: abs() képlet hozzáadva.
+rev 3: Hozzáadtam vector és float-os közötti szorzás operátorokat mindkét vektorhoz.
+rev 4: Vector length képlet hozzáadva.
+rev 5: Vector dot() képletben hiányzott egy .y
+rev 6: lenght_squared -> length_squared
 
 1. Implementáld az alábbi 2ds matematikai vektor osztályt:
 
@@ -7,6 +13,7 @@
 | + x : float                                   |  -> Nincs getter, és szetter, mert azok lassítanának. (Függvényhívásnak van minimális erőforrás igénye) 
 | + y : float                                   |  -> Ilyen matematikai osztályoknál, érdemes ilyeneket kioptimalizálni. PLussz leírni is sok. getx(), setx() etc.
 | + abs() : Vector2                             |  -> visszaadja egy új vektorba ennek a vektornak az abszolút értékét. (x, y abszolút értékét veszi)
+|                                               |      Abszolút érték képlet:  ha egy a < 0 ret -a, else ret a;
 | + angle() float                               |  -> atan2(x, y)
 | + angle_to(b : Vector2) : float               |  -> atan2(cross(b), dot(b));
 | + cross(b : Vector2) : float                  |  -> Cross product -> x * b.y - y * b.x;
@@ -16,15 +23,15 @@
 | + distance_to(b : Vector2) : float            |  -> sqrt((x - b.x) * (x - b.x) + (y - b.y) * (y - b.y));
 | + dot(b : Vector2) : float                    |  -> dot product -> Ha a 2 vektor 90 fokosz szöget zár be, akkor 0.
 |                                               |         Pozitív, ha a 2 vektor által bezárt szög kisebb mint 90 fok, negatív, ha nagyobb.
-|                                               |         képlet: x * b.x + y * b.
+|                                               |         képlet: x * b.x + y * b.y.
 | + is_equal_approx(b : Vector2) : bool         |  -> nagyjából egyenlőek-e a vektorok. A max különbség legyen 0.00001 (Epszilon).
-| + length() : float                            |
-| + lenght_squared() : float                    |  -> A hossz a gyökvonás nélkül. (A gyökvonás relatíve lassú, és ha csak össze kell 
+| + length() : float                            |  -> sqrt(x * x + y * y)
+| + length_squared() : float                    |  -> A hossz a gyökvonás nélkül. (A gyökvonás relatíve lassú, és ha csak össze kell 
 |                                               |                         hasonlítani hosszakat, akkor elég így)
 | + lerp(b : Vector2, t : float) : Vector2      |  -> Linear interpolate -> a jelenlegi vektor és b közötti átmenetvektort adja vissza t paraméter felhasználásával.
 |                                               |     A t 0 és 1 közötti. Képlet: newx = x + (t * (b.x - x)); és newy = y + (t * (b.y - y));
 | + normalized() : Vector2                      |  -> A vektor normalizálva. Normalizált vektor = a hossza 1. 
-|                                               |     float l = lenght_squared(); ha nem 0, gyököt kell vonni belőle, és le kell osztani x, y-t is vele
+|                                               |     float l = length_squared(); ha nem 0, gyököt kell vonni belőle, és le kell osztani x, y-t is vele
 | + normalize()                                 |  -> Maga a vektor normalizálódik.
 | + add(b: Vector2)                             |  -> x += b.x, y += b.y
 | + sub(b: Vector2)                             |  -> x -= b.x, y -= b.y
@@ -32,6 +39,8 @@
 | + operator-=(b: Vector2)                      |
 | + operator+(a: Vector2, b: Vector2) : Vector2 |
 | + operator-(a: Vector2, b: Vector2) : Vector2 |
+| + operator*=(b: float)                        |  -> x és y-t is megszorozzuk b-vel.
+| + operator*(Vector2 a, float b) : Vector2     |  -> x és y-t is megszorozzuk b-vel.
 | + operator==(b: Vector2, b: Vector2) : bool   |
 | + operator!=(b: Vector2, b: Vector2) : bool   |
 | + Vector2()                                   |
@@ -48,6 +57,7 @@
 | + y : float                                   |  -> Ilyen matematikai osztályoknál, érdemes ilyeneket kioptimalizálni. PLussz leírni is sok. getx(), setx() etc.
 | + z : float                                   |
 | + abs() : Vector3                             |  -> visszaadja egy új vektorba ennek a vektornak az abszolút értékét. (x, y, y abszolút értékét veszi)
+|                                               |      Abszolút érték képlet:  ha egy a < 0 ret -a, else ret a;
 | + angle_to(b : Vector3) : float               |  -> atan2(cross(b).length(), dot(b));
 | + cross(b : Vector3) : Vector3                |  -> Cross product -> x = (y * b.z) - (z * b.y), y = (z * b.x) - (x * b.z), z = (x * b.y) - (y * b.x)
 | + clamped(len : float) : Vector3              |  -> normalized() * len
@@ -56,16 +66,16 @@
 | + distance_to(b : Vector3) : float            |  -> return (b - *this).length(); 
 | + dot(b : Vector3) : float                    |  -> dot product -> Ha a 2 vektor 90 fokosz szöget zár be, akkor 0.
 |                                               |         Pozitív, ha a 2 vektor által bezárt szög kisebb mint 90 fok, negatív, ha nagyobb.
-|                                               |         képlet: x * b.x + y * b + z * b.z.
+|                                               |         képlet: x * b.x + y * b.y + z * b.z.
 | + is_equal_approx(b : Vector3) : bool         |  -> nagyjából egyenlőek-e a vektorok. A max különbség legyen 0.00001 (Epszilon).
-| + length() : float                            |
-| + lenght_squared() : float                    |  -> A hossz a gyökvonás nélkül. (A gyökvonás relatíve lassú, és ha csak össze kell 
+| + length() : float                            |  -> sqrt(x * x + y * y + z * z)
+| + length_squared() : float                    |  -> A hossz a gyökvonás nélkül. (A gyökvonás relatíve lassú, és ha csak össze kell 
 |                                               |                         hasonlítani hosszakat, akkor elég így)
 | + lerp(b : Vector3, t : float) : Vector3      |  -> Linear interpolate -> a jelenlegi vektor és b közötti átmenetvektort adja vissza t paraméter felhasználásával.
 |                                               |     A t 0 és 1 közötti. Képlet: newx = x + (t * (b.x - x)); és newy = y + (t * (b.y - y)); 
 |                                               |     newy = z + (t * (b.z - z)); 
 | + normalized() : Vector3                      |  -> A vektor normalizálva. Normalizált vektor = a hossza 1.
-|                                               |     float l = lenght_squared(); ha nem 0, gyököt kell vonni belőle, és le kell osztani x, y, z-t is vele
+|                                               |     float l = length_squared(); ha nem 0, gyököt kell vonni belőle, és le kell osztani x, y, z-t is vele
 | + normalize()                                 |  -> A vektor normalizálódik.
 | + add(b: Vector3)                             |  -> x += b.x, y += b.y, z += b.z
 | + sub(b: Vector3)                             |  -> x -= b.x, y -= b.y, z -= b.z
@@ -73,6 +83,8 @@
 | + operator-=(b: Vector3)                      |
 | + operator+(a: Vector3, b: Vector3) : Vector3 |
 | + operator-(a: Vector3, b: Vector3) : Vector3 |
+| + operator*=(b: float)                        |  -> x,y és z-t is megszorozzuk b-vel.
+| + operator*(Vector2 a, float b) : Vector2     |  -> x,y és z-t is megszorozzuk b-vel.
 | + operator==(b: Vector3, b: Vector2) : bool   |
 | + operator!=(b: Vector3, b: Vector2) : bool   |
 | + Vector3()                                   |
