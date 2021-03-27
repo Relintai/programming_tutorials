@@ -70,21 +70,3 @@ float Math::rand(const float from, const float to) {
 float Math::rand(const double from, const double to) {
 	return randd() * (to - from) + from;
 }
-
-/*
-
-
-| + is_equal_approx(float a, float b) : bool { }      |  -> mint vektorban
-| + is_zero_approx(float a) : bool { }                | 
-|                                                            |
-| + seed(unsigned int s) { }                          |  -> srand(s);
-| + randomize() { }                                   |  -> srand(time(NULL));
-|                                                            |
-| + rand() : int { }                                  |  -> return rand();
-| + randf() : float { }                               |  -> return rand() / RANDOM_32BIT_MAX;
-| + randd() : float { }                               |  -> return rand() / RANDOM_32BIT_MAX;
-|                                                            |
-| + rand(float from, float to) : float { }            |  -> return randf() * to + from;
-| + rand(double from, double to) : double { }         |  -> return randd() * to + from;
-|------------------------------------------------------------|
-*/
