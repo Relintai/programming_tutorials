@@ -1,0 +1,307 @@
+SDL2 Projekt setup
+
+Itt is a code blocks-ot fogjuk használni.
+
+(Build scriptekkel így lehet megcsinálni: <link>)
+
+
+
+==========  Windows:  ====================================================================================================
+
+
+Windowson sajnos nem a legtriviálisabb megcsinálni.
+
+Én azt ajánlom, hogy NE SDL2 projektet hozzatok létre, mert nálam nem működött túl jól alapból, és nem is túl hordozható úgy.
+
+Hozzatok létre / nyissatok meg meg egy console projektet.
+
+
+
+-- 1. Töltsétek le az sdl2 fejlesztői konyvtárát: ------------------------------------------------------------------------
+
+https://www.libsdl.org/download-2.0.php
+
+Development Libraries résznél az a fájl aminek mingw van a nevében.
+
+Direkt link a 2.0.14-eshez: https://www.libsdl.org/release/SDL2-devel-2.0.14-mingw.tar.gz
+
+
+-- 2. Csomagoljátok ki: --------------------------------------------------------------------------------------------------
+
+Ha esetleg nincs fent semmi guis cucc ami ki tudja bontani, akkor alapból powershellel is ki lehet:
+
+tar xzvf .\SDL2-devel-2.0.14-mingw.tar.gz
+
+(Ha a windows intézőben shift-jobbklikkeltek egy mappában, akkor lessz egy olyan opció a popup menüben,
+hogy powershell nyitása itt.)
+
+
+-- 3. Menjetek bele a most kicsomagolt mappába. ---------------------------------------------------------------------------
+
+Itt van egy "x86_64-w64-mingw32" mappa. Ennek a tartalmát másoljátok át a codeblocks projektetekbe, egy SDL2 mappába.
+
+A "x86_64-w64-mingw32" mappa tartalma 4 könyvtár: bin, include, lib, share
+
+Ezeket kell átmásolni: <CodeBlocksProjektMappa>/SDL2/
+
+Így fog kinézni a végső mappaszerkezet:
+
+<CodeBlocksProjektMappa>
+├───bin
+├───obj
+└───SDL2
+    ├───bin
+    ├───include
+    ├───lib
+    └───share
+├───proj.cbp
+├───proj.depend
+└───main.cpp
+
+
+-- 4. Menjetek vissza a Code::Blocks-ba, és nyissátok meg a "Project->Build Options" ablakot. ------------------------------
+
+
+-- 5. Jelöljétek ki a bal oldalon magát a projektet. -----------------------------------------------------------------------
+
+(Alapból a Debug van kijelölve, de egyszerűbb, ha projektekt szinten vannak a beállítások megcsinálva.)
+
+
+-- 6. Menjetek a "Search directories" fülre. -------------------------------------------------------------------------------
+
+
+-- 7. A "Compiler" fülön adjátok hozzá ezt: --------------------------------------------------------------------------------
+
+SDL2\include\SDL2
+
+Ha megnézitek, ebben a mappában egy csomó .h fájl van. Ezt a beállítást azért csináljuk, hogy így lehessen az 
+SDL header fájlait includeolni:
+
+#include <SDL.h>
+
+
+-- 8. A "Linker" fülön adjátok hozzá ezt: ---------------------------------------------------------------------------------
+
+SDL2\lib
+
+Ha megnézitek, ebben a könvtárban ilen fájlok vannak:
+
+libSDL2.a
+libSDL2.dll.a
+libSDL2.la
+libSDL2main.a
+libSDL2main.la
+libSDL2_test.a
+libSDL2_test.la
+
+Ez azért szükséges, hogy majd a 10. lépésben a compiler megtalálja ezeket a fájlokat.
+
+
+-- 9. Menjetek át a jobb oldalon a "Linker settings" fülre. ----------------------------------------------------------------
+
+
+-- 10. A link libraries részhez adogassátok hotzzá a következőket (ugyan ilyen sorrendben) (Kis és nagy betűk számítanak): -
+
+mingw32
+SDL2main
+SDL2.dll
+user32
+gdi32
+winmm
+dxguid
+
+
+Ezek alapból elérhetőek a windowsban / a mingw-vel:
+
+mingw32
+user32
+gdi32
+winmm
+dxguid
+
+Ezeknek az elérési ítját kellett hozzáadni a 8. lépésben.
+
+SDL2main
+SDL2.dll
+
+Viszont ha megnézitek a fájlokat, azok így néznek ki:
+
+libSDL2.dll.a
+libSDL2main.a
+...
+
+Látni, hogy a compiler a fájlok elején lévő "lib" szót nem veszi figyelembe, illetve a kiterjesztést sem:
+
+libSDL2.dll.a -> SDL2.dll
+libSDL2main.a -> SDL2main
+
+etc.
+
+
+-- 11. Menjetek át a "Pre/post build steps" fülre. -------------------------------------------------------------------------
+
+Mostmár a projektnek fordulnia kell, viszont ha megpróbáljátok futtatni, akkor nem fog elindulni, mert hiányolja az SDL.dll-t.
+
+Nyilván oda lehet másolni manuálisan is, viszont ha a "post-build steps" részhez ezt a prancsot be copy pastelitek:
+
+XCOPY SDL2\bin\*.dll $(TARGET_OUTPUT_DIR) /D /Y
+
+Akkor a codeblocks automatikusan oda fogja nektek másolni a build végén.
+
+--
+
+És kész is. A txt alján ott egy teszt main.cpp, fel kell hoznia egy ablakot, és színes vertikális csíkokkal fel kel 
+töltenie szép lassan, majd ha kész kilép.
+
+
+
+
+-- Megj.: ------------------------------------------------------------------------------------------------------------------
+
+Ha ilyen hibát kaptok:
+
+ld.exe||cannot find -lSDL2main|
+ld.exe||cannot find -lSDL2.dll|
+||error: ld returned 1 exit status|
+||=== Build failed: 3 error(s), 0 warning(s) (0 minute(s), 0 second(s)) ===|
+
+Akkor először menjetek át a build log fülre, és nézzétek meg, hogy ilyesmi hibát ír-e:
+
+<hosszú path>/ld.exe: skipping incompatible SDL2\lib/libSDL2main.a when searching for -lSDL2main
+
+Ha igen, akkor ismételjétek meg csak a 3. lépést, annyi különbséggel, hogy nem a "x86_64-w64-mingw32" mappa tartalmát 
+másoljátok, hanem az "i686-w64-mingw32" mappáét. 
+
+Ez azt jelenti, hogy 32 bites módban fordít a ti fordítótok.
+
+
+-- Megj. 2: ----------------------------------------------------------------------------------------------------------------
+
+Innen elérhető egy működő projekt: <link>
+
+
+
+==========  Linux:  ========================================================================================================
+
+
+
+Linuxon jól működik az SDL2-es projekt létrehozás, de ha console projektet szeretnétek átalakítani, akkor azt így kell:
+
+Hozzatok létre / nyissatok meg meg egy console projektet.
+
+
+
+-- 1. Nyissátok meg a "Project->Build Options" ablakot. --------------------------------------------------------------------
+
+
+-- 2. Jelöljétek ki a bal oldalon magát a projektet. -----------------------------------------------------------------------
+
+(Alapból a Debug van kijelölve, de egyszerűbb, ha projektekt szinten vannak a beállítások megcsinálva.)
+
+
+-- 3. Menjetek át a jobb oldalon a "Linker settings" fülre. ----------------------------------------------------------------
+
+Az "Other linker options" részhez copy pasteljétek be az alábbit: (A Backtick-ekkel (`) együtt.)
+
+`sdl2-config --libs`
+
+És kész is. A txt alján ott egy teszt main.cpp, fel kell hoznia egy ablakot, és színes vertikális csíkokkal fel kel 
+töltenie szép lassan, majd ha kész kilép.
+
+
+
+-- Megj.: ------------------------------------------------------------------------------------------------------------------
+
+A fenti windowsos beállítás is működik, ha megszerzitek a fordításhoz szükséges fájlokat (.so fájlok etc).
+pl ki lehet szedni .deb csomagból, vagy lefordíthatjátok magatok.
+
+Viszont ekkor a 7. pontban más könyvtárakat kell oda beírni.
+
+Ha lefuttatjátok a "sdl2-config --libs" parancsot egy terminálba, az ki fogja írni, hogy mit kell beállítani.
+
+Pl nálam lefuttatva ezt írja ki:
+
+-L/usr/lib -pthread -lSDL2
+
+Nyilván ennek az a lényege, hogy a fordításkor ez a script a megfelelő paramétereket belerakja a linker/compiler
+argumentumai közé.
+
+-L/usr/lib nem kell, az megvan a 12. pontban
+
+-pthread -lSDL2 -> ezeket kell hozzáadni a "Link libraries részhez"
+
+Viszont! nem kell odaírni a "-"-t, vagy a "-l"-t!
+
+Azaz így kell odarakni őket:
+
+pthread
+SDL2
+
+Amúgy, ezt nagyon nem érdemes így csinálni, de a lehetőség megvan rá.
+
+
+
+==========  Teszt main.cpp:  ================================================================================================
+
+#include <string>
+#include <iostream>
+#include <SDL.h>
+
+int main(int argv, char** args)
+{
+    SDL_Window * m_window;
+    SDL_Renderer * m_renderer;
+
+    Uint32 flags = SDL_INIT_VIDEO | SDL_INIT_TIMER;
+
+    if (SDL_Init(flags) != 0)
+    {
+        //hiba
+        return 1;
+    }
+
+    if (SDL_CreateWindowAndRenderer(640, 480, SDL_WINDOW_SHOWN, &m_window, &m_renderer ) != 0)
+    {
+        //hiba
+        return 2;
+    }
+
+    // Clear the window with a black background
+    SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 255);
+    SDL_RenderClear(m_renderer);
+
+    // Show the window
+    SDL_RenderPresent( m_renderer );
+
+    int rgb[] = { 203, 203, 203, // Gray
+                  254, 254,  31, // Yellow
+                  0, 255, 255, // Cyan
+                  0, 254,  30, // Green
+                  255,  16, 253, // Magenta
+                  253,   3,   2, // Red
+                  18,  14, 252, // Blue
+                  0,   0,   0  // Black
+                };
+
+    SDL_Rect colorBar;
+    colorBar.x = 0;
+    colorBar.y = 0;
+    colorBar.w = 90;
+    colorBar.h = 480;
+
+    // Render a new color bar every 0.5 seconds
+    for ( int i = 0; i != sizeof rgb / sizeof *rgb; i += 3, colorBar.x += 90)
+    {
+        SDL_SetRenderDrawColor(m_renderer, rgb[i], rgb[i + 1], rgb[i + 2], 255);
+        SDL_RenderFillRect(m_renderer, &colorBar);
+        SDL_RenderPresent(m_renderer);
+        SDL_Delay(500);
+    }
+
+    SDL_DestroyWindow(m_window);
+    SDL_DestroyRenderer(m_renderer);
+    SDL_Quit();
+
+    return 0;
+}
+
