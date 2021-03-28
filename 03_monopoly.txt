@@ -9,6 +9,52 @@ virtual void player_arrived(Player *p);
 
 
 ----------
+
+class Player
+
+String name;
+int tile_index;
+int money;
+int jail_time;
+bool _lost;
+
+virtual bool ask_buy(String name, int price);
+virtual void pay_entry(int val, Player *to);
+void pay_tax(int val);
+void receive_payment(int val);
+void lost();
+bool did_lose();
+
+virtual void act();
+virtual int throw_dice();
+virtual void on_lose();
+
+
+
+----------
+
+class Playerloader
+
+vec pl laod_players(file);
+save_players(file, Vec p);
+
+
+----------
+
+class TileLoader
+
+isame
+
+ezek ay oytalzok load savelnek
+lehetne static fv playerbe is pl
+meg lehetne a boardba
+de igy egyszerubben ujra tudjuk majd hasznalni
+javaban TileFactorynak lenne nevezve
+
+
+
+
+----------
 class TaxTile : Tile 
 
 int tax;
@@ -49,29 +95,6 @@ class JailTile : Tile
 
 int jail_time;
 virtual void player_arrived(Player *p);
-
-
-
-----------
-
-class Player
-
-String name;
-int tile_index;
-int money;
-int jail_time;
-bool _lost;
-
-virtual bool ask_buy(String name, int price);
-virtual void pay_entry(int val, Player *to);
-void pay_tax(int val);
-void receive_payment(int val);
-void lost();
-bool did_lose();
-
-virtual void act();
-virtual int throw_dice();
-virtual void on_lose();
 
 
 
@@ -118,7 +141,6 @@ int throw_result;
 
 virtual void act();
 virtual int throw_dice();
-
 
 
 ----------
