@@ -8,6 +8,7 @@ rev 7: Rect2 is_equal_approx paraméter típus kijavítva.
 rev 8: Rect2 grow, shrink visszatérési érték javítva (Már nincs).
 rev 9: intersects_include_borders typo javítva.
 rev 10: IntVectorba pop_back metódus hozzáadva.
+rev 11: String: c_str + nul terminator megjegyzés hozzáadva.
 
 1. Implementáld az alábbi 2ds matematikai vektor osztályt:
 
@@ -286,6 +287,25 @@ int main() {
    néhány ötlet: to_float(), to_double(), to_int(), trim(), replace(), find(val : String), begins_with(str : String) : bool, ends_with(), 
    sub_str(int from, int num = -1), c_str(), operator==, operator!=, operator=, operator+=, operator+, remove(str : String),
    print(), format(), etc.
+
+Megj: Ha implementáljátok a c_str() függvényt: Ez egy c/c++ on tömböt ad vissza (char *), és nyilván már tudjátok,
+hogy egy ilyen tömbnek nem lehet megmondani a méretét. A trükk az, hogy ezek a c stringek nul termináltak.
+Azaz az utolsó karakterük a 0 kontroll karaktert tartalmazza! Kódban: '\0' azza a 0. ASCII karakter.
+
+Például, hogy egy ilyen char* es konstruktort szeretnétek csinálni, az valahogy így fog kinézni:
+
+String::String(const char *p_c_str) {
+	_data = nullptr;
+	_actual_size = 0;
+	_size = 0;
+	_grow_by = 100;
+
+	int i = 0;
+	while (p_c_str[i] != '\0') {
+		push_back(p_c_str[i]);
+		++i;
+	}
+}
 
 8. Az előző feladatokban sok helyen meg lehet jelölni paramétereket konstansként, illetve pl. konstans referenciává lehet alakítani őket.
    Menj végig az előző osztályokon, és mindenhol, ahol van értelme, ezeket add hozzá.
