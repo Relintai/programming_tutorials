@@ -1,0 +1,12 @@
+
+Most hogy már működik az sdl
+
+Hogy működik, main etc
+
+//megj: sima int main() {} ként nem fog működni a program, mert az sdl fogja meghívni a mi main()-ünket!
+vagy 
+
+#define SDL_MAIN_HANDLED
+#include <GL/glew.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>

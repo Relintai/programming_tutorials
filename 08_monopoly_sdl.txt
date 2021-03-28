@@ -1,0 +1,31 @@
+
+
+Texture + Sprite
+
+Tile, player is lehet sprite
+
+Tile: x, y, w, h
+Player x, y, w, h
+
+
+tile betolt
+
+tile-> on player_step -> player set_pos this.center;
+
+
+Először a rendertt ell megcsálni,és input nélkül
+utána külön feladat az input visszarakása + player egész ilyen txts
+
+Fontos, hogy látni lehessen, hogy a render az csak megjelenítés, a mögötte lévő adat majdnem ugyen az.
+
+Board:
+input() -> send to the current player
+
+step()
+
+do everything the same.
+
+
+render()
+
+
