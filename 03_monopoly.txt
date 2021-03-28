@@ -1,0 +1,177 @@
+
+Írni fogunk egy leegyszerűsített monopoly szerűséget. 
+
+
+class Tile 
+
+String name;
+virtual void player_arrived(Player *p);
+
+
+----------
+class TaxTile : Tile 
+
+int tax;
+virtual void player_arrived(Player *p);
+
+
+----------
+class OwnableTile : Tile 
+
+int price;
+int enter_price;
+Player *owner;
+
+virtual void player_arrived(Player *p);
+//ask player if he wnats to buy.
+//if owned works like tax
+//if owner steps on it, he gains enter_price
+
+
+----------
+class GainTile : Tile 
+
+int gain;
+virtual void player_arrived(Player *p);
+
+
+----------
+class LuckTile : Tile 
+
+int chance;
+int gain_min;
+int gain_max;
+virtual void player_arrived(Player *p);
+
+
+----------
+class JailTile : Tile 
+
+int jail_time;
+virtual void player_arrived(Player *p);
+
+
+
+----------
+
+class Player
+
+String name;
+int tile_index;
+int money;
+int jail_time;
+bool _lost;
+
+virtual bool ask_buy(String name, int price);
+virtual void pay_entry(int val, Player *to);
+void pay_tax(int val);
+void receive_payment(int val);
+void lost();
+bool did_lose();
+
+virtual void act();
+virtual int throw_dice();
+virtual void on_lose();
+
+
+
+
+----------
+
+class AgressivePlayer : Player
+
+virtual void act();
+
+
+
+
+----------
+
+class ConservativePlayer : Player
+
+virtual void act();
+
+
+
+----------
+
+class TrickyPlayer : Player
+
+virtual void act();
+
+
+
+----------
+
+class HumanPlayer : Player
+
+virtual void act();
+megkérdezi, hogy mit csináljon
+
+
+
+----------
+
+class CheatingPlayer : Player
+
+int throw_result;
+
+virtual void act();
+virtual int throw_dice();
+
+
+
+----------
+
+class Board 
+
+Vector<Player *> players;
+Vector<Tile *> tiles;
+Vector<Player *> lost_players;
+
+int current_player;
+
+void step();
+bool is_finished();
+void print_results();
+
+void load_tile_file(String f);
+void load_player_setup_file(String f);
+
+
+
+
+step():
+
+current player -> throw dice -> wrap index -> get tile -> tile->player_arrived(p) -> if did_lose() remove from game, add to lost_players
+
+current_player++; and wrap;
+
+
+
+
+
+------------
+
+main() {
+    Board();
+    Board.load_tile_file();
+    Board.load_player_setup_file();
+
+    //esetleg kerdezhet
+
+    while (!board.is_finished()) {
+        board.step();
+
+        sleep 1s
+    }
+
+    board.print_results();
+    ret 0;
+}
+
+print_results():
+
+1. place, 2nd place print etc.
+
+
