@@ -1,201 +1,533 @@
 
 Írni fogunk egy leegyszerűsített monopoly szerűséget. 
 
-Ha a vektorod remove() függvénye nem tartja meg a sorrendet, akkor adj hozzá egy remove_keep_order() függvényt.
+Ebben a példában már használni fogunk öröklődést, és polimorfizmust is!
+
+----------------------------------------------------------------------
+
+Ahol csak lehet, használd fel az előzőleg megírt osztályaidat!
+
+Ha szükséged van egy függvényre, amely nem található meg még a már
+kész osztályodban, akkor azt add hozzá.
+
+Például ha a Math osztályodba a te megoldásodhoz hiányzik valamilyen
+függvény, akkor oda írd meg, ne csak direktbe felhasználd valamelyik 
+beépített header-ből!
+
+Ha a vektorod remove() függvénye nem tartja meg a sorrendet, akkor 
+adj hozzá egy remove_keep_order() függvényt.
+
+Egyéb: 
+
+Kicsit kiegyszerűsítettem az UML diagramokat, már gyakorlatilag c++
+kódként néznek ki. Az előző feladatokban a tárgy által elvárt módon 
+voltak írva, de mostantól nem fogom annyira átszerkeszteni.
+----------------------------------------------------------------------
+
+A játékszabályok, amiket implementálni fogunk:
+
+A játék n db játákossal indul. Mindenkinek van valamennyi pénze
+(legyen egyeenként megadható). És van egy játékmező. (Mint a valódi 
+monopolyban kb).
+A játékmezőn vannak mezők. Ezeknek a típusai:
+
+- TaxTile - Amikor a játékos rálép ennyi adót kell fizetnie.
+
+- OwnableTile - Ez olyan mező, amit meg lehet venni. Van vátelára, 
+illetve egy belépési költsége. Ha egy játékos rálép, és még senkié, 
+akkor az a játékos megveheti a vételárért cserébe. Ha nem veszi meg, 
+nem kell fizetnie semit. Ha valaki megveszi, akkor mindenki másnak, 
+aki rálép meg kell fiyetnie a tulajdonosnak a belépési díjat.
+Ha a tulajdonos kiesik a játékból, akkor az összes tulajdona 
+felszabadul.
 
+- GainTile - Aki rálép az egy meghatározott össszeget kap.
 
-class Tile 
+- LuckTile - Aki rálép kaphat megadott %-nyi eséllyel,
+két megadott érték közötti pénzt.
 
-String name;
-virtual void player_arrived(Player *p);
+- JailTile - Aki rálép, a megadott környi ideig börtönbe kerül, azaz
+annzi körig nem léphet.
 
+Egy játékos akkor esik ki, ha elfogyott minden pénze.
 
-----------
+Az nyer, aki a legutoljára bent marad.
 
-class Player
+A játékosok előre meghatározott, fix sorrendben jönnek egymás után,
+a körük elején dobnak 1db 6 oldalú dobókockával, majd anyit lépnek, 
+amennyit dobtak, és a mező amire érkeztek hatásal lesz rájuk.
 
-String name;
-int tile_index;
-int money;
-int jail_time;
-bool _lost;
+A játékosok a játékmezőn körbe-körbe haladnak.
+
+A játékot úgy fogjuk megírni, hogy legyenek különböző szemályiségü
+gépi játékosok:
+
+Agresszív: Mindent megvesz, amíg van rá pénze.
+Konzervatív: Ha a mező ára kevesebb, mint a pénzének a fele, akkor megveszi,
+Ügyeskedő: 50% eséllyel megveszi a mezőt, ha van rá lehetősége.
+Emberi: Megkérdezi a felhasználót, hogy mit akar tenni.
+Csaló: Mindent megvesz, amit csak tud. (csak 4, 5, 6-okat dobhat)
 
-virtual bool ask_buy(String name, int price);
-virtual void pay_entry(int val, Player *to);
-void pay_tax(int val);
-void receive_payment(int val);
-void lost();
-bool did_lose();
+A játokosok beállításait, és a mezőket is fájlból tötsük be.
 
-virtual void act();
-virtual int throw_dice();
-virtual void on_lose();
+Konzolos program lesz, szóval mindent ami fontos, a konzolra kell 
+majd kiírnunk, és a konzolról kell beolvasni, ha kérdezni szeretnénk a 
+felhasználótól.
 
+A feladatm hogy ezt implementáljuk.
+
+Kezdjük a játékos osztályokkal:
 
+|--------------------------------------------------------------------------|
+| class Player                                                             |
+|--------------------------------------------------------------------------|
+| + String get_name();                                                     |
+| + void set_name(const String &name);                                     |
+|                                                                          |
+| + int get_tile_index() const;                                            |
+| + void set_tile_index(const int val);                                    |
+|                                                                          |
+| + int get_money() const;                                                 |
+| + void set_money(const int val);                                         |
+|                                                                          |
+| + int get_jail_time() const;                                             |
+| + void set_jail_time(const int val);                                     |
+|                                                                          |
+| + bool get_lost() const;                                                 |
+| + void set_lost(const bool val);                                         |
+|                                                                          |
+| + virtual bool want_buy(const String &tile_name, int price);             |
+| + virtual int throw_dice();                                              |
+| + virtual void on_lose();                                                |
+|                                                                          |
+| + virtual void print();                                                  |
+|                                                                          |
+| + virtual String get_class_name();                                       |
+|                                                                          |
+| + Player();                                                              |
+| + virtual ~Player();                                                     |
+|                                                                          |
+| - String _name;                                                          |
+| - int _tile_index;                                                       |
+| - int _money;                                                            |
+| - int _jail_time;                                                        |
+| - bool _lost;                                                            |
+|--------------------------------------------------------------------------|
 
-----------
+Amik nem nyilvánvalók:
 
-class Playerloader
+set_money, set_jail_time -> írjon üzenetet a konzolra.
 
-vec pl laod_players(file);
-save_players(file, Vec p);
+set_lost(val) -> ha a val true, hívja meg az on_lost() függvényt.
 
+want_buy() függvénnyel fogja meegkérdezni a rendszer, hogy meg akarja-e 
+venni a játékos a jelenlegi mezőt.
+
+Megj.: nagy programban valószínűleg érdemes lenne a magát a Tile osztályt 
+odaadni pointerkénkt, viszont a Tile osztálynak is kelleni fog majd, a 
+Player osztály.
 
-----------
+Ezt aműgy meg lehet oldani, méghozzá úgy, hogy a Tile osztály a Player 
+headerje tetején előre van deklarálva (class Tile;), a Player osztály 
+a Tile headerje tetején van előre deklarálva (class Player;), és acsak a
+.cpp fájlokoban vannak maguk a headerek beincludeolva.
 
-class TileLoader
+Hogy könnyítsek a dolgotokon, ezt kihagytam, viszont ha valaki elég erőt
+érez magában, az mindenképp csinálja így!
 
-isame
+Ekkor így fog kinézni a függvény:
 
-ezek ay oytalzok load savelnek
-lehetne static fv playerbe is pl
-meg lehetne a boardba
-de igy egyszerubben ujra tudjuk majd hasznalni
-javaban TileFactorynak lenne nevezve
+virtual bool want_buy(Tile *tile);
+(A volt paraméterek elérhetők a Tile osztály gettereivel.)
 
+int throw_dice(); Kockadobás 1-6 ig.
 
+on_lose() A játékos kiírja a konzolra, hogy vesztett. Mindegyik típus
+kicsit máshogy.
 
+print() Kiírja magát a játékos a konzolra.
 
-----------
-class TaxTile : Tile 
+get_class_name() Visszaadja a játékos osztályának a nevét.
+pl itt return "Player"; 
+A kényelem miatt van bent, a print()-hez.
 
-int tax;
-virtual void player_arrived(Player *p);
+|--------------------------------------------------------------------------|
+| class AgressivePlayer : public Player                                    |
+|--------------------------------------------------------------------------|
+| + bool want_buy(const String &tile_name, int price);                     |
+| + void on_lose();                                                        |
+|                                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + AgressivePlayer();                                                     |
+|--------------------------------------------------------------------------|
 
+Agresszív: Mindent megvesz, amíg van rá pénze.
 
-----------
-class OwnableTile : Tile 
 
-int price;
-int enter_price;
-Player *owner;
 
-virtual void player_arrived(Player *p);
-//ask player if he wnats to buy.
-//if owned works like tax
-//if owner steps on it, he gains enter_price
+|--------------------------------------------------------------------------|
+| class ConservativePlayer : public Player                                 |
+|--------------------------------------------------------------------------|
+| + bool want_buy(const String &tile_name, int price);                     |
+| + void on_lose();                                                        |
+|                                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + ConservativePlayer();                                                  |
+|--------------------------------------------------------------------------|
 
+Konzervatív: Ha a mező ára kevesebb, mint a pénzének a fele, akkor megveszi,
 
-----------
-class GainTile : Tile 
 
-int gain;
-virtual void player_arrived(Player *p);
 
+|--------------------------------------------------------------------------|
+| class TrickyPlayer : public Player                                       |
+|--------------------------------------------------------------------------|
+| + bool want_buy(const String &tile_name, int price);                     |
+| + void on_lose();                                                        |
+|                                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + TrickyPlayer();                                                        |
+|--------------------------------------------------------------------------|
 
-----------
-class LuckTile : Tile 
+Ügyeskedő: 50% eséllyel megveszi a mezőt, ha van rá lehetősége.
 
-int chance;
-int gain_min;
-int gain_max;
-virtual void player_arrived(Player *p);
 
 
-----------
-class JailTile : Tile 
+|--------------------------------------------------------------------------|
+| class HumanPlayer : public Player                                        |
+|--------------------------------------------------------------------------|
+| + bool want_buy(const String &tile_name, int price);                     |
+| + void on_lose();                                                        |
+|                                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + HumanPlayer();                                                         |
+|--------------------------------------------------------------------------|
 
-int jail_time;
-virtual void player_arrived(Player *p);
+Emberi: Megkérdezi a felhasználót, hogy mit akar tenni.
 
 
 
-
-----------
-
-class AgressivePlayer : Player
-
-virtual void act();
-
-
-
-
-----------
-
-class ConservativePlayer : Player
-
-virtual void act();
-
-
-
-----------
-
-class TrickyPlayer : Player
-
-virtual void act();
-
-
-
-----------
-
-class HumanPlayer : Player
-
-virtual void act();
-megkérdezi, hogy mit csináljon
-
-
-
-----------
-
-class CheatingPlayer : Player
-
-int throw_result;
-
-virtual void act();
-virtual int throw_dice();
-
-
-----------
-
-class Board 
-
-Vector<Player *> players;
-Vector<Tile *> tiles;
-Vector<Player *> lost_players;
-
-int current_player;
-
-void step();
-bool is_finished();
-void print_results();
-
-void load_tile_file(String f);
-void load_player_setup_file(String f);
-
-
-
-
-step():
-
-current player -> throw dice -> wrap index -> get tile -> tile->player_arrived(p) -> if did_lose() remove from game, add to lost_players
-
-current_player++; and wrap;
-
-
-
-
-
-------------
-
-main() {
-    Board();
-    Board.load_tile_file();
-    Board.load_player_setup_file();
-
-    //esetleg kerdezhet
-
-    while (!board.is_finished()) {
-        board.step();
-
-        sleep 1s
-    }
-
-    board.print_results();
-    ret 0;
-}
-
-print_results():
-
-1. place, 2nd place print etc.
+|--------------------------------------------------------------------------|
+| class CheatingPlayer : public Player                                     |
+|--------------------------------------------------------------------------|
+| + bool want_buy(const String &tile_name, int price);                     |
+| + int throw_dice();                                                      |
+| + void on_lose();                                                        |
+|                                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + CheatingPlayer();                                                      |
+|--------------------------------------------------------------------------|
+
+Csaló: Mindent megvesz, amit csak tud. (és csak 4, 5, 6-okat dobhat)
+
+
+
+|--------------------------------------------------------------------------|
+| class PlayerLoader                                                       |
+|--------------------------------------------------------------------------|
+| + static Vector<Player *> load_player_file(const String &file_name);     |
+|--------------------------------------------------------------------------|
+
+Segít betölteni egy játékosok leírását tartalmaző filet.
+(Java-ban valószínűleg PlayerFactory lenne a neve.)
+
+Mindegy, hogy a file hogy néz ki. De itt egy példa:
+
+Player 10000 AA
+AgressivePlayer 20000 BC
+ConservativePlayer 20000 DA
+TrickyPlayer 20000 FA
+HumanPlayer 20000 RR
+CheatingPlayer 20000 AF
+
+
+
+
+|--------------------------------------------------------------------------|
+| class Tile                                                               |
+|--------------------------------------------------------------------------|
+| + String get_name();                                                     |
+| + void set_name(const String &name);                                     |
+|                                                                          |
+| + virtual void on_player_arrived(Player *p);                             |
+|                                                                          |
+| + virtual void reset();                                                  |
+|                                                                          |
+| + virtual void print();                                                  |
+| + virtual String get_class_name();                                       |
+|                                                                          |
+| + Tile();                                                                |
+| + virtual ~Tile();                                                       |
+|                                                                          |
+| - String _name;                                                          |
+|--------------------------------------------------------------------------|
+
+A Mező osztály.
+
+A rendszer majd az on_player_arrived() függvényt hívja meg, miután egy 
+játékos dobott, és rálép a következő mezőre.
+Ez a függvény mindent releváns információt írjon a konzolra.
+
+Itt maja a Mező fogja pl növelnia  játékos pénzét, vagy börtönbe tenni,
+vagy megkjérdezni, hogy meg akarja e venni megát a mezőt.
+
+reset() csak a OwnableTIle fog itt valamit csinálni, ugyanis ebben 
+ki fogja nulláyni a tulajdonosát. (Ez két játék közötti kinullázásra való)
+
+A többit, ami esetleg nem triviális, lásd a player-nél.
+
+
+
+|--------------------------------------------------------------------------|
+| class TaxTile : public Tile                                              |
+|--------------------------------------------------------------------------|
+| + int get_tax() const;                                                   |
+| + void set_tax(const int tax);                                           |
+|                                                                          |
+| + void on_player_arrived(Player *p);                                     |
+| + void print();                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + TaxTile();                                                             |
+|                                                                          |
+| - int _tax;                                                              |
+|--------------------------------------------------------------------------|
+
+- TaxTile - Amikor a játékos rálép ennyi adót kell fizetnie.
+
+
+
+|--------------------------------------------------------------------------|
+| class OwnableTile : public Tile                                          |
+|--------------------------------------------------------------------------|
+| + int get_price() const;                                                 |
+| + void set_price(const int val);                                         |
+|                                                                          |
+| + int get_enter_price() const;                                           |
+| + void set_enter_price(const int val);                                   |
+|                                                                          |
+| + Player *get_owner() const;                                             |
+| + void set_owner(Player *val);                                           |
+|                                                                          |
+| + void on_player_arrived(Player *p);                                     |
+| + void print();                                                          |
+| + void reset();                                                          |
+|                                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + OwnableTile();                                                         |
+|                                                                          |
+| - int _price;                                                            |
+| - int _enter_price;                                                      |
+| - Player *_owner;                                                        |
+|--------------------------------------------------------------------------|
+
+- OwnableTile - Ez olyan mező, amit meg lehet venni. Van vátelára, 
+illetve egy belépési költsége. Ha egy játékos rálép, és még senkié, 
+akkor az a játékos megveheti a vételárért cserébe. Ha nem veszi meg, 
+nem kell fizetnie semit. Ha valaki megveszi, akkor mindenki másnak, 
+aki rálép meg kell fiyetnie a tulajdonosnak a belépési díjat.
+Ha a tulajdonos kiesik a játékból, akkor az összes tulajdona 
+felszabadul.
+
+
+
+|--------------------------------------------------------------------------|
+| class GainTile : public Tile                                             |
+|--------------------------------------------------------------------------|
+| + int get_gain() const;                                                  |
+| + void set_gain(const int val);                                          |
+|                                                                          |
+| + void on_player_arrived(Player *p);                                     |
+| + void print();                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + GainTile();                                                            |
+|                                                                          |
+| - int _gain;                                                             |
+|--------------------------------------------------------------------------|
+
+- GainTile - Aki rálép az egy meghatározott össszeget kap.
+
+
+
+|--------------------------------------------------------------------------|
+| class LuckTile : public Tile                                             |
+|--------------------------------------------------------------------------|
+| + int get_chance() const;                                                |
+| + void set_chance(const int val);                                        |
+|                                                                          |
+| + int get_gain_min() const;                                              |
+| + void set_gain_min(const int val);                                      |
+|                                                                          |
+| + int get_gain_max() const;                                              |
+| + void set_gain_max(const int val);                                      |
+|                                                                          |
+| + void on_player_arrived(Player *p);                                     |
+| + void print();                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + LuckTile();                                                            |
+|                                                                          |
+| - int _chance;                                                           |
+| - int _gain_min;                                                         |
+| - int _gain_max;                                                         |
+|--------------------------------------------------------------------------|
+
+- LuckTile - Aki rálép kaphat megadott %-nyi eséllyel,
+két megadott érték közötti pénzt.
+
+
+
+
+|--------------------------------------------------------------------------|
+| class JailTile : public Tile                                             |
+|--------------------------------------------------------------------------|
+| + int get_jail_time() const;                                             |
+| + void set_jail_time(const int val);                                     |
+|                                                                          |
+| + void on_player_arrived(Player *p);                                     |
+| + void print();                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + JailTile();                                                            |
+|                                                                          |
+| - int _jail_time;                                                        |
+|--------------------------------------------------------------------------|
+
+- JailTile - Aki rálép, a megadott környi ideig börtönbe kerül, azaz
+annzi körig nem léphet.
+
+
+
+|--------------------------------------------------------------------------|
+| class TileLoader                                                         |
+|--------------------------------------------------------------------------|
+| + static Vector<Tile *> load_tile_file(const String &file_name);         |
+|--------------------------------------------------------------------------|
+
+Ugyanolyan betöltő osztály, mint a játékos estében.
+
+Példa file szerkezet:
+
+Tile A
+TaxTile B 3433
+TaxTile C 3433
+OwnableTile D 222 22
+OwnableTile E 222 22
+OwnableTile F 222 22
+GainTile G 100
+TaxTile H 3433
+LuckTile I 50 100 200
+TaxTile J 3433
+JailTile K 3
+TaxTile L 3433
+TaxTile M 3433
+TaxTile N 3433
+
+
+
+
+|--------------------------------------------------------------------------|
+| class Board                                                              |
+|--------------------------------------------------------------------------|
+| + Player *get_current_player();                                          |
+| + Player *get_previous_player();                                         |
+|                                                                          |
+| + int get_turn() const;                                                  |
+| + void set_turn(const int turn);                                         |
+|                                                                          |
+| + Vector<Tile *> get_tiles() const;                                      |
+| + void set_tiles(const Vector<Tile *> &tiles);                           |
+|                                                                          |
+| + Vector<Player *> get_active_players() const;                           |
+| + void set_active_players(const Vector<Player *> &players);              |
+|                                                                          |
+| + Vector<Player *> get_lost_players() const;                             |
+| + void set_lost_players(const Vector<Player *> &players);                |
+|                                                                          |
+| + void load(const String &tile_file, const String &player_file);         |
+| + void load_players(const String &file);                                 |
+| + void load_tiles(const String &file);                                   |
+|                                                                          |
+| + void step();                                                           |
+| + void run();                                                            |
+|                                                                          |
+| + void on_game_finished();                                               |
+|                                                                          |
+| + void clear();                                                          |
+| + void clear_players();                                                  |
+| + void reset();                                                          |
+|                                                                          |
+| + void print();                                                          |
+|                                                                          |
+| + Board();                                                               |
+| + Board(const String &tile_file, const String &player_file);             |
+| + virtual ~Board();                                                      |
+|                                                                          |
+| - Vector<Tile *> _tiles;                                                 |
+| - Vector<Player *> _active_players;                                      |
+| - Vector<Player *> _lost_players;                                        |
+| -                                                                        |
+| - Player *_previous_player;                                              |
+| - int _current_player_index;                                             |
+| - int _turn;                                                             |
+|--------------------------------------------------------------------------|
+
+
+on_game_finished() a játékról kiír a konyolra mindenféle információt, 
+miután véget ért.
+
+run() a fő ciklus, a step() fggvényt hívogatja, amíg több mint 1 
+aktív játékos van. Esetleg kiléphez nagy _turn szám után is.
+
+Ha a ciklus kilépett, hívja meg az on_game_finished()-et.
+
+clear() Minden vektort kiürít. 
+clear_players() csak a 2 játékos vektort üríti ki.
+ne felejtsétek ez felszabadítani a memóriát! (delete).
+
+step(): 
+Egy játékos körének a kezelése.
+
+Az algoritmus:
+
+1. Fogjuk meg az aktív játékost.
+2. Ha börtönben van, vonjunk le egy kört a börtönének számából, és kész.
+3. Dobassunk vele kockát.
+4. Számoljuk ki (modulo), hogy melyik mezőre érkezett. (player get_tile_index())
+5. Állítsuk be az új mező indexét neki (set_tile_index()).
+6. kérjük ki a megfelelő mezőt a _tiles vektorból, és hívjuk meg a 
+    on_player_arrived(p); függvényét, a játékost adjuk be paraméternek.
+7. Állítsuk be a _previous_player osztályváltozót a jelenlegi játékosra.
+8. Ha ajátékos vesztett (get_lost()), akkor rakjuk ár a _lost_players
+    veektorba, majd ellenűrizzük, hogy a _current_player_index nem indexel-e
+    túl a játékosok vektorán. Ha igen, akkor állítsuk a 
+    _current_player_index-et 0-ra. (ugye eggyel csökkent a vektor mérete.)
+9. Egyébként növeljük meg a _current_player_index-et 1-el, és ugyanűgy
+    ellenűrizzük, hogy a _current_player_index nem indexel-e
+    túl a játékosok vektorán, ha igen, akkor állítsuk a 
+    _current_player_index-et 0-ra.   
+
+
+main.cpp + int main() :
+
+A main függvénybe csak ennyi legyen:
+
+Math::randomize();
+
+Board b;
+b.load("tiles.config", "players.config");
+b.run();
+b.print();
+
+return 0;
+
+Nyilvánvalóan a "tiles.config", "players.config" fájlokat hozzátok létre.
 
 
