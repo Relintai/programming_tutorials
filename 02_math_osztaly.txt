@@ -147,9 +147,9 @@ UML:
 | + seed(s : unsigned int) { static }                        |  -> srand(s);
 | + randomize() { static }                                   |  -> srand(time(NULL));
 |                                                            |
-| + rand() : int { static }                                  |  -> return rand();
-| + randf() : float { static }                               |  -> return rand() / static_cast<float>(RANDOM_32BIT_MAX);
-| + randd() : double { static }                              |  -> return rand() / static_cast<double>(RANDOM_32BIT_MAX);
+| + rand() : int { static }                                  |  -> return ::rand();
+| + randf() : float { static }                               |  -> return ::rand() / static_cast<float>(RANDOM_32BIT_MAX);
+| + randd() : double { static }                              |  -> return ::rand() / static_cast<double>(RANDOM_32BIT_MAX);
 |                                                            |
 | + rand(int m) : int { static }                             |  -> return rand() % m;
 |                                                            |

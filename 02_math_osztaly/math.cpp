@@ -44,22 +44,22 @@ void Math::randomize() {
 }
 
 int Math::rand() {
-	return rand();
+	return ::rand();
 }
 
 float Math::randf() {
-	return rand() / static_cast<float>(RANDOM_32BIT_MAX);
+	return ::rand() / static_cast<float>(RANDOM_32BIT_MAX);
 }
 
 double Math::randd() {
-	return rand() / static_cast<double>(RANDOM_32BIT_MAX);
+	return ::rand() / static_cast<double>(RANDOM_32BIT_MAX);
 }
 
-int rand(const int m) {
+int Math::rand(const int m) {
     return rand() % m;
 }
 
-int rand(const int from, const int to) {
+int Math::rand(const int from, const int to) {
     return (rand() % (to - from)) + from;
 }
 
