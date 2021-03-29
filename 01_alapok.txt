@@ -1,14 +1,3 @@
-rev 1: Néhány képlet hozzáadva / javítva. Néhány elírás javítva.
-rev 2: abs() képlet hozzáadva.
-rev 3: Hozzáadtam vector és float-os közötti szorzás operátorokat mindkét vektorhoz.
-rev 4: Vector length képlet hozzáadva.
-rev 5: Vector dot() képletben hiányzott egy .y
-rev 6: lenght_squared -> length_squared.
-rev 7: Rect2 is_equal_approx paraméter típus kijavítva.
-rev 8: Rect2 grow, shrink visszatérési érték javítva (Már nincs).
-rev 9: intersects_include_borders typo javítva.
-rev 10: IntVectorba pop_back metódus hozzáadva.
-rev 11: String: c_str + nul terminator megjegyzés hozzáadva.
 
 1. Implementáld az alábbi 2ds matematikai vektor osztályt:
 
