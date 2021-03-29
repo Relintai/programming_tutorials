@@ -6,8 +6,12 @@ void Renderer::present() {
 	SDL_RenderPresent(_renderer);
 }
 
-void Renderer::set_draw_color(Uint8 r, Uint8 g, Uint8 b, Uint8 a) {
+void Renderer::set_draw_color(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a) {
 	SDL_SetRenderDrawColor(_renderer, r, g, b, a);
+}
+
+void Renderer::set_draw_color(const Color &color) {
+    SDL_SetRenderDrawColor(_renderer, color.r, color.g, color.b, color.a);
 }
 
 void Renderer::clear() {

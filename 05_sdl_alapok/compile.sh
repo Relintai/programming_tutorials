@@ -16,8 +16,9 @@ fi
 
 g++ -Wall -g -c math.cpp -o obj/math.o
 g++ -Wall -g -c rect2.cpp -o obj/rect2.o
+g++ -Wall -g -c color.cpp -o obj/color.o
 g++ -Wall -g $(sdl2-config --cflags) -c renderer.cpp -o obj/renderer.o 
 g++ -Wall -g $(sdl2-config --cflags) -c main.cpp -o obj/main.o
 
-g++ -o bin/program obj/math.o obj/rect2.o obj/renderer.o obj/main.o $(sdl2-config --libs) 
+g++ -o bin/program obj/math.o obj/rect2.o obj/color.o obj/renderer.o obj/main.o $(sdl2-config --libs) 
 
