@@ -1,6 +1,8 @@
 
 Írni fogunk egy leegyszerűsített monopoly szerűséget. 
 
+Ha a vektorod remove() függvénye nem tartja meg a sorrendet, akkor adj hozzá egy remove_keep_order() függvényt.
+
 
 class Tile 
 
