@@ -258,6 +258,10 @@ String::String() {
 	_actual_size = 0;
 	_size = 0;
 	_grow_by = 100;
+
+	ensure_capacity(100);
+
+	_data[0] = '\0';
 }
 
 String::String(const String &other) {
@@ -272,6 +276,8 @@ String::String(const String &other) {
 	for (int i = 0; i < other._size; ++i) {
 		_data[i] = other._data[i];
 	}
+
+	_data[other._size] = '\0';
 }
 
 String::String(const String &other, int grow_by) {

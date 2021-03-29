@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 
+#include "math.h"
+
 String Player::get_name() {
 	return _name;
 }
@@ -23,7 +25,21 @@ int Player::get_money() const {
 }
 
 void Player::set_money(const int val) {
+	int c = _money - val;
+
+	if (c >= 0) {
+		printf("Player - %s has gained %d dollars.\n", _name.c_str(), c);
+	} else {
+		printf("Player - %s has gained %d dollars.\n", _name.c_str(), -c);
+	}
+
 	_money = val;
+
+	if (_money <= 0) {
+		_money = 0;
+
+		set_lost(true);
+	}
 }
 
 int Player::get_jail_time() const {
@@ -31,6 +47,10 @@ int Player::get_jail_time() const {
 }
 
 void Player::set_jail_time(const int val) {
+	if (_jail_time == 0) {
+		printf("Player - %s has been jailed for %d turns.\n", _name.c_str(), val);
+	}
+
 	_jail_time = val;
 }
 
@@ -40,19 +60,26 @@ bool Player::get_lost() const {
 
 void Player::set_lost(const bool val) {
 	_lost = val;
+
+	if (val) {
+		on_lose();
+	}
 }
 
 bool Player::want_buy(const String &tile_name, int price) {
 	return false;
 }
 
-void Player::pay_entry_fee(const int val, Player *to) {
-}
+int Player::throw_dice() {
+	int t = Math::rand(1, 7);
 
-void Player::throw_dice() {
+	printf("Player - %s has thrown the dice, and rolled %d.\n", _name.c_str(), t);
+
+	return t;
 }
 
 void Player::on_lose() {
+	printf("Player - %s has lost the game. And he's sad.\n", _name.c_str());
 }
 
 void Player::print() {
@@ -77,6 +104,7 @@ bool AgressivePlayer::want_buy(const String &tile_name, int price) {
 	return false;
 }
 void AgressivePlayer::on_lose() {
+	printf("Player - %s has lost the game. And he's angry.\n", _name.c_str());
 }
 String AgressivePlayer::get_class_name() {
 	return "AgressivePlayer";
@@ -101,6 +129,7 @@ bool TrickyPlayer::want_buy(const String &tile_name, int price) {
 	return false;
 }
 void TrickyPlayer::on_lose() {
+	printf("Player - %s has lost the game.\n", _name.c_str());
 }
 String TrickyPlayer::get_class_name() {
 	return "TrickyPlayer";
@@ -113,6 +142,7 @@ bool HumanPlayer::want_buy(const String &tile_name, int price) {
 	return false;
 }
 void HumanPlayer::on_lose() {
+	printf("Player - %s has lost the game. And he's really sad.\n", _name.c_str());
 }
 String HumanPlayer::get_class_name() {
 	return "HumanPlayer";
@@ -124,9 +154,15 @@ HumanPlayer::HumanPlayer() :
 bool CheatingPlayer::want_buy(const String &tile_name, int price) {
 	return false;
 }
-void CheatingPlayer::throw_dice() {
+int CheatingPlayer::throw_dice() {
+	int t = Math::rand(3, 7);
+
+	printf("Player - %s has thrown the dice, and rolled %d.\n", _name.c_str(), t);
+
+	return t;
 }
 void CheatingPlayer::on_lose() {
+	printf("Player - %s has lost the game. And he's really angry.\n", _name.c_str());
 }
 String CheatingPlayer::get_class_name() {
 	return "CheatingPlayer";

@@ -8,6 +8,7 @@ public:
 	void push_back(const T &element);
 	void pop_back();
 	void remove(const int index);
+	void remove_keep_order(const int index);
 	void erase(const T &element);
 	void clear();
 	bool empty() const;
@@ -60,6 +61,15 @@ void Vector<T>::remove(const int index) {
 	_data[index] = _data[_size - 1];
 
 	--_size;
+}
+
+template <class T>
+void Vector<T>::remove_keep_order(const int index) {
+	--_size;
+
+	for (int i = index; i < _size; ++i) {
+		_data[i] = _data[i + 1];
+	}
 }
 
 template <class T>

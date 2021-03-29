@@ -21,8 +21,7 @@ public:
 	void set_lost(const bool val);
 
 	virtual bool want_buy(const String &tile_name, int price);
-	virtual void pay_entry_fee(const int val, Player *to);
-	virtual void throw_dice();
+	virtual int throw_dice();
 	virtual void on_lose();
 
 	virtual void print();
@@ -83,7 +82,7 @@ public:
 class CheatingPlayer : public Player {
 public:
 	bool want_buy(const String &tile_name, int price);
-	void throw_dice();
+	int throw_dice();
 	void on_lose();
 
 	String get_class_name();

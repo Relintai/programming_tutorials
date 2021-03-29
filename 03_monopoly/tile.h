@@ -10,6 +10,8 @@ public:
 
 	virtual void on_player_arrived(Player *p);
 
+	virtual void reset();
+
 	virtual void print();
 	virtual String get_class_name();
 
@@ -26,6 +28,7 @@ public:
 	void set_tax(const int tax);
 
 	void on_player_arrived(Player *p);
+	void print();
 	String get_class_name();
 
 	TaxTile();
@@ -46,6 +49,9 @@ public:
 	void set_owner(Player *val);
 
 	void on_player_arrived(Player *p);
+	void print();
+	void reset();
+
 	String get_class_name();
 
 	OwnableTile();
@@ -62,6 +68,7 @@ public:
 	void set_gain(const int val);
 
 	void on_player_arrived(Player *p);
+	void print();
 	String get_class_name();
 
 	GainTile();
@@ -82,6 +89,7 @@ public:
 	void set_gain_max(const int val);
 
 	void on_player_arrived(Player *p);
+	void print();
 	String get_class_name();
 
 	LuckTile();
@@ -98,6 +106,7 @@ public:
 	void set_jail_time(const int val);
 
 	void on_player_arrived(Player *p);
+	void print();
 	String get_class_name();
 
 	JailTile();

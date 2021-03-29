@@ -18,6 +18,8 @@ g++ -Wall -g -c player.cpp -o obj/player.o
 g++ -Wall -g -c player_loader.cpp -o obj/player_loader.o
 g++ -Wall -g -c tile_loader.cpp -o obj/tile_loader.o
 
+g++ -Wall -g -c board.cpp -o obj/board.o
+
 g++ -Wall -g -c main.cpp -o obj/main.o
-g++ -o bin/program obj/string.o obj/math.o obj/tile.o obj/tile_loader.o obj/player.o obj/player_loader.o obj/main.o
+g++ -g -o bin/program obj/string.o obj/math.o obj/tile.o obj/tile_loader.o obj/player.o obj/player_loader.o obj/board.o obj/main.o
 

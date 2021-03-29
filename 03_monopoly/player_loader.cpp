@@ -39,11 +39,10 @@ Vector<Player *> PlayerLoader::load_player_file(const String &file_name) {
 
 				f >> money >> name;
 
-				p->set_money(money);
-
 				String n(name.c_str());
-
 				p->set_name(n);
+
+				p->set_money(money);
 
 				players.push_back(p);
 			}

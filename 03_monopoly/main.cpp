@@ -10,18 +10,19 @@
 #include "tile_loader.h"
 #include "player_loader.h"
 
+#include "board.h"
+
+#include "math.h"
+
 int main() {
+	Math::randomize();
 
-	Vector<Tile *> tiles = TileLoader::load_tile_file("tiles.config");
-	Vector<Player *> players = PlayerLoader::load_player_file("players.config");
+	Board b;
+	b.load("tiles.config", "players.config");
 
-	for (int i = 0; i < tiles.size(); ++i) {
-		tiles[i]->print();
-	}
+	b.run();
 
-	for (int i = 0; i < players.size(); ++i) {
-		players[i]->print();
-	}
+	b.print();
 
 	return 0;
 }
