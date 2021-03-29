@@ -13,7 +13,7 @@ void Tile::set_name(const String &name) {
 }
 
 void Tile::on_player_arrived(Player *p) {
-    printf("Player %s just stepped on %s.\n", p->get_name().c_str(), _name.c_str());
+    printf("Player - %s just stepped on %s.\n", p->get_name().c_str(), _name.c_str());
 }
 
 void Tile::reset() {

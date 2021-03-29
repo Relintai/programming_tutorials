@@ -4,6 +4,8 @@
 
 #include "math.h"
 
+#include <iostream>
+
 String Player::get_name() {
 	return _name;
 }
@@ -101,7 +103,7 @@ Player::~Player() {
 }
 
 bool AgressivePlayer::want_buy(const String &tile_name, int price) {
-	return false;
+	return true;
 }
 void AgressivePlayer::on_lose() {
 	printf("Player - %s has lost the game. And he's angry.\n", _name.c_str());
@@ -114,9 +116,14 @@ AgressivePlayer::AgressivePlayer() :
 }
 
 bool ConservativePlayer::want_buy(const String &tile_name, int price) {
+	if (price < _money / 2) {
+		return true;
+	}
+
 	return false;
 }
 void ConservativePlayer::on_lose() {
+	printf("Player - %s has lost the game.\n", _name.c_str());
 }
 String ConservativePlayer::get_class_name() {
 	return "ConservativePlayer";
@@ -126,7 +133,7 @@ ConservativePlayer::ConservativePlayer() :
 }
 
 bool TrickyPlayer::want_buy(const String &tile_name, int price) {
-	return false;
+	return Math::rand(2) == 0 ? true : false;;
 }
 void TrickyPlayer::on_lose() {
 	printf("Player - %s has lost the game.\n", _name.c_str());
@@ -139,7 +146,13 @@ TrickyPlayer::TrickyPlayer() :
 }
 
 bool HumanPlayer::want_buy(const String &tile_name, int price) {
-	return false;
+	bool w = false;
+
+	printf("Player - %s do you want to buy %s for %d? You have %d dollars.\n", _name.c_str(), tile_name.c_str(), price, _money);
+
+	std::cin >> w;
+
+	return w;
 }
 void HumanPlayer::on_lose() {
 	printf("Player - %s has lost the game. And he's really sad.\n", _name.c_str());
@@ -152,7 +165,7 @@ HumanPlayer::HumanPlayer() :
 }
 
 bool CheatingPlayer::want_buy(const String &tile_name, int price) {
-	return false;
+	return true;
 }
 int CheatingPlayer::throw_dice() {
 	int t = Math::rand(3, 7);
