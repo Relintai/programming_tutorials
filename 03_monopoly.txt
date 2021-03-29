@@ -1,5 +1,5 @@
 
-Írni fogunk egy leegyszerűsített monopoly szerűséget. 
+Írni fogunk egy leegyszerűsített Monopoly szerűséget. 
 
 Ebben a példában már használni fogunk öröklődést, és polimorfizmust is!
 
@@ -26,8 +26,8 @@ voltak írva, de mostantól nem fogom annyira átszerkeszteni.
 
 A játékszabályok, amiket implementálni fogunk:
 
-A játék n db játákossal indul. Mindenkinek van valamennyi pénze
-(legyen egyeenként megadható). És van egy játékmező. (Mint a valódi 
+A játék n db ját;kossal indul. Mindenkinek van valamennyi pénze
+(legyen egyenként megadható). És van egy játékmező. (Mint a valódi 
 monopolyban kb).
 A játékmezőn vannak mezők. Ezeknek a típusai:
 
@@ -36,12 +36,12 @@ A játékmezőn vannak mezők. Ezeknek a típusai:
 - OwnableTile - Ez olyan mező, amit meg lehet venni. Van vátelára, 
 illetve egy belépési költsége. Ha egy játékos rálép, és még senkié, 
 akkor az a játékos megveheti a vételárért cserébe. Ha nem veszi meg, 
-nem kell fizetnie semit. Ha valaki megveszi, akkor mindenki másnak, 
-aki rálép meg kell fiyetnie a tulajdonosnak a belépési díjat.
+nem kell fizetnie semmit. Ha valaki megveszi, akkor mindenki másnak, 
+aki rálép meg kell fizetnie a tulajdonosnak a belépési díjat.
 Ha a tulajdonos kiesik a játékból, akkor az összes tulajdona 
 felszabadul.
 
-- GainTile - Aki rálép az egy meghatározott össszeget kap.
+- GainTile - Aki rálép az egy meghatározott összeget kap.
 
 - LuckTile - Aki rálép kaphat megadott %-nyi eséllyel,
 két megadott érték közötti pénzt.
@@ -54,12 +54,12 @@ Egy játékos akkor esik ki, ha elfogyott minden pénze.
 Az nyer, aki a legutoljára bent marad.
 
 A játékosok előre meghatározott, fix sorrendben jönnek egymás után,
-a körük elején dobnak 1db 6 oldalú dobókockával, majd anyit lépnek, 
-amennyit dobtak, és a mező amire érkeztek hatásal lesz rájuk.
+a körük elején dobnak 1db 6 oldalú dobókockával, majd annyit lépnek, 
+amennyit dobtak, és a mező amire érkeztek hattásal lesz rájuk.
 
 A játékosok a játékmezőn körbe-körbe haladnak.
 
-A játékot úgy fogjuk megírni, hogy legyenek különböző szemályiségü
+A játékot úgy fogjuk megírni, hogy legyenek különböző személyiségü
 gépi játékosok:
 
 Agresszív: Mindent megvesz, amíg van rá pénze.
@@ -68,13 +68,13 @@ Konzervatív: Ha a mező ára kevesebb, mint a pénzének a fele, akkor megveszi
 Emberi: Megkérdezi a felhasználót, hogy mit akar tenni.
 Csaló: Mindent megvesz, amit csak tud. (csak 4, 5, 6-okat dobhat)
 
-A játokosok beállításait, és a mezőket is fájlból tötsük be.
+A játékosok beállításait, és a mezőket is fájlból töltsük be.
 
 Konzolos program lesz, szóval mindent ami fontos, a konzolra kell 
 majd kiírnunk, és a konzolról kell beolvasni, ha kérdezni szeretnénk a 
 felhasználótól.
 
-A feladatm hogy ezt implementáljuk.
+A feladat, hogy ezt implementáljuk.
 
 Kezdjük a játékos osztályokkal:
 
@@ -120,7 +120,7 @@ set_money, set_jail_time -> írjon üzenetet a konzolra.
 
 set_lost(val) -> ha a val true, hívja meg az on_lost() függvényt.
 
-want_buy() függvénnyel fogja meegkérdezni a rendszer, hogy meg akarja-e 
+want_buy() függvénnyel fogja megkérdezni a rendszer, hogy meg akarja-e 
 venni a játékos a jelenlegi mezőt.
 
 Megj.: nagy programban valószínűleg érdemes lenne a magát a Tile osztályt 
@@ -129,7 +129,7 @@ Player osztály.
 
 Ezt aműgy meg lehet oldani, méghozzá úgy, hogy a Tile osztály a Player 
 headerje tetején előre van deklarálva (class Tile;), a Player osztály 
-a Tile headerje tetején van előre deklarálva (class Player;), és acsak a
+a Tile headerje tetején van előre deklarálva (class Player;), és csak a
 .cpp fájlokoban vannak maguk a headerek beincludeolva.
 
 Hogy könnyítsek a dolgotokon, ezt kihagytam, viszont ha valaki elég erőt
@@ -273,11 +273,11 @@ A rendszer majd az on_player_arrived() függvényt hívja meg, miután egy
 játékos dobott, és rálép a következő mezőre.
 Ez a függvény mindent releváns információt írjon a konzolra.
 
-Itt maja a Mező fogja pl növelnia  játékos pénzét, vagy börtönbe tenni,
-vagy megkjérdezni, hogy meg akarja e venni megát a mezőt.
+Itt maja a Mező fogja pl növelni a játékos pénzét, vagy börtönbe tenni,
+vagy megkérdezni, hogy meg akarja-e venni meg át a mezőt.
 
-reset() csak a OwnableTIle fog itt valamit csinálni, ugyanis ebben 
-ki fogja nulláyni a tulajdonosát. (Ez két játék közötti kinullázásra való)
+reset() csak a OwnableTile fog itt valamit csinálni, ugyanis ebben 
+ki fogja nullázni a tulajdonosát. (Ez két játék közötti kinullázásra való)
 
 A többit, ami esetleg nem triviális, lásd a player-nél.
 
@@ -327,11 +327,11 @@ A többit, ami esetleg nem triviális, lásd a player-nél.
 | - Player *_owner;                                                        |
 |--------------------------------------------------------------------------|
 
-- OwnableTile - Ez olyan mező, amit meg lehet venni. Van vátelára, 
+- OwnableTile - Ez olyan mező, amit meg lehet venni. Van vételára, 
 illetve egy belépési költsége. Ha egy játékos rálép, és még senkié, 
 akkor az a játékos megveheti a vételárért cserébe. Ha nem veszi meg, 
-nem kell fizetnie semit. Ha valaki megveszi, akkor mindenki másnak, 
-aki rálép meg kell fiyetnie a tulajdonosnak a belépési díjat.
+nem kell fizetnie semmit. Ha valaki megveszi, akkor mindenki másnak, 
+aki rálép meg kell fizetnie a tulajdonosnak a belépési díjat.
 Ha a tulajdonos kiesik a játékból, akkor az összes tulajdona 
 felszabadul.
 
@@ -352,7 +352,7 @@ felszabadul.
 | - int _gain;                                                             |
 |--------------------------------------------------------------------------|
 
-- GainTile - Aki rálép az egy meghatározott össszeget kap.
+- GainTile - Aki rálép az egy meghatározott összeget kap.
 
 
 
@@ -401,7 +401,7 @@ két megadott érték közötti pénzt.
 |--------------------------------------------------------------------------|
 
 - JailTile - Aki rálép, a megadott környi ideig börtönbe kerül, azaz
-annzi körig nem léphet.
+annyi körig nem léphet.
 
 
 
@@ -480,11 +480,11 @@ TaxTile N 3433
 |--------------------------------------------------------------------------|
 
 
-on_game_finished() a játékról kiír a konyolra mindenféle információt, 
+on_game_finished() a játékról kiír a konzolra mindenféle információt, 
 miután véget ért.
 
-run() a fő ciklus, a step() fggvényt hívogatja, amíg több mint 1 
-aktív játékos van. Esetleg kiléphez nagy _turn szám után is.
+run() a fő ciklus, a step() függvényt hívogatja, amíg több mint 1 
+aktív játékos van. Esetleg kiléphet nagy _turn szám után is.
 
 Ha a ciklus kilépett, hívja meg az on_game_finished()-et.
 
@@ -506,10 +506,10 @@ Az algoritmus:
     on_player_arrived(p); függvényét, a játékost adjuk be paraméternek.
 7. Állítsuk be a _previous_player osztályváltozót a jelenlegi játékosra.
 8. Ha ajátékos vesztett (get_lost()), akkor rakjuk ár a _lost_players
-    veektorba, majd ellenűrizzük, hogy a _current_player_index nem indexel-e
+    veektorba, majd ellenőrizzük, hogy a _current_player_index nem indexel-e
     túl a játékosok vektorán. Ha igen, akkor állítsuk a 
     _current_player_index-et 0-ra. (ugye eggyel csökkent a vektor mérete.)
-9. Egyébként növeljük meg a _current_player_index-et 1-el, és ugyanűgy
+9. Egyébként növeljük meg a _current_player_index-et 1-el, és ugyanúgy
     ellenűrizzük, hogy a _current_player_index nem indexel-e
     túl a játékosok vektorán, ha igen, akkor állítsuk a 
     _current_player_index-et 0-ra.   
