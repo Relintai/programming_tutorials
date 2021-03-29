@@ -2,20 +2,6 @@ SDL2 Projekt setup
 
 A code blocks-ot fogjuk használni.
 
-(
-Build scriptekkel így lehet megcsinálni: 
-
-Videók:
-https://drive.google.com/file/d/1Q9FCnoeFN6tTq2eoW8eIFnHmc9ktwlS_/view?usp=sharing
-https://drive.google.com/file/d/1Uqp927Kz_MUpBTeQNGO0lvcy6ser3i3H/view?usp=sharing
-
-Kód:
-https://drive.google.com/file/d/1EuGilY0o0zJKIViEccHNQivcTGddTw4e/view?usp=sharing
-https://drive.google.com/file/d/1p23sIOQ1LEz6aofLBveQq1_CdtzZc0uu/view?usp=sharing
-)
-
-
-
 ==========  Windows:  ====================================================================================================
 
 
@@ -187,7 +173,7 @@ Ez azt jelenti, hogy 32 bites módban fordít a ti fordítótok.
 
 -- Megj. 2: ----------------------------------------------------------------------------------------------------------------
 
-Innen elérhető egy működő projekt: https://drive.google.com/file/d/1Y9fffctKozhBhPIv8eAGVyjMFBebQlcH/view?usp=sharing
+Elérhető egy működő porojekt a 04_sdl_setup mappában.
 
 
 
