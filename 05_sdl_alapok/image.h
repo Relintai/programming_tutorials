@@ -9,7 +9,7 @@
 
 class Image {
 public:
-	void create(Uint32 flags, int width, int height);
+	void create(const Uint32 flags, const int width, const int height);
 
 	void enable_transparent_color(const Color &color);
 	void disable_transparent_color();
