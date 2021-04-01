@@ -13,7 +13,6 @@ public:
 
 	void enable_transparent_color(const Color &color);
 	void disable_transparent_color();
-	void set_transparent_color(const Color &color);
 	bool has_transparent_color();
 	Color get_transparent_color();
 
@@ -21,18 +20,15 @@ public:
 	void set_color_mod(const Color &color);
 
 	Color get_alpha_mod();
-	void set_alpha_mod(const Color &color);
+	void set_alpha_mod(const Uint8 alpha);
 
 	SDL_BlendMode get_blend_mode();
-	void get_blend_mode(const SDL_BlendMode mode);
+	void set_blend_mode(const SDL_BlendMode mode);
 
 	Rect2 get_clip_rect();
-	void get_clip_rect(const Rect2 &mode);
+	void set_clip_rect(const Rect2 &rect);
 
-	Image *duplicate();
-
-	void convert(const SDL_PixelFormat *fmt, Uint32 flags);
-	void convert(Uint32 pixel_format, Uint32 flags);
+	void duplicate(Image *into);
 
 	void fill_rect(const Rect2 &rect, const Color &color);
 	void fill_rects(const Vector<Rect2> &rects, const Color &color);
@@ -46,7 +42,8 @@ public:
 
 	void free();
 
-	void load_bmp();
+	void load_bmp(const String &file_name);
+	void save_bmp(const String &file_name);
 
 	Uint32 get_width() const;
 	Uint32 get_height() const;
@@ -54,6 +51,7 @@ public:
 	SDL_Surface *get_surface();
 
 	Image();
+	Image(const String &file_name);
 	virtual ~Image();
 
 private:

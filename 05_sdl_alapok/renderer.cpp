@@ -45,25 +45,25 @@ int Renderer::get_dpi() const {
 }
 
 int Renderer::get_size_w() const {
-    int w;
-    int h;
+	int w;
+	int h;
 
-    SDL_GetWindowSize(_window, &w, &h);
+	SDL_GetWindowSize(_window, &w, &h);
 
-    return w;
+	return w;
 }
 
 int Renderer::get_size_h() const {
-    int w;
-    int h;
+	int w;
+	int h;
 
-    SDL_GetWindowSize(_window, &w, &h);
+	SDL_GetWindowSize(_window, &w, &h);
 
-    return h;
+	return h;
 }
 
 void Renderer::get_size(int *w, int *h) const {
-    SDL_GetWindowSize(_window, w, h);
+	SDL_GetWindowSize(_window, w, h);
 }
 
 void Renderer::initialize() {
@@ -91,6 +91,14 @@ void Renderer::destroy() {
 
 	_window = nullptr;
 	_renderer = nullptr;
+}
+
+SDL_Window *Renderer::get_window() {
+	return _window;
+}
+
+SDL_Renderer *Renderer::get_renderer() {
+	return _renderer;
 }
 
 Renderer::Renderer() {
