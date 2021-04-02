@@ -3,8 +3,8 @@
 
 #include "color.h"
 #include "rect2.h"
-#include "texture.h"
 #include "sprite.h"
+#include "texture.h"
 
 #include <SDL.h>
 
@@ -15,8 +15,18 @@ public:
 	void set_draw_color(const Color &color);
 	void clear();
 
-	void draw_rect(const SDL_Rect &rect);
+	SDL_BlendMode get_blend_mode() const;
+	void set_blend_mode(const SDL_BlendMode mode);
+
+	void draw_point(const int x, const int y);
+	void draw_point(const float x, const float y);
+
+	void draw_line(const int x1, const int x2, const int y1, const int y2);
+	void draw_line(const float x1, const float x2, const float y1, const float y2);
+
 	void draw_rect(const Rect2 &rect);
+
+	void draw_fill_rect(const Rect2 &rect);
 
 	void draw_texture(const Texture &texture, const Rect2 &dst_rect);
 	void draw_texture(const Texture &texture, const Rect2 &src_rect, const Rect2 &dst_rect);
@@ -25,9 +35,32 @@ public:
 	void draw_sprite(const Sprite &sprite);
 
 	int get_dpi() const;
+	int get_window_size_w() const;
+	int get_window_size_h() const;
 	int get_size_w() const;
 	int get_size_h() const;
+	void set_size(const int w, const int h) const;
 	void get_size(int *w, int *h) const;
+
+	float get_scale_w() const;
+	float get_scale_h() const;
+	void set_scale(const float w, const float h) const;
+	void get_scale(float *w, float *h) const;
+
+	bool get_integer_scaling() const;
+	void set_integer_scaling(const bool enable);
+
+	Rect2 get_viewport() const;
+	void set_viewport(const Rect2 &rect) const;
+
+	Rect2 get_clip_rect() const;
+	void set_clip_rect(Rect2 *rect) const;
+	bool clip_rect_enabled() const;
+
+	bool render_target_supported();
+
+	SDL_Texture *get_render_target();
+	void set_render_target(Texture *texture);
 
 	void initialize();
 	void destroy();

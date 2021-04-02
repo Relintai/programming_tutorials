@@ -20,10 +20,37 @@ void Renderer::clear() {
 	SDL_RenderClear(_renderer);
 }
 
-void Renderer::draw_rect(const SDL_Rect &rect) {
-	SDL_RenderFillRect(_renderer, &rect);
+SDL_BlendMode Renderer::get_blend_mode() const {
+	SDL_BlendMode mode;
+	SDL_GetRenderDrawBlendMode(_renderer, &mode);
+
+	return mode;
 }
+void Renderer::set_blend_mode(const SDL_BlendMode mode) {
+	SDL_SetRenderDrawBlendMode(_renderer, mode);
+}
+
+void Renderer::draw_point(const int x, const int y) {
+	SDL_RenderDrawPoint(_renderer, x, y);
+}
+void Renderer::draw_point(const float x, const float y) {
+	SDL_RenderDrawPointF(_renderer, x, y);
+}
+
+void Renderer::draw_line(const int x1, const int x2, const int y1, const int y2) {
+	SDL_RenderDrawLine(_renderer, x1, x2, y1, y2);
+}
+void Renderer::draw_line(const float x1, const float x2, const float y1, const float y2) {
+	SDL_RenderDrawLineF(_renderer, x1, x2, y1, y2);
+}
+
 void Renderer::draw_rect(const Rect2 &rect) {
+	SDL_Rect r = rect.as_rect();
+
+	SDL_RenderDrawRect(_renderer, &r);
+}
+
+void Renderer::draw_fill_rect(const Rect2 &rect) {
 	SDL_Rect r = rect.as_rect();
 
 	SDL_RenderFillRect(_renderer, &r);
@@ -99,7 +126,7 @@ int Renderer::get_dpi() const {
 	return 1;
 }
 
-int Renderer::get_size_w() const {
+int Renderer::get_window_size_w() const {
 	int w;
 	int h;
 
@@ -108,7 +135,7 @@ int Renderer::get_size_w() const {
 	return w;
 }
 
-int Renderer::get_size_h() const {
+int Renderer::get_window_size_h() const {
 	int w;
 	int h;
 
@@ -117,8 +144,111 @@ int Renderer::get_size_h() const {
 	return h;
 }
 
+int Renderer::get_size_w() const {
+	int w;
+	int h;
+
+	SDL_RenderGetLogicalSize(_renderer, &w, &h);
+
+	return w;
+}
+
+int Renderer::get_size_h() const {
+	int w;
+	int h;
+
+	SDL_RenderGetLogicalSize(_renderer, &w, &h);
+
+	return h;
+}
+
 void Renderer::get_size(int *w, int *h) const {
-	SDL_GetWindowSize(_window, w, h);
+	SDL_RenderGetLogicalSize(_renderer, w, h);
+}
+
+void Renderer::set_size(const int w, const int h) const {
+	SDL_RenderSetLogicalSize(_renderer, w, h);
+}
+
+float Renderer::get_scale_w() const {
+	float w;
+	float h;
+
+	SDL_RenderGetScale(_renderer, &w, &h);
+
+	return w;
+}
+float Renderer::get_scale_h() const {
+	float w;
+	float h;
+
+	SDL_RenderGetScale(_renderer, &w, &h);
+
+	return h;
+}
+void Renderer::set_scale(const float w, const float h) const {
+	SDL_RenderSetScale(_renderer, w, h);
+}
+void Renderer::get_scale(float *w, float *h) const {
+	SDL_RenderGetScale(_renderer, w, h);
+}
+
+bool Renderer::get_integer_scaling() const {
+	return SDL_RenderGetIntegerScale(_renderer);
+}
+void Renderer::set_integer_scaling(const bool enable) {
+	if (enable)
+		SDL_RenderSetIntegerScale(_renderer, SDL_TRUE);
+	else
+		SDL_RenderSetIntegerScale(_renderer, SDL_FALSE);
+}
+
+Rect2 Renderer::get_viewport() const {
+	SDL_Rect r;
+
+	SDL_RenderGetViewport(_renderer, &r);
+
+	return Rect2(r.x, r.y, r.w, r.h);
+}
+void Renderer::set_viewport(const Rect2 &rect) const {
+	SDL_Rect r = rect.as_rect();
+
+	SDL_RenderSetViewport(_renderer, &r);
+}
+
+Rect2 Renderer::get_clip_rect() const {
+	SDL_Rect r;
+
+	SDL_RenderGetClipRect(_renderer, &r);
+
+	return Rect2(r.x, r.y, r.w, r.h);
+}
+void Renderer::set_clip_rect(Rect2 *rect) const {
+	if (rect) {
+		SDL_Rect r = rect->as_rect();
+
+		SDL_RenderSetClipRect(_renderer, &r);
+	} else {
+		SDL_RenderSetClipRect(_renderer, nullptr);
+	}
+}
+bool Renderer::clip_rect_enabled() const {
+	return SDL_RenderIsClipEnabled(_renderer);
+}
+
+bool Renderer::render_target_supported() {
+	return SDL_RenderTargetSupported(_renderer);
+}
+
+SDL_Texture *Renderer::get_render_target() {
+	return SDL_GetRenderTarget(_renderer);
+}
+void Renderer::set_render_target(Texture *texture) {
+	if (texture) {
+		SDL_SetRenderTarget(_renderer, texture->get_texture());
+	} else {
+		SDL_SetRenderTarget(_renderer, nullptr);
+	}
 }
 
 void Renderer::initialize() {

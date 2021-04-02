@@ -141,6 +141,14 @@ SDL_Texture *Texture::get_texture() const {
 	return _texture;
 }
 
+bool Texture::is_render_target() {
+	if (_texture == Renderer::get_singleton()->get_render_target()) {
+		return true;
+	}
+
+	return false;
+}
+
 Texture::Texture() {
 	_image = nullptr;
 	_texture = nullptr;

@@ -53,7 +53,7 @@ int main(int argv, char **args) {
 		0, 0, 0 // Black
 	};
 
-	SDL_Rect colorBar;
+	Rect2 colorBar;
 	colorBar.x = 0;
 	colorBar.y = 0;
 	colorBar.w = 90;

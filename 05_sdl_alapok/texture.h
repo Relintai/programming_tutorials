@@ -30,6 +30,8 @@ public:
     SDL_Texture *get_texture();
     SDL_Texture *get_texture() const;
 
+    bool is_render_target();
+
     Texture();
     Texture(Image *image);
     virtual ~Texture();
