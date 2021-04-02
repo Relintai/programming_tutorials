@@ -22,13 +22,39 @@ void Renderer::draw_rect(const SDL_Rect &rect) {
 	SDL_RenderFillRect(_renderer, &rect);
 }
 void Renderer::draw_rect(const Rect2 &rect) {
-	SDL_Rect r;
-	r.x = rect.x;
-	r.y = rect.y;
-	r.w = rect.w;
-	r.h = rect.h;
+	SDL_Rect r = rect.as_rect();
 
 	SDL_RenderFillRect(_renderer, &r);
+}
+
+void Renderer::draw_texture(const Texture &texture, const Rect2 &dst_rect) {
+	SDL_Rect sr;
+
+	sr.x = 0; 
+	sr.y = 0;
+	sr.w = texture.get_width();
+	sr.h = texture.get_height();
+
+	SDL_Rect dr = dst_rect.as_rect();
+
+	SDL_RenderCopy(_renderer, texture.get_texture(), &sr, &dr);
+}
+void Renderer::draw_texture(const Texture &texture, const Rect2 &src_rect, const Rect2 &dst_rect) {
+	SDL_Rect sr = src_rect.as_rect();
+	SDL_Rect dr = dst_rect.as_rect();
+
+	SDL_RenderCopy(_renderer, texture.get_texture(), &sr, &dr);
+}
+void Renderer::draw_texture(const Texture &texture, const Rect2 &src_rect, const Rect2 &dst_rect, const double angle, const float cx, const float cy, const SDL_RendererFlip flip) {
+	SDL_Rect sr = src_rect.as_rect();
+	SDL_FRect dr = dst_rect.as_frect();
+
+	SDL_FPoint p;
+
+	p.x = cx;
+	p.y = cy;
+
+	SDL_RenderCopyExF(_renderer, texture.get_texture(), &sr, &dr, angle, &p, flip);
 }
 
 int Renderer::get_dpi() const {

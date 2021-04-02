@@ -1,6 +1,8 @@
 #ifndef RECT2_H
 #define RECT2_H
 
+#include <SDL.h>
+
 class Rect2 {
 public:
 	float get_area() const;
@@ -13,6 +15,9 @@ public:
 
 	void grow(const float by);
 	void shrink(const float by);
+
+	SDL_Rect as_rect() const;
+	SDL_FRect as_frect() const;
 
 	Rect2 &operator+=(const Rect2 &b);
 	Rect2 &operator-=(const Rect2 &b);

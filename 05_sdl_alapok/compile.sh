@@ -14,7 +14,7 @@ fi
 #g++ -Wall -g -c int_vector.cpp -o obj/int_vector.o
 
 g++ -Wall -g -c math.cpp -o obj/math.o
-g++ -Wall -g -c rect2.cpp -o obj/rect2.o
+g++ -Wall -g $(sdl2-config --cflags) -c rect2.cpp -o obj/rect2.o
 g++ -Wall -g -c color.cpp -o obj/color.o
 g++ -Wall -g -c string.cpp -o obj/string.o
 

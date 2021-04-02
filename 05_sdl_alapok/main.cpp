@@ -14,18 +14,24 @@ int main(int argv, char **args) {
 	i.set_pixel(i.get_height() - 1, i.get_width() - 1, Color(0, 0, 255, 255));
 	i.unlock();
 
+/* old
 	SDL_Texture *t = SDL_CreateTextureFromSurface(r.get_renderer(), i.get_surface());
-
 	r.set_draw_color(0, 0, 0, 255);
 	r.clear();
-
 	SDL_Rect rs;
 	rs.x = 0;
 	rs.y = 0;
 	rs.w = i.get_width();
 	rs.h = i.get_height();
-
 	SDL_RenderCopy(r.get_renderer(), t, &rs, &rs);
+	*/
+
+	r.set_draw_color(0, 0, 0, 255);
+	r.clear();
+
+	Texture t(&i);
+
+	r.draw_texture(t, Rect2(0, 0, t.get_width(), t.get_height()));
 
 	r.present();
 
@@ -55,8 +61,10 @@ int main(int argv, char **args) {
 		SDL_Delay(500);
 	}
 
-	SDL_DestroyTexture(t);
+	//old
+	//SDL_DestroyTexture(t);
 
+	t.free();
 	i.free();
 	r.destroy();
 

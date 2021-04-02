@@ -3,6 +3,7 @@
 
 #include "color.h"
 #include "rect2.h"
+#include "texture.h"
 
 #include <SDL.h>
 
@@ -15,6 +16,10 @@ public:
 
 	void draw_rect(const SDL_Rect &rect);
 	void draw_rect(const Rect2 &rect);
+
+	void draw_texture(const Texture &texture, const Rect2 &dst_rect);
+	void draw_texture(const Texture &texture, const Rect2 &src_rect, const Rect2 &dst_rect);
+	void draw_texture(const Texture &texture, const Rect2 &src_rect, const Rect2 &dst_rect, const double angle, const float cx = 0, const float cy = 0, const SDL_RendererFlip flip = SDL_FLIP_NONE);
 
 	int get_dpi() const;
 	int get_size_w() const;

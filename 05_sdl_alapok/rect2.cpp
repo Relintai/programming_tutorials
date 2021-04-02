@@ -83,6 +83,28 @@ void Rect2::shrink(const float by) {
 	w -= by;
 }
 
+SDL_Rect Rect2::as_rect() const {
+	SDL_Rect r;
+
+	r.x = x;
+	r.y = y;
+	r.w = w;
+	r.h = h;
+
+	return r;
+}
+
+SDL_FRect Rect2::as_frect() const {
+	SDL_FRect r;
+
+	r.x = x;
+	r.y = y;
+	r.w = w;
+	r.h = h;
+
+	return r;
+}
+
 Rect2 &Rect2::operator+=(const Rect2 &b) {
     x += b.x;
 	y += b.y;
