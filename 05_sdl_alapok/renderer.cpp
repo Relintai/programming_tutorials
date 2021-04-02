@@ -2,6 +2,8 @@
 
 #include <cstdio>
 
+#include "math.h"
+
 void Renderer::present() {
 	SDL_RenderPresent(_renderer);
 }
@@ -30,7 +32,7 @@ void Renderer::draw_rect(const Rect2 &rect) {
 void Renderer::draw_texture(const Texture &texture, const Rect2 &dst_rect) {
 	SDL_Rect sr;
 
-	sr.x = 0; 
+	sr.x = 0;
 	sr.y = 0;
 	sr.w = texture.get_width();
 	sr.h = texture.get_height();
@@ -55,6 +57,33 @@ void Renderer::draw_texture(const Texture &texture, const Rect2 &src_rect, const
 	p.y = cy;
 
 	SDL_RenderCopyExF(_renderer, texture.get_texture(), &sr, &dr, angle, &p, flip);
+}
+
+void Renderer::draw_sprite(const Sprite &sprite) {
+	Texture *t = sprite.get_texture();
+
+	if (!t) {
+		return;
+	}
+
+	double angle = sprite.get_angle();
+
+	if (Math::is_zero_approx(angle)) {
+		SDL_Rect sr = sprite.get_texture_clip_rect().as_rect();
+		SDL_Rect dr = sprite.get_transform().as_rect();
+
+		SDL_RenderCopy(_renderer, t->get_texture(), &sr, &dr);
+	} else {
+		SDL_Rect sr = sprite.get_texture_clip_rect().as_rect();
+		SDL_FRect dr = sprite.get_transform().as_frect();
+
+		SDL_FPoint p;
+
+		p.x = sprite.get_anchor_x();
+		p.y = sprite.get_anchor_y();
+
+		SDL_RenderCopyExF(_renderer, t->get_texture(), &sr, &dr, angle, &p, sprite.get_flip());
+	}
 }
 
 int Renderer::get_dpi() const {

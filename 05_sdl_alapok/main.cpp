@@ -2,6 +2,7 @@
 
 #include "image.h"
 #include "renderer.h"
+#include "sprite.h"
 
 #include <SDL.h>
 
@@ -30,8 +31,14 @@ int main(int argv, char **args) {
 	r.clear();
 
 	Texture t(&i);
+	Sprite s(&t);
 
-	r.draw_texture(t, Rect2(0, 0, t.get_width(), t.get_height()));
+	s.set_x(30);
+	s.set_y(30);
+
+	//r.draw_texture(t, Rect2(0, 0, t.get_width(), t.get_height()));
+
+	r.draw_sprite(s);
 
 	r.present();
 
