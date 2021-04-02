@@ -6,6 +6,27 @@
 
 #include <SDL.h>
 
+void main_loop_1() {
+	bool quit = false;
+	SDL_Event e;
+
+	while (!quit) {
+		while (SDL_PollEvent(&e)) {
+			if (e.type == SDL_QUIT) {
+				quit = true;
+			}
+
+			if (e.type == SDL_KEYDOWN) {
+				printf("keydown\n");
+			}
+
+			if (e.type == SDL_KEYUP) {
+				printf("keyup\n");
+			}
+		}
+	}
+}
+
 int main(int argv, char **args) {
 	Renderer r;
 
@@ -23,7 +44,7 @@ int main(int argv, char **args) {
 	r.draw_sprite(s);
 	r.present();
 
-	SDL_Delay(500);
+	main_loop_1();
 
 	t.free();
 	i.free();
