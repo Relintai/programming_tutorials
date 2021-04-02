@@ -129,6 +129,8 @@ void Texture::refresh() {
 void Texture::free() {
     if (_texture) {
         SDL_DestroyTexture(_texture);
+
+		_texture = nullptr;
     }
 }
 
