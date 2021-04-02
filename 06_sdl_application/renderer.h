@@ -33,6 +33,7 @@ public:
 	void draw_texture(const Texture &texture, const Rect2 &src_rect, const Rect2 &dst_rect, const double angle, const float cx = 0, const float cy = 0, const SDL_RendererFlip flip = SDL_FLIP_NONE);
 
 	void draw_sprite(const Sprite &sprite);
+	void draw_sprite(const Sprite *sprite);
 
 	int get_dpi() const;
 	int get_window_size_w() const;

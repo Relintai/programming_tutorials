@@ -1,54 +1,34 @@
-#include <SDL.h>
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
 
-#include "image.h"
+#include "application.h"
 #include "renderer.h"
-#include "sprite.h"
 
-#include <SDL.h>
+#include "impl_application.h"
+#define APPLICATION_CLASS ImplApplication
 
-void main_loop_1() {
-	bool quit = false;
-	SDL_Event e;
+Renderer *renderer = nullptr;
+Application *application = nullptr;
 
-	while (!quit) {
-		while (SDL_PollEvent(&e)) {
-			if (e.type == SDL_QUIT) {
-				quit = true;
-			}
-
-			if (e.type == SDL_KEYDOWN) {
-				printf("keydown\n");
-			}
-
-			if (e.type == SDL_KEYUP) {
-				printf("keyup\n");
-			}
-		}
-	}
+void handle_frame() {
+	application->main_loop();
 }
 
-int main(int argv, char **args) {
-	Renderer r;
+int main(int argc, char *argv[]) {
+	renderer = new Renderer();
+	application = new APPLICATION_CLASS();
 
-	Image i("ti.bmp");
+#ifdef __EMSCRIPTEN__
+	emscripten_set_main_loop(handle_frame, 0, 1);
+#else
+	while (application->running) {
+		application->main_loop();
+	}
+#endif
 
-	r.set_draw_color(0, 0, 0, 255);
-	r.clear();
+	delete application;
+	delete renderer;
 
-	Texture t(&i);
-	Sprite s(&t);
-
-	s.set_x(30);
-	s.set_y(30);
-
-	r.draw_sprite(s);
-	r.present();
-
-	main_loop_1();
-
-	t.free();
-	i.free();
-	r.destroy();
-
-	SDL_Quit();
+	return 0;
 }

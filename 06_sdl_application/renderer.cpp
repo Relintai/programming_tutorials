@@ -113,6 +113,33 @@ void Renderer::draw_sprite(const Sprite &sprite) {
 	}
 }
 
+void Renderer::draw_sprite(const Sprite *sprite) {
+	Texture *t = sprite->get_texture();
+
+	if (!t) {
+		return;
+	}
+
+	double angle = sprite->get_angle();
+
+	if (Math::is_zero_approx(angle)) {
+		SDL_Rect sr = sprite->get_texture_clip_rect().as_rect();
+		SDL_Rect dr = sprite->get_transform().as_rect();
+
+		SDL_RenderCopy(_renderer, t->get_texture(), &sr, &dr);
+	} else {
+		SDL_Rect sr = sprite->get_texture_clip_rect().as_rect();
+		SDL_FRect dr = sprite->get_transform().as_frect();
+
+		SDL_FPoint p;
+
+		p.x = sprite->get_anchor_x();
+		p.y = sprite->get_anchor_y();
+
+		SDL_RenderCopyExF(_renderer, t->get_texture(), &sr, &dr, angle, &p, sprite->get_flip());
+	}
+}
+
 int Renderer::get_dpi() const {
 	float ddpi;
 	float hdpi;
