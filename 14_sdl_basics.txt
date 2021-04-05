@@ -1,0 +1,115 @@
+
+Először nézzük meg, hogy hogy is működik az SDL2.
+
+--------------------------------------------------------------------------------------------------------
+
+Fontos tudni, hogy ez egy C könyvtár, ami úgy van megcisnálva, hogy működjön c++-al is!
+Azaz: Csak structok vannak, és ezekbe nincsenek függvények!
+
+Szóval sok olyan függvénnyel fogunk találkozni:
+
+SDL_Renderer* r = SDL_CreateRenderer(...)
+
+SDL_GetRendererOutputSize(r, ...)
+SDL_CreateTexture(r, ...)
+
+etc...
+
+Úgy érdemes erre gondolni, mitnha a this* paramétert, ami c++-ban eléhető minden osztály 
+tagfüggvényben, itt az első paraméterként adjuk be.
+
+--------------------------------------------------------------------------------------------------------
+
+Az SDL egy relatíve szimpla könytár, gyakolratilag nem sokkal több, mint sok platform 
+fölötti absztrakciós réteg.
+
+Pl.: Minden platformon máshogy kell ablakot létrehozni, ablakra rajzolni, hangokat lejátszani,
+bementete kezelni, fájlokat megynitni, stb. Az SDL gyakorlatilag csak ezeket csinálja meg nekünk, 
+egy egyesített interface-en keresztül.
+
+Elérhető benne egy software-es, és hardware-es renderer. A hardware-es rajzoló az jelenleg az OpenGL,
+vagy a Vulkan lehet.
+
+A különbség közöttük:
+
+A software-es renderer a CPUt használva állítgatja be / számolgatja ki egy ablak pixeleinek értékét,
+míg a hardware-es renderer a GPUt használva csinálja ugyanezt.
+
+Fontos tudni, hogy a software-es renderert jóval egyszerűbb használni / először beállítani, 
+mint a hardware-est. (Nem annyival nehezebb, de sok plussz kódot, és magyarázatot igényel,
+inkább a szokatlansága miatt.) Ugyanis a gpu úgy működik, hogy mindent az ő általa egyszerűen 
+értelmezhető formátumba kell konvertálni, illetve külön manage-elni kell az egyéb dolgokat, 
+pl. a képeket fel kell neki tölteni. 
+
+Viszont! A GPUkban több száz mag található, míg a cpukban általában csak 4-5!
+Természetesen a hátránya a GPUs magoknak, hogy nagyon szimplák!
+
+De a lényeg az, hogy a softwares rajzolóknak az általános problémája, ha sok pixelt kell feldolgozniuk
+nagyon gyorsan. Jóval kisebb az ilyen kimeneti teljesítményük. Hogy mennyi pixelt képesek feldolgozni,
+az természetesen sokmindentől függ, én sajnos nem tudok erre pontos számokat. A lényeg, hogy tudjatok róla.
+
+Ettől függetlenül azért a softwares renderereknek van előnye, sőt képesek elég jó dolgokra is!
+(Pl Quake, DOOM, Duke Nukem 3D, WolfEinstein 3D, etc... mind softwares renderereket használtak! Érdemes utánanézni,
+hogy hogy működtek, vannak már róluk videók is a youtube-on.)
+
+Egyenlőre csak a software-est fogjuk használni. 
+
+(Lehet, hogy majd egyszer a hardware-es renderert is belerakom. Majd kiderül.)
+
+Szóval: először a cél az, hogy az egyszerűbb felhasználás érdekében építsünk osztályokat az SDL2
+C API-ja köré.
+
+--------------------------------------------------------------------------------------------------------
+
+==== Egy kis bevezető: ====
+
+Elég csak az SDL.h-t includeolni a projektben! Így:
+#include <SDL.h>
+
+---- Rajzolás: ----
+
+A legfőbb osztályok:
+
+SDL_Window: //SDL_render.h ban lehet megnézni a függvényeket
+
+Az ablak adatainak mutatója. Minden platformon más lessz kicsit mögötte. 
+Amikor létrehozatjuk, akkor hozatja létre az sdl maga az ablakot az operációs rendszerrel.
+Az ablak módosításához van rá szükség. Pl át lehet nevezni, meg ilyenek.
+
+SDL_Renderer: //SDL_render.h ban lehet megnézni a függvényeket
+
+Az ablak mögötti rajzoló oszály mutatója. Lehet softwares, és hardwares is.
+Rajzoláshoz van rá szükség.
+Fontos tudni, hogy a softwares, és a hardwares renderert máshogy kell használni, szóval
+sajnos nem triviális váltani közöttük!
+
+SDL_Surface: //SDL_surface.h, SDL_image.h ban lehet megnézni a függvényeket
+
+Egy képnek az adatait tartalmazza. Sokféle belső formátumot képes kezelni.
+
+SDL_Texture: //SDL_render.h ban lehet megnézni a függvényeket
+
+Ugyanúgy, mint egy SDL_Surface, egy kép adatait tartalmazza, viszont ez a softwares rajzoláshoz
+optimalizált formában.
+
+---- Bemenet: ----
+
+SDL_Event: //SDL_event.h ban lehet megnézni a függvényeket
+
+Egy struct, ami egy bemenet adatait tartalmazza.
+Nagyon sok adattagja van, bármilyen eventet le tud tárolni.
+
+A bemenetek guis appoknál úgy működnek, hogy amikor a felhasználó valamit csinál,
+pl megmozdítja az egeret, vagy lenyom egy billentyűt, akkor az eltárolódik, egy queue-ban,
+és nekünk (a számunkra megfelelő helyen a programunkban) ki kell kéregetnünk ezeket az eventeket,
+és fel kell őket dolgoznunk.
+
+Azaz, ha megmozdítjuk az egeret, akkor:
+SDL_event type mezője SDL_MOUSEMOTION lesz, és az adatokat el fogjuk tuni érni a motion mezőben.
+
+---- Egyéb: ----
+
+Audio, fájlok, etc, ugyan így működnek, nézzetek körbe a headerekben, illetve az SDL wiki jén, ha 
+használni szeretnétek őket, nem fogunk rájuk kitérni. 
+
+(Legalábbis egyenlőre biztosan nem, talán majd egyszer.)

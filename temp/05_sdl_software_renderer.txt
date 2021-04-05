@@ -10,3 +10,8 @@ vagy
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_opengl.h>
+
+
+
+Megj.: WolfEinstein 3D rendererjét úgy hívják, hogy raycaster. Nem sok kód szükséges hozzá, pár száz sor csak
+Vannak róla tutorialok a zoutube-on, még talán beimplementálni is érdemes.
