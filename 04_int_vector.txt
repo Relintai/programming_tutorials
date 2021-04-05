@@ -1,0 +1,35 @@
+
+Implementáld az alábbi int-eket tároló vektor osztályt:
+
+------------------------------------------------------|
+|  class IntVector                                    |
+|-----------------------------------------------------|
+| + push_back(element : int)                          | 
+| + pop_back()                                        | -> utolsó elem törlése
+| + remove(index : int)                               |  
+| + erase(element : int)                              | 
+| + clear()                                           |  
+| + empty() : bool                                    |
+| + get(index : int) : int                            |  
+| + get(index : int) : const &int, (const)            | -> 5. feladatban már hasznos optimalizáció lesz, 
+|                                                     |     amúgy igazából nincs értelme const referenciaként visszaadni intet
+| + set(index : int, value : int)                     |  
+| + size() : int                                      |  
+| + capacity() : int                                  |  
+| + ensure_capacity(capacity : int)                   |  
+| + resize(size : int)                                |  
+| + append_array(other : IntVector)                   |  
+| + find(val : int) : int                             | -> Megkeresi az adott értéket, és visszaadja az indexét, illetve ha nem található -1 et
+| + dataw() : int*                                    | -> Visszaadja az adatokat tároló tömböt -> ki lehet optimalizálni vele függvényhívásokat, amikor fontos.
+| + data() : const int*, (const)                      | -> Visszaadja az adatokat tároló tömböt, de ez konstans verzió.
+| + operator[](index: int) : const &int, (const)      | -> 5. feladatban már hasznos optimalizáció
+| + operator[](index: int) : &int                     | -> Ha esetleg összeakad az eggyel fejlebb lévővel, akkor hagyjátok ki az egyiket, majd később kipróbálom én is
+| + IntVector()                                       |
+| + IntVector(prealloc : int)                         |
+| + IntVector(prealloc : int, grow_by : int)          |
+|-----------------------------------------------------|
+| - _data : int*                                      | -> Maga a tároló tömb
+| - _actual_size : int                                | -> ekkora a tömb
+| - _size : int                                       | -> size() ezt adja vissza / ennyi elem van eltárolva a vektorban
+| - _grow_by : int                                    | -> Ha növelni kell a _data tömböt, akkor ennyivel legyen megnövelve
+------------------------------------------------------|

@@ -1,0 +1,99 @@
+
+|--------------------------------------------------------------------------|
+| class Board                                                              |
+|--------------------------------------------------------------------------|
+| + Player *get_current_player();                                          |
+| + Player *get_previous_player();                                         |
+|                                                                          |
+| + int get_turn() const;                                                  |
+| + void set_turn(const int turn);                                         |
+|                                                                          |
+| + Vector<Tile *> get_tiles() const;                                      |
+| + void set_tiles(const Vector<Tile *> &tiles);                           |
+|                                                                          |
+| + Vector<Player *> get_active_players() const;                           |
+| + void set_active_players(const Vector<Player *> &players);              |
+|                                                                          |
+| + Vector<Player *> get_lost_players() const;                             |
+| + void set_lost_players(const Vector<Player *> &players);                |
+|                                                                          |
+| + void load(const String &tile_file, const String &player_file);         |
+| + void load_players(const String &file);                                 |
+| + void load_tiles(const String &file);                                   |
+|                                                                          |
+| + void step();                                                           |
+| + void run();                                                            |
+|                                                                          |
+| + void on_game_finished();                                               |
+|                                                                          |
+| + void clear();                                                          |
+| + void clear_players();                                                  |
+| + void reset();                                                          |
+|                                                                          |
+| + void print();                                                          |
+|                                                                          |
+| + Board();                                                               |
+| + Board(const String &tile_file, const String &player_file);             |
+| + virtual ~Board();                                                      |
+|                                                                          |
+| - Vector<Tile *> _tiles;                                                 |
+| - Vector<Player *> _active_players;                                      |
+| - Vector<Player *> _lost_players;                                        |
+| -                                                                        |
+| - Player *_previous_player;                                              |
+| - int _current_player_index;                                             |
+| - int _turn;                                                             |
+|--------------------------------------------------------------------------|
+
+
+on_game_finished() a játékról kiír a konzolra mindenféle információt, 
+miután véget ért.
+
+run() a fő ciklus, a step() függvényt hívogatja, amíg több mint 1 
+aktív játékos van. Esetleg kiléphet nagy _turn szám után is.
+
+Ha a ciklus kilépett, hívja meg az on_game_finished()-et.
+
+clear() Minden vektort kiürít. 
+clear_players() csak a 2 játékos vektort üríti ki.
+ne felejtsétek ez felszabadítani a memóriát! (delete).
+
+step(): 
+Egy játékos körének a kezelése.
+
+Az algoritmus:
+
+1. Fogjuk meg az aktív játékost.
+2. Ha börtönben van, vonjunk le egy kört a börtönének számából, és kész.
+3. Dobassunk vele kockát.
+4. Számoljuk ki (modulo), hogy melyik mezőre érkezett. (player get_tile_index())
+5. Állítsuk be az új mező indexét neki (set_tile_index()).
+6. kérjük ki a megfelelő mezőt a _tiles vektorból, és hívjuk meg a 
+    on_player_arrived(p); függvényét, a játékost adjuk be paraméternek.
+7. Állítsuk be a _previous_player osztályváltozót a jelenlegi játékosra.
+8. Ha ajátékos vesztett (get_lost()), akkor rakjuk ár a _lost_players
+    veektorba, majd ellenőrizzük, hogy a _current_player_index nem indexel-e
+    túl a játékosok vektorán. Ha igen, akkor állítsuk a 
+    _current_player_index-et 0-ra. (ugye eggyel csökkent a vektor mérete.)
+9. Egyébként növeljük meg a _current_player_index-et 1-el, és ugyanúgy
+    ellenűrizzük, hogy a _current_player_index nem indexel-e
+    túl a játékosok vektorán, ha igen, akkor állítsuk a 
+    _current_player_index-et 0-ra.   
+
+
+main.cpp + int main() :
+
+A main függvénybe csak ennyi legyen:
+
+Math::randomize();
+
+Board b;
+b.load("tiles.config", "players.config");
+b.run();
+b.print();
+
+return 0;
+
+Nyilvánvalóan a "tiles.config", "players.config" fájlokat hozzátok létre.
+
+

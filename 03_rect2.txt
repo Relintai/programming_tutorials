@@ -1,0 +1,67 @@
+
+Implementáld az alábbi matematikai négyzet osztályt.
+
+------------------------------------------------------|
+|  class Rect2                                        |
+|-----------------------------------------------------|
+| + x : float                                         |  
+| + y : float                                         | 
+| + w : float                                         |
+| + h : float                                         |
+| + get_area() : float                                |  -> Terület (w * h)
+| + intersects(b : Rect2) : bool                      |  -> Lejjebb
+| + intersects_include_borders(b : Rect2) : bool      |  -> Lejjebb
+| + encloses(b : Rect2) : bool                        |  -> Lejjebb
+| + has_no_area() : bool                              |
+| + has_point(x : float, y : float) : bool            |  
+| + is_equal_approx(b : Rect2) : bool                 |  
+| + grow(by : float)                                  |  -> x, y, csökkent, w,h növel by-al
+| + shrink(by : float)                                |  -> x, y, növel, w,h csökkent by-al
+| + operator+=(b: Rect2)                              | 
+| + operator-=(b: Rect2)                              |
+| + operator+(a: Rect2, b: Rect2) : Rect2             |
+| + operator-(a: Rect2, b: Rect2) : Rect2             |
+| + operator==(b: Rect2) : bool                       |
+| + operator!=(b: Rect2) : bool                       |
+| + Rect2()                                           |
+| + Rect2(b : Rect2)                                  |
+| + Rect2(x : float, y : float)                       |
+| + Rect2(x : float, y : float, w : float, h : float) |
+------------------------------------------------------|
+
+intersects:
+	if (x >= (b.x + b.w))
+		return false;
+
+	if ((x + w) <= b.x)
+		return false;
+
+	if (y >= (b.y + b.h))
+		return false;
+
+	if ((y + h) <= b.y)
+		return false;
+
+    return true;
+
+intersects_include_borders:
+	if (x > (b.x + b.w))
+		return false;
+
+	if ((x + w) < b.x)
+		return false;
+
+	if (y > (b.y + b.h))
+		return false;
+
+	if ((y + h) < b.y)
+		return false;
+
+     return true;
+
+Encloses:
+
+return (b.x >= x) && (b.y >= y) &&
+		((b.x + b.w) <= (x + w)) &&
+		 ((b.y + b.h) <= (y + h));
+

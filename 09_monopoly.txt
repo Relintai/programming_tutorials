@@ -1,0 +1,77 @@
+
+Írni fogunk egy leegyszerűsített Monopoly szerűséget. 
+
+Ebben a példában már használni fogunk öröklődést, és polimorfizmust is!
+
+----------------------------------------------------------------------
+
+Ahol csak lehet, használd fel az előzőleg megírt osztályaidat!
+
+Ha szükséged van egy függvényre, amely nem található meg még a már
+kész osztályodban, akkor azt add hozzá.
+
+Például ha a Math osztályodba a te megoldásodhoz hiányzik valamilyen
+függvény, akkor oda írd meg, ne csak direktbe felhasználd valamelyik 
+beépített header-ből!
+
+Ha a vektorod remove() függvénye nem tartja meg a sorrendet, akkor 
+adj hozzá egy remove_keep_order() függvényt.
+
+Egyéb: 
+
+Kicsit kiegyszerűsítettem az UML diagramokat, már gyakorlatilag c++
+kódként néznek ki. Az előző feladatokban a tárgy által elvárt módon 
+voltak írva, de mostantól nem fogom annyira átszerkeszteni.
+----------------------------------------------------------------------
+
+A játékszabályok, amiket implementálni fogunk:
+
+A játék n db ját;kossal indul. Mindenkinek van valamennyi pénze
+(legyen egyenként megadható). És van egy játékmező. (Mint a valódi 
+monopolyban kb).
+A játékmezőn vannak mezők. Ezeknek a típusai:
+
+- TaxTile - Amikor a játékos rálép ennyi adót kell fizetnie.
+
+- OwnableTile - Ez olyan mező, amit meg lehet venni. Van vátelára, 
+illetve egy belépési költsége. Ha egy játékos rálép, és még senkié, 
+akkor az a játékos megveheti a vételárért cserébe. Ha nem veszi meg, 
+nem kell fizetnie semmit. Ha valaki megveszi, akkor mindenki másnak, 
+aki rálép meg kell fizetnie a tulajdonosnak a belépési díjat.
+Ha a tulajdonos kiesik a játékból, akkor az összes tulajdona 
+felszabadul.
+
+- GainTile - Aki rálép az egy meghatározott összeget kap.
+
+- LuckTile - Aki rálép kaphat megadott %-nyi eséllyel,
+két megadott érték közötti pénzt.
+
+- JailTile - Aki rálép, a megadott környi ideig börtönbe kerül, azaz
+annzi körig nem léphet.
+
+Egy játékos akkor esik ki, ha elfogyott minden pénze.
+
+Az nyer, aki a legutoljára bent marad.
+
+A játékosok előre meghatározott, fix sorrendben jönnek egymás után,
+a körük elején dobnak 1db 6 oldalú dobókockával, majd annyit lépnek, 
+amennyit dobtak, és a mező amire érkeztek hattásal lesz rájuk.
+
+A játékosok a játékmezőn körbe-körbe haladnak.
+
+A játékot úgy fogjuk megírni, hogy legyenek különböző személyiségü
+gépi játékosok:
+
+Agresszív: Mindent megvesz, amíg van rá pénze.
+Konzervatív: Ha a mező ára kevesebb, mint a pénzének a fele, akkor megveszi,
+Ügyeskedő: 50% eséllyel megveszi a mezőt, ha van rá lehetősége.
+Emberi: Megkérdezi a felhasználót, hogy mit akar tenni.
+Csaló: Mindent megvesz, amit csak tud. (csak 4, 5, 6-okat dobhat)
+
+A játékosok beállításait, és a mezőket is fájlból töltsük be.
+
+Konzolos program lesz, szóval mindent ami fontos, a konzolra kell 
+majd kiírnunk, és a konzolról kell beolvasni, ha kérdezni szeretnénk a 
+felhasználótól.
+
+A feladat, hogy ezt implementáljuk.

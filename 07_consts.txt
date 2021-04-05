@@ -1,0 +1,6 @@
+
+Az előző feladatokban sok helyen meg lehet jelölni paramétereket konstansként, illetve pl. konstans referenciává lehet alakítani őket.
+   Menj végig az előző osztályokon, és mindenhol, ahol van értelme, ezeket add hozzá.
+   (int-eket/float okat csak konstanssá érdemes átrakni, referenciává tenni őket nincs értelme!)
+   (Érdemes másolatot csinálni, vagy pl. egy git commitban eltárolni az eredetieket, és csak úgy szerkesztgetni őket!)
+

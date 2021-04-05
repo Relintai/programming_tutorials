@@ -1,0 +1,184 @@
+
+|--------------------------------------------------------------------------|
+| class Tile                                                               |
+|--------------------------------------------------------------------------|
+| + String get_name();                                                     |
+| + void set_name(const String &name);                                     |
+|                                                                          |
+| + virtual void on_player_arrived(Player *p);                             |
+|                                                                          |
+| + virtual void reset();                                                  |
+|                                                                          |
+| + virtual void print();                                                  |
+| + virtual String get_class_name();                                       |
+|                                                                          |
+| + Tile();                                                                |
+| + virtual ~Tile();                                                       |
+|                                                                          |
+| - String _name;                                                          |
+|--------------------------------------------------------------------------|
+
+A Mező osztály.
+
+A rendszer majd az on_player_arrived() függvényt hívja meg, miután egy 
+játékos dobott, és rálép a következő mezőre.
+Ez a függvény mindent releváns információt írjon a konzolra.
+
+Itt maja a Mező fogja pl növelni a játékos pénzét, vagy börtönbe tenni,
+vagy megkérdezni, hogy meg akarja-e venni meg át a mezőt.
+
+reset() csak a OwnableTile fog itt valamit csinálni, ugyanis ebben 
+ki fogja nullázni a tulajdonosát. (Ez két játék közötti kinullázásra való)
+
+A többit, ami esetleg nem triviális, lásd a player-nél.
+
+
+
+|--------------------------------------------------------------------------|
+| class TaxTile : public Tile                                              |
+|--------------------------------------------------------------------------|
+| + int get_tax() const;                                                   |
+| + void set_tax(const int tax);                                           |
+|                                                                          |
+| + void on_player_arrived(Player *p);                                     |
+| + void print();                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + TaxTile();                                                             |
+|                                                                          |
+| - int _tax;                                                              |
+|--------------------------------------------------------------------------|
+
+- TaxTile - Amikor a játékos rálép ennyi adót kell fizetnie.
+
+
+
+|--------------------------------------------------------------------------|
+| class OwnableTile : public Tile                                          |
+|--------------------------------------------------------------------------|
+| + int get_price() const;                                                 |
+| + void set_price(const int val);                                         |
+|                                                                          |
+| + int get_enter_price() const;                                           |
+| + void set_enter_price(const int val);                                   |
+|                                                                          |
+| + Player *get_owner() const;                                             |
+| + void set_owner(Player *val);                                           |
+|                                                                          |
+| + void on_player_arrived(Player *p);                                     |
+| + void print();                                                          |
+| + void reset();                                                          |
+|                                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + OwnableTile();                                                         |
+|                                                                          |
+| - int _price;                                                            |
+| - int _enter_price;                                                      |
+| - Player *_owner;                                                        |
+|--------------------------------------------------------------------------|
+
+- OwnableTile - Ez olyan mező, amit meg lehet venni. Van vételára, 
+illetve egy belépési költsége. Ha egy játékos rálép, és még senkié, 
+akkor az a játékos megveheti a vételárért cserébe. Ha nem veszi meg, 
+nem kell fizetnie semmit. Ha valaki megveszi, akkor mindenki másnak, 
+aki rálép meg kell fizetnie a tulajdonosnak a belépési díjat.
+Ha a tulajdonos kiesik a játékból, akkor az összes tulajdona 
+felszabadul.
+
+
+
+|--------------------------------------------------------------------------|
+| class GainTile : public Tile                                             |
+|--------------------------------------------------------------------------|
+| + int get_gain() const;                                                  |
+| + void set_gain(const int val);                                          |
+|                                                                          |
+| + void on_player_arrived(Player *p);                                     |
+| + void print();                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + GainTile();                                                            |
+|                                                                          |
+| - int _gain;                                                             |
+|--------------------------------------------------------------------------|
+
+- GainTile - Aki rálép az egy meghatározott összeget kap.
+
+
+
+|--------------------------------------------------------------------------|
+| class LuckTile : public Tile                                             |
+|--------------------------------------------------------------------------|
+| + int get_chance() const;                                                |
+| + void set_chance(const int val);                                        |
+|                                                                          |
+| + int get_gain_min() const;                                              |
+| + void set_gain_min(const int val);                                      |
+|                                                                          |
+| + int get_gain_max() const;                                              |
+| + void set_gain_max(const int val);                                      |
+|                                                                          |
+| + void on_player_arrived(Player *p);                                     |
+| + void print();                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + LuckTile();                                                            |
+|                                                                          |
+| - int _chance;                                                           |
+| - int _gain_min;                                                         |
+| - int _gain_max;                                                         |
+|--------------------------------------------------------------------------|
+
+- LuckTile - Aki rálép kaphat megadott %-nyi eséllyel,
+két megadott érték közötti pénzt.
+
+
+
+
+|--------------------------------------------------------------------------|
+| class JailTile : public Tile                                             |
+|--------------------------------------------------------------------------|
+| + int get_jail_time() const;                                             |
+| + void set_jail_time(const int val);                                     |
+|                                                                          |
+| + void on_player_arrived(Player *p);                                     |
+| + void print();                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + JailTile();                                                            |
+|                                                                          |
+| - int _jail_time;                                                        |
+|--------------------------------------------------------------------------|
+
+- JailTile - Aki rálép, a megadott környi ideig börtönbe kerül, azaz
+annyi körig nem léphet.
+
+
+
+|--------------------------------------------------------------------------|
+| class TileLoader                                                         |
+|--------------------------------------------------------------------------|
+| + static Vector<Tile *> load_tile_file(const String &file_name);         |
+|--------------------------------------------------------------------------|
+
+Ugyanolyan betöltő osztály, mint a játékos estében.
+
+Példa file szerkezet:
+
+Tile A
+TaxTile B 3433
+TaxTile C 3433
+OwnableTile D 222 22
+OwnableTile E 222 22
+OwnableTile F 222 22
+GainTile G 100
+TaxTile H 3433
+LuckTile I 50 100 200
+TaxTile J 3433
+JailTile K 3
+TaxTile L 3433
+TaxTile M 3433
+TaxTile N 3433
+
+

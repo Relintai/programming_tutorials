@@ -1,0 +1,170 @@
+
+Kezdjük a játékos osztályokkal:
+
+|--------------------------------------------------------------------------|
+| class Player                                                             |
+|--------------------------------------------------------------------------|
+| + String get_name();                                                     |
+| + void set_name(const String &name);                                     |
+|                                                                          |
+| + int get_tile_index() const;                                            |
+| + void set_tile_index(const int val);                                    |
+|                                                                          |
+| + int get_money() const;                                                 |
+| + void set_money(const int val);                                         |
+|                                                                          |
+| + int get_jail_time() const;                                             |
+| + void set_jail_time(const int val);                                     |
+|                                                                          |
+| + bool get_lost() const;                                                 |
+| + void set_lost(const bool val);                                         |
+|                                                                          |
+| + virtual bool want_buy(const String &tile_name, int price);             |
+| + virtual int throw_dice();                                              |
+| + virtual void on_lose();                                                |
+|                                                                          |
+| + virtual void print();                                                  |
+|                                                                          |
+| + virtual String get_class_name();                                       |
+|                                                                          |
+| + Player();                                                              |
+| + virtual ~Player();                                                     |
+|                                                                          |
+| - String _name;                                                          |
+| - int _tile_index;                                                       |
+| - int _money;                                                            |
+| - int _jail_time;                                                        |
+| - bool _lost;                                                            |
+|--------------------------------------------------------------------------|
+
+Amik nem nyilvánvalók:
+
+set_money, set_jail_time -> írjon üzenetet a konzolra.
+
+set_lost(val) -> ha a val true, hívja meg az on_lost() függvényt.
+
+want_buy() függvénnyel fogja megkérdezni a rendszer, hogy meg akarja-e 
+venni a játékos a jelenlegi mezőt.
+
+Megj.: nagy programban valószínűleg érdemes lenne a magát a Tile osztályt 
+odaadni pointerkénkt, viszont a Tile osztálynak is kelleni fog majd, a 
+Player osztály.
+
+Ezt aműgy meg lehet oldani, méghozzá úgy, hogy a Tile osztály a Player 
+headerje tetején előre van deklarálva (class Tile;), a Player osztály 
+a Tile headerje tetején van előre deklarálva (class Player;), és csak a
+.cpp fájlokoban vannak maguk a headerek beincludeolva.
+
+Hogy könnyítsek a dolgotokon, ezt kihagytam, viszont ha valaki elég erőt
+érez magában, az mindenképp csinálja így!
+
+Ekkor így fog kinézni a függvény:
+
+virtual bool want_buy(Tile *tile);
+(A volt paraméterek elérhetők a Tile osztály gettereivel.)
+
+int throw_dice(); Kockadobás 1-6 ig.
+
+on_lose() A játékos kiírja a konzolra, hogy vesztett. Mindegyik típus
+kicsit máshogy.
+
+print() Kiírja magát a játékos a konzolra.
+
+get_class_name() Visszaadja a játékos osztályának a nevét.
+pl itt return "Player"; 
+A kényelem miatt van bent, a print()-hez.
+
+|--------------------------------------------------------------------------|
+| class AgressivePlayer : public Player                                    |
+|--------------------------------------------------------------------------|
+| + bool want_buy(const String &tile_name, int price);                     |
+| + void on_lose();                                                        |
+|                                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + AgressivePlayer();                                                     |
+|--------------------------------------------------------------------------|
+
+Agresszív: Mindent megvesz, amíg van rá pénze.
+
+
+
+|--------------------------------------------------------------------------|
+| class ConservativePlayer : public Player                                 |
+|--------------------------------------------------------------------------|
+| + bool want_buy(const String &tile_name, int price);                     |
+| + void on_lose();                                                        |
+|                                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + ConservativePlayer();                                                  |
+|--------------------------------------------------------------------------|
+
+Konzervatív: Ha a mező ára kevesebb, mint a pénzének a fele, akkor megveszi,
+
+
+
+|--------------------------------------------------------------------------|
+| class TrickyPlayer : public Player                                       |
+|--------------------------------------------------------------------------|
+| + bool want_buy(const String &tile_name, int price);                     |
+| + void on_lose();                                                        |
+|                                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + TrickyPlayer();                                                        |
+|--------------------------------------------------------------------------|
+
+Ügyeskedő: 50% eséllyel megveszi a mezőt, ha van rá lehetősége.
+
+
+
+|--------------------------------------------------------------------------|
+| class HumanPlayer : public Player                                        |
+|--------------------------------------------------------------------------|
+| + bool want_buy(const String &tile_name, int price);                     |
+| + void on_lose();                                                        |
+|                                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + HumanPlayer();                                                         |
+|--------------------------------------------------------------------------|
+
+Emberi: Megkérdezi a felhasználót, hogy mit akar tenni.
+
+
+
+|--------------------------------------------------------------------------|
+| class CheatingPlayer : public Player                                     |
+|--------------------------------------------------------------------------|
+| + bool want_buy(const String &tile_name, int price);                     |
+| + int throw_dice();                                                      |
+| + void on_lose();                                                        |
+|                                                                          |
+| + String get_class_name();                                               |
+|                                                                          |
+| + CheatingPlayer();                                                      |
+|--------------------------------------------------------------------------|
+
+Csaló: Mindent megvesz, amit csak tud. (és csak 4, 5, 6-okat dobhat)
+
+
+
+|--------------------------------------------------------------------------|
+| class PlayerLoader                                                       |
+|--------------------------------------------------------------------------|
+| + static Vector<Player *> load_player_file(const String &file_name);     |
+|--------------------------------------------------------------------------|
+
+Segít betölteni egy játékosok leírását tartalmaző filet.
+(Java-ban valószínűleg PlayerFactory lenne a neve.)
+
+Mindegy, hogy a file hogy néz ki. De itt egy példa:
+
+Player 10000 AA
+AgressivePlayer 20000 BC
+ConservativePlayer 20000 DA
+TrickyPlayer 20000 FA
+HumanPlayer 20000 RR
+CheatingPlayer 20000 AF
+
