@@ -5,6 +5,7 @@
 
 #include "rect2.h"
 #include "texture.h"
+#include "color.h"
 
 class Sprite {
 public:
@@ -35,22 +36,28 @@ public:
 	float get_anchor_y() const;
 	void set_anchor_y(const float val);
 
-    void set_anchor(const float x, const float y);
+	void set_anchor(const float x, const float y);
 
 	SDL_RendererFlip get_flip() const;
 	void set_flip(const SDL_RendererFlip val);
+
+	Color get_color_mod() const;
+	void set_color_mod(const Color &color);
 
 	Texture *get_texture();
 	Texture *get_texture() const;
 	void set_texture(Texture *texture);
 
-    Sprite();
-    Sprite(Texture *texture);
-    Sprite(Texture *texture, const float x, const float y, const double angle = 0);
-    Sprite(Texture *texture, const float x, const float y, const Rect2 &texture_clip_rect, const double angle = 0);
-    Sprite(Texture *texture, const Rect2 &transform, const Rect2 &texture_clip_rect, const double angle = 0);
-    Sprite(Texture *texture, const float x, const float y, const float w, const float h, const double angle = 0);
-    virtual ~Sprite();
+	void draw();
+
+	Sprite();
+	Sprite(Texture *texture);
+	Sprite(Texture *texture, const Color &color_mod);
+	Sprite(Texture *texture, const float x, const float y, const double angle = 0);
+	Sprite(Texture *texture, const float x, const float y, const Rect2 &texture_clip_rect, const double angle = 0);
+	Sprite(Texture *texture, const Rect2 &transform, const Rect2 &texture_clip_rect, const double angle = 0);
+	Sprite(Texture *texture, const float x, const float y, const float w, const float h, const double angle = 0);
+	virtual ~Sprite();
 
 private:
 	Rect2 _texture_clip_rect;
@@ -61,6 +68,8 @@ private:
 	float _anchor_y;
 
 	SDL_RendererFlip _flip;
+
+	Color _color_mod;
 
 	Texture *_texture;
 };

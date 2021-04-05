@@ -93,6 +93,8 @@ void Renderer::draw_sprite(const Sprite &sprite) {
 		return;
 	}
 
+	t->set_color_mod(sprite.get_color_mod());
+
 	double angle = sprite.get_angle();
 
 	if (Math::is_zero_approx(angle)) {
@@ -114,11 +116,16 @@ void Renderer::draw_sprite(const Sprite &sprite) {
 }
 
 void Renderer::draw_sprite(const Sprite *sprite) {
+	if (!sprite)
+		return;
+
 	Texture *t = sprite->get_texture();
 
 	if (!t) {
 		return;
 	}
+
+	t->set_color_mod(sprite->get_color_mod());
 
 	double angle = sprite->get_angle();
 

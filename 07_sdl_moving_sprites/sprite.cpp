@@ -1,5 +1,7 @@
 #include "sprite.h"
 
+#include "renderer.h"
+
 Rect2 Sprite::get_texture_clip_rect() const {
 	return _texture_clip_rect;
 }
@@ -75,6 +77,13 @@ void Sprite::set_flip(const SDL_RendererFlip val) {
 	_flip = val;
 }
 
+Color Sprite::get_color_mod() const {
+	return _color_mod;
+}
+void Sprite::set_color_mod(const Color &color) {
+	_color_mod = color;
+}
+
 Texture *Sprite::get_texture() {
 	return _texture;
 }
@@ -83,6 +92,10 @@ Texture *Sprite::get_texture() const {
 }
 void Sprite::set_texture(Texture *texture) {
 	_texture = texture;
+}
+
+void Sprite::draw() {
+	Renderer::get_singleton()->draw_sprite(this);
 }
 
 Sprite::Sprite() {
@@ -94,6 +107,8 @@ Sprite::Sprite() {
 	_flip = SDL_FLIP_NONE;
 
 	_texture = nullptr;
+
+	_color_mod = Color(255, 255, 255, 255);
 }
 Sprite::Sprite(Texture *texture) {
 	_angle = 0;
@@ -112,7 +127,31 @@ Sprite::Sprite(Texture *texture) {
 		_transform.w = texture->get_width();
 		_transform.h = texture->get_height();
 	}
+
+	_color_mod = Color(255, 255, 255, 255);
 }
+
+Sprite::Sprite(Texture *texture, const Color &color_mod) {
+		_angle = 0;
+
+	_anchor_x = 0;
+	_anchor_y = 0;
+
+	_flip = SDL_FLIP_NONE;
+
+	_texture = texture;
+
+	if (_texture != nullptr) {
+		_texture_clip_rect.w = texture->get_width();
+		_texture_clip_rect.h = texture->get_height();
+
+		_transform.w = texture->get_width();
+		_transform.h = texture->get_height();
+	}
+
+	_color_mod = color_mod;
+}
+
 Sprite::Sprite(Texture *texture, const float x, const float y, const double angle) {
 	_angle = angle;
 
@@ -133,6 +172,8 @@ Sprite::Sprite(Texture *texture, const float x, const float y, const double angl
 		_transform.w = texture->get_width();
 		_transform.h = texture->get_height();
 	}
+
+	_color_mod = Color(255, 255, 255, 255);
 }
 Sprite::Sprite(Texture *texture, const float x, const float y, const Rect2 &texture_clip_rect, const double angle) {
 	_angle = angle;
@@ -153,6 +194,8 @@ Sprite::Sprite(Texture *texture, const float x, const float y, const Rect2 &text
 	}
 
 	_texture_clip_rect = texture_clip_rect;
+
+	_color_mod = Color(255, 255, 255, 255);
 }
 Sprite::Sprite(Texture *texture, const Rect2 &transform, const Rect2 &texture_clip_rect, const double angle) {
 	_angle = angle;
@@ -166,6 +209,8 @@ Sprite::Sprite(Texture *texture, const Rect2 &transform, const Rect2 &texture_cl
 
 	_transform = transform;
 	_texture_clip_rect = texture_clip_rect;
+
+	_color_mod = Color(255, 255, 255, 255);
 }
 Sprite::Sprite(Texture *texture, const float x, const float y, const float w, const float h, const double angle) {
 	_angle = angle;
@@ -186,6 +231,8 @@ Sprite::Sprite(Texture *texture, const float x, const float y, const float w, co
 		_texture_clip_rect.w = texture->get_width();
 		_texture_clip_rect.h = texture->get_height();
 	}
+
+	_color_mod = Color(255, 255, 255, 255);
 }
 Sprite::~Sprite() {
 }
