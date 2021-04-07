@@ -26,208 +26,207 @@ Ezt egy egy dimenziós tömbként kell tuni kezelni. Erre a képlet: "x * _surfa
 |---------------------------------------------------------------------------------------|
 | class Image                                                                           |
 |---------------------------------------------------------------------------------------|
-| + void create(const Uint32 flags, const int width, const int height);                 |
+| + void create(const Uint32 flags, const int width, const int height)                  |
 |                                                                                       |
-| + void enable_transparent_color(const Color &color);                                  |
-| + void disable_transparent_color();                                                   |
-| + bool has_transparent_color();                                                       |
-| + Color get_transparent_color();                                                      |
+| + void enable_transparent_color(const Color &color)                                   |
+| + void disable_transparent_color()                                                    |
+| + bool has_transparent_color()                                                        |
+| + Color get_transparent_color()                                                       |
 |                                                                                       |
-| + Color get_color_mod();                                                              |
-| + void set_color_mod(const Color &color);                                             |
+| + Color get_color_mod()                                                               |
+| + void set_color_mod(const Color &color)                                              |
 |                                                                                       |
-| + Color get_alpha_mod();                                                              |
-| + void set_alpha_mod(const Uint8 alpha);                                              |
+| + Color get_alpha_mod()                                                               |
+| + void set_alpha_mod(const Uint8 alpha)                                               |
 |                                                                                       |
-| + SDL_BlendMode get_blend_mode();                                                     |
-| + void set_blend_mode(const SDL_BlendMode mode);                                      |
+| + SDL_BlendMode get_blend_mode()                                                      |
+| + void set_blend_mode(const SDL_BlendMode mode)                                       |
 |                                                                                       |
-| + Rect2 get_clip_rect();                                                              |
-| + void set_clip_rect(const Rect2 &rect);                                              |
+| + Rect2 get_clip_rect()                                                               |
+| + void set_clip_rect(const Rect2 &rect)                                               |
 |                                                                                       |
-| + void duplicate(Image *into);                                                        |
+| + void duplicate(Image *into)                                                         |
 |                                                                                       |
-| + void fill_rect(const Rect2 &rect, const Color &color);                              |
-| + void fill_rects(const Vector<Rect2> &rects, const Color &color);                    |
-| + void set_pixel(const int x, const int y, const Color &color);                       |
-| + Color get_pixel(const int x, const int y);                                          |
+| + void fill_rect(const Rect2 &rect, const Color &color)                               |
+| + void fill_rects(const Vector<Rect2> &rects, const Color &color)                     |
+| + void set_pixel(const int x, const int y, const Color &color)                        |
+| + Color get_pixel(const int x, const int y)                                           |
 |                                                                                       |
-| + void blit_surface(const Image &source, const Rect2 &srcrect, const Rect2 &dstrect); |
+| + void blit_surface(const Image &source, const Rect2 &srcrect, const Rect2 &dstrect)  |
 |                                                                                       |
-| + void lock();                                                                        | -> a pixelek módosításához le kell zárni a surface-t,
-| + void unlock();                                                                      | -> majd fel kell oldani
+| + void lock()                                                                         | -> a pixelek módosításához le kell zárni a surface-t,
+| + void unlock()                                                                       | -> majd fel kell oldani
 |                                                                                       |
-| + void free();                                                                        |
+| + void free()                                                                         |
 |                                                                                       |
-| + void load_bmp(const String &file_name);                                             |
-| + void save_bmp(const String &file_name);                                             |
+| + void load_bmp(const String &file_name)                                              |
+| + void save_bmp(const String &file_name)                                              |
 |                                                                                       |
-| + Uint32 get_width() const;                                                           |
-| + Uint32 get_height() const;                                                          |
+| + Uint32 get_width() const                                                            |
+| + Uint32 get_height() const                                                           |
 |                                                                                       |
-| + SDL_Surface *get_surface();                                                         |
+| + SDL_Surface *get_surface()                                                          |
 |                                                                                       |
-| + Image();                                                                            |
-| + Image(const String &file_name);                                                     |
-| + virtual ~Image();                                                                   |
+| + Image()                                                                             |
+| + Image(const String &file_name)                                                      |
+| + virtual ~Image()                                                                    |
 |                                                                                       |
-| - SDL_Surface *_surface;                                                              |
+| - SDL_Surface *_surface                                                               |
 |---------------------------------------------------------------------------------------|
 
 ------------------------------------------------------------------------------------------
 
 create:
 	if (_surface):
-		free();
+		free()
 	
-
 	//SDL_PIXELFORMAT_RGBA8888 SDL_pixels.h ból
-	SDL_CreateRGBSurfaceWithFormat(flags, width, height, 32, SDL_PIXELFORMAT_RGBA8888);
+	SDL_CreateRGBSurfaceWithFormat(flags, width, height, 32, SDL_PIXELFORMAT_RGBA8888)
 
 ------------------------------------------------------------------------------------------
 
 enable_transparent_color:
 	if (!SDL_SetColorKey(_surface, 1, color.to_key())):
-		printf("enable_transparent_color error.\n");
+		printf("enable_transparent_color error.\n")
 	
 ------------------------------------------------------------------------------------------
 
 disable_transparent_color:
 	if (!SDL_SetColorKey(_surface, 0, 0)):
-		printf("disable_transparent_color error.\n");
+		printf("disable_transparent_color error.\n")
 	
 ------------------------------------------------------------------------------------------
 
 has_transparent_color:
-	return SDL_HasColorKey(_surface);
+	return SDL_HasColorKey(_surface)
 
 ------------------------------------------------------------------------------------------
 
 get_transparent_color:
-	uint32_t key;
+	uint32_t key
 
-	SDL_GetColorKey(_surface, &key);
+	SDL_GetColorKey(_surface, &key)
 
-	return Color(key);
+	return Color(key)
 
 ------------------------------------------------------------------------------------------
 
 get_color_mod:
-	Uint8 r;
-	Uint8 g;
-	Uint8 b;
+	Uint8 r
+	Uint8 g
+	Uint8 b
 
-	SDL_GetSurfaceColorMod(_surface, &r, &g, &b);
+	SDL_GetSurfaceColorMod(_surface, &r, &g, &b)
 
-	return Color(r, g, b);
+	return Color(r, g, b)
 
 ------------------------------------------------------------------------------------------
 
 set_color_mod:
-	SDL_SetSurfaceColorMod(_surface, color.r, color.g, color.b);
+	SDL_SetSurfaceColorMod(_surface, color.r, color.g, color.b)
 
 ------------------------------------------------------------------------------------------
 
 get_alpha_mod:
-	Uint8 a;
+	Uint8 a
 
-	SDL_GetSurfaceAlphaMod(_surface, &a);
+	SDL_GetSurfaceAlphaMod(_surface, &a)
 
-	return a;
+	return a
 
 ------------------------------------------------------------------------------------------
 
 set_alpha_mod:
-	SDL_SetSurfaceAlphaMod(_surface, alpha);
+	SDL_SetSurfaceAlphaMod(_surface, alpha)
 
 ------------------------------------------------------------------------------------------
 
 get_blend_mode:
-	SDL_BlendMode mode;
+	SDL_BlendMode mode
 
-	SDL_GetSurfaceBlendMode(_surface, &mode);
+	SDL_GetSurfaceBlendMode(_surface, &mode)
 
-	return mode;
+	return mode
 
 ------------------------------------------------------------------------------------------
 
 set_blend_mode:
-	SDL_SetSurfaceBlendMode(_surface, mode);
+	SDL_SetSurfaceBlendMode(_surface, mode)
 
 ------------------------------------------------------------------------------------------
 
 get_clip_rect:
-	SDL_Rect r;
+	SDL_Rect r
 
-	SDL_GetClipRect(_surface, &r);
+	SDL_GetClipRect(_surface, &r)
 
-	Rect2 rect;
+	Rect2 rect
 
-	rect.x = r.x;
-	rect.y = r.y;
-	rect.w = r.w;
-	rect.h = r.h;
+	rect.x = r.x
+	rect.y = r.y
+	rect.w = r.w
+	rect.h = r.h
 
-	return rect;
+	return rect
 
 ------------------------------------------------------------------------------------------
 
 set_clip_rect:
-	SDL_Rect r;
+	SDL_Rect r
 
-	r.x = rect.x;
-	r.y = rect.y;
-	r.w = rect.w;
-	r.h = rect.h;
+	r.x = rect.x
+	r.y = rect.y
+	r.w = rect.w
+	r.h = rect.h
 
-	SDL_SetClipRect(_surface, &r);
+	SDL_SetClipRect(_surface, &r)
 
 ------------------------------------------------------------------------------------------
 
 duplicate:
 	if (into == nullptr):
-		return;
+		return
 	
 
-	into->_surface = SDL_DuplicateSurface(_surface);
+	into->_surface = SDL_DuplicateSurface(_surface)
 
 ------------------------------------------------------------------------------------------
 
 fill_rect:
-	SDL_Rect r;
+	SDL_Rect r
 
-	r.x = rect.x;
-	r.y = rect.y;
-	r.w = rect.w;
-	r.h = rect.h;
+	r.x = rect.x
+	r.y = rect.y
+	r.w = rect.w
+	r.h = rect.h
 
-	SDL_FillRect(_surface, &r, color.to_key());
+	SDL_FillRect(_surface, &r, color.to_key())
 
 ------------------------------------------------------------------------------------------
 
 fill_rects:
-	SDL_Rect *r = new SDL_Rect[rects.size()];
+	SDL_Rect *r = new SDL_Rect[rects.size()]
 
-	for (int i = 0; i < rects.size(); ++i):
-		r[i].x = rects[i].x;
-		r[i].y = rects[i].y;
-		r[i].w = rects[i].w;
-		r[i].h = rects[i].h;
+	for (int i = 0 i < rects.size() ++i):
+		r[i].x = rects[i].x
+		r[i].y = rects[i].y
+		r[i].w = rects[i].w
+		r[i].h = rects[i].h
 	
 
-	SDL_FillRects(_surface, r, rects.size(), color.to_key());
+	SDL_FillRects(_surface, r, rects.size(), color.to_key())
 
-	delete[] r;
+	delete[] r
 
 ------------------------------------------------------------------------------------------
 
 set_pixel:
 	if (_surface == nullptr):
-		return;
+		return
 	
-	Uint32 *p = reinterpret_cast<Uint32 *>(_surface->pixels);
+	Uint32 *p = reinterpret_cast<Uint32 *>(_surface->pixels)
 
-	p[x * _surface->w + y] = color.to_key();
+	p[x * _surface->w + y] = color.to_key()
 
 
 Megj.:
@@ -240,11 +239,11 @@ nyilván ekkor az indexet-et meg kell szorozni 4-el. -> mivel 1 intben 4db byte 
 
 get_pixel:
 	if (_surface == nullptr):
-		return Color();
+		return Color()
 
-	Uint32 *p = reinterpret_cast<Uint32 *>(_surface->pixels);
+	Uint32 *p = reinterpret_cast<Uint32 *>(_surface->pixels)
 
-	return Color(p[x * _surface->w + y]);
+	return Color(p[x * _surface->w + y])
 
 
 set_pixel megjegyzése ide is érvényes.
@@ -252,38 +251,38 @@ set_pixel megjegyzése ide is érvényes.
 ------------------------------------------------------------------------------------------
 
 blit_surface:
-	SDL_Rect sr;
+	SDL_Rect sr
 
-	sr.x = srcrect.x;
-	sr.y = srcrect.y;
-	sr.w = srcrect.w;
-	sr.h = srcrect.h;
+	sr.x = srcrect.x
+	sr.y = srcrect.y
+	sr.w = srcrect.w
+	sr.h = srcrect.h
 
-	SDL_Rect dr;
+	SDL_Rect dr
 
-	dr.x = dstrect.x;
-	dr.y = dstrect.y;
-	dr.w = dstrect.w;
-	dr.h = dstrect.h;
+	dr.x = dstrect.x
+	dr.y = dstrect.y
+	dr.w = dstrect.w
+	dr.h = dstrect.h
 
-	SDL_BlitSurface(source._surface, &sr, _surface, &dr);
+	SDL_BlitSurface(source._surface, &sr, _surface, &dr)
 
 ------------------------------------------------------------------------------------------
 
 lock:
-	SDL_LockSurface(_surface);
+	SDL_LockSurface(_surface)
 
 ------------------------------------------------------------------------------------------
 
 unlock:
-	SDL_UnlockSurface(_surface);
+	SDL_UnlockSurface(_surface)
 
 ------------------------------------------------------------------------------------------
 
 free:
-	SDL_FreeSurface(_surface);
+	SDL_FreeSurface(_surface)
 
-	_surface = nullptr;
+	_surface = nullptr
 
 Megj.:
 Deallokálja a surface-t. Azért nem a destruktor csinálja ezt, mert közben is tudni 
@@ -293,62 +292,62 @@ kell surface-eket deallokálni. Pl load_bmp(), etc
 
 load_bmp:
 	if (_surface != nullptr):
-		free();
+		free()
 	
 
-	_surface = SDL_LoadBMP(file_name.c_str());
+	_surface = SDL_LoadBMP(file_name.c_str())
 
 	if (_surface != nullptr && _surface->format->format != SDL_PIXELFORMAT_RGBA8888):
 		//Nem ARGB8888 as formátum, konvertáljuk át
-		SDL_Surface *n = SDL_ConvertSurfaceFormat(_surface, SDL_PIXELFORMAT_RGBA8888, 0);
+		SDL_Surface *n = SDL_ConvertSurfaceFormat(_surface, SDL_PIXELFORMAT_RGBA8888, 0)
 
-		free();
+		free()
 
-		_surface = n;
+		_surface = n
 	
 ------------------------------------------------------------------------------------------
 
 save_bmp:
-	SDL_SaveBMP(_surface, file_name.c_str());
+	SDL_SaveBMP(_surface, file_name.c_str())
 
 ------------------------------------------------------------------------------------------
 
 get_width:
 	if (_surface == nullptr):
-		return 0;
+		return 0
 	
 
-	return _surface->w;
+	return _surface->w
 
 ------------------------------------------------------------------------------------------
 
 get_height:
 	if (_surface == nullptr):
-		return 0;
+		return 0
 	
 
-	return _surface->h;
+	return _surface->h
 
 ------------------------------------------------------------------------------------------
 
 get_surface:
-	return _surface;
+	return _surface
 
 ------------------------------------------------------------------------------------------
 
 Image():
-	_surface = nullptr;
+	_surface = nullptr
 
 ------------------------------------------------------------------------------------------
 
 Image(const String &file_name):
-	_surface = nullptr;
+	_surface = nullptr
 
-	load_bmp(file_name);
+	load_bmp(file_name)
 
 ------------------------------------------------------------------------------------------
 
 ~Image:
-	free();
+	free()
 
 ------------------------------------------------------------------------------------------
