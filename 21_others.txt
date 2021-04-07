@@ -3,6 +3,7 @@ Egyéb feladatok.
 
 Ezeket már nem fejtettem ki teljesen, csak "guideline"-okat, és ötleteket írok róluk.
 
+
 ============================== Asset DB ==============================
 
 Egy olyan osztály, amely képes tárolni, és elérhetővé tenni (Singleton),
@@ -121,33 +122,50 @@ kell megcisnálni, és betölteni képekként.
 
 ============================== Notepad ==============================
 
+Írj egy nagyon egyszerű Notepad szerű programot, a widget 
+készleted felhasználásával.
+
+
 ============================== Táblázatkezelő ==============================
 
-============================== Json szerkesztő ==============================
+Írj egy nagyon egyszerű excel szerű táblázatkezelő programot, 
+a widget készleted felhasználásával.
 
 
-============================== XML szerkesztő ==============================
+============================== Pong klón ==============================
 
-============================== Webböngésző ==============================
+Írj egy Pong klónt.
 
+
+============================== Breakout klón ==============================
+
+Írj egy Breakout klónt.
+
+A Tile Map osztállyal egyszerűen megoldható.
 
 
 ============================== Snake játék ==============================
 
+Írj egy snake klónt.
 
-============================== Tankos játék ==============================
-
-
-============================== Ugrálós játék ==============================
-
-
-============================== Ponk klón ==============================
+A Tile Map osztállyal is egyszerűen megoldható.
 
 
 ============================== Monopolys programhoz gui ==============================
 
+Írj az előzőleg kifejleszett Monopolys szimulációhoz egy felhasználói felületet.
+
 
 ============================== Raycaster ==============================
 
+Implementálj egy Raycaster-t.
+
+Pl.: 
+
+https://www.youtube.com/watch?v=gYRrGTC7GtA
+https://www.youtube.com/watch?v=PC1RaETIx3Y
+https://www.youtube.com/watch?v=eOCQfxRQ2pY
+
+etc...
 
 
