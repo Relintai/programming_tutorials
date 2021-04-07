@@ -1,7 +1,0 @@
-
-
-Textura
-
-Sprite
-
-Assets class
