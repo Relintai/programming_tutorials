@@ -118,12 +118,35 @@ fel itt, ha nincs akkor sincs probléma, akkor viszont minden szöveget kézzel
 kell megcisnálni, és betölteni képekként.
 
 
+Widget
+
+Container : Widget
+
+PanelContainer : Container
+
+HBoxContainer : Container
+
+VBoxContainer : Container
+
+Label : Widget
+
+Button : Widget
+
+LabelButton : Button
+
+ImageButton : Button
+
+Image : Widget
+
+
 
 
 ============================== Notepad ==============================
 
 Írj egy nagyon egyszerű Notepad szerű programot, a widget 
 készleted felhasználásával.
+
+Az se probléma, ha nem lehet szerkeszteni a szöveget.
 
 
 ============================== Táblázatkezelő ==============================
