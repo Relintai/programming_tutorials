@@ -1,4 +1,62 @@
 
+Írjunk egy Textúra osztályt.
+
+Ez fogja menedzselni az SDL_Texture osztályokat.
+
+Ahogy a bevezetőben elhangzott, Ez egy kép adatait tartalmazza, viszont ez a 
+softwares rajzoláshoz optimalizált formában.
+
+Kirajzolni a Renderer segédfüggvényeivel lehet, ezeket később menjetek vissza, és 
+implementáljátok be.
+
+Fontos!
+
+A renderer.h-t csak a texture.cpp fájlba include-oljátok be!
+
+Ugyanis, a texture.h kelleni fog a renderer.h-nak is!
+És nem lehet kör az inlcude gráfban.
+
+Ebben az esetben a renderer csak a .cpp fájlban kell, így ez a legegyszerűbb megoldás.
+
+
+------------
+
+Megj.:
+
+Ha a Renderer osztályt a .h fájlban is kellene használni valamiért, akkor előre kellene 
+definiálni, így:
+
+---
+
+texture.h:
+
+class Renderer;
+
+class Texture {
+	//...
+};
+
+texture.cpp:
+
+#include "remderer.h"
+
+---
+
+És ugyanezt el lehetne játszani a Rendererbe is, sőt ha lenne több ilyen körkörös 
+függőség, azoknál is.
+
+Nagy projektekben előfordul az ilyen, érdemes fejben tartani, hogy meg lehet 
+oldani, és hogy így.
+
+Ez amúgy azért működik, mert a cpp fájlok külön fordítási egységekként vannak 
+lefordítva (alapból, akkor is, ha csak több cpp fájlt fodítunk egy paranccsal 
+programmá), és a végén egy utolsó lépésként vannak összelinkelve 
+(összeállítva) egy futtatható fájllá. És ez a hiba pont a fordítási
+lépésben okoz gondot.
+
+------------
+
+És akkor a Texture osztály UML diagramja:
 
 |---------------------------------------------------------------------------------------|
 | class Texture                                                                         |
@@ -49,6 +107,10 @@ get_color_mod:
 	SDL_GetTextureAlphaMod(_texture, &a)
 
 	return Color(r, g, b, a)
+
+
+Az sdl külön kezeli a színezés paramétert, és az átlátszóságot, de ezt itt egybe vettem,
+mert így jobban illik a program felépítéséhez.
 
 ------------------------------------------------------------------------------------------
 
