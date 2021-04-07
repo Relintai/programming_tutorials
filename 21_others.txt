@@ -112,7 +112,12 @@ de rá is lehet keresni "bitmap font" okra az interneten, nagyon sok van belől�
 
 Írjunk egy egyszerű Widget készletet.
 
-Megj.: Nagyon hasznos, ha 
+Megj.: Ha már van használható BitmapFont osztályotok, midnenképp használjátok 
+fel itt, ha nincs akkor sincs probléma, akkor viszont minden szöveget kézzel
+kell megcisnálni, és betölteni képekként.
+
+
+
 
 ============================== Notepad ==============================
 
