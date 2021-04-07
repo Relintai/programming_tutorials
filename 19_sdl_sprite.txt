@@ -1,4 +1,17 @@
 
+Írjunk egy Sprite osztályt.
+
+Egy Sprite az egybe fog egy textúrát (Texture) és az ennek a kirajzolásához 
+szükséges adatokat. (Pozíció, méret, stb).
+
+A lényege egy ilyne osztálynak, hogy ne kelljen sok külön textúrát létrehozni,
+és eltárolni a memóriában, ha csak egy textúrát többször több helyre akarunk kirajzolni.
+
+A Renderer-be van függvény, amik ezt használják, azokat ne felejtsátek el implementálni!
+
+Fontos, az include-olásos probléma ugyanúgy jelen van mint a textúra osztálynál!
+Figylejetek rá!
+
 |---------------------------------------------------------------------------------------|
 | class Sprite                                                                          |
 |---------------------------------------------------------------------------------------|
@@ -78,6 +91,9 @@ get_texture_clip_rect:
 	return _texture_clip_rect 
 
 
+Ezzel be lehet állítani, hogy a textúrának csak egy kis részletét rajzolja ki a sprite.
+Pl így lehet sprite sheet-eket, tile map-okat, de akár bitmap font-okat is csinálni.
+
 ------------------------------------------------------------------------------------------
 
 set_texture_clip_rect:
@@ -89,6 +105,10 @@ set_texture_clip_rect:
 get_transform:
 	return _transform 
 
+
+Transform-nak neveztem, de jó ha tudjátok, hogy játékmotorokban a transzformációk
+általában mátrixokat jelentenek. Ezek annyival jobbak, hogy a forgatások, és skálázások
+is beléjük fér.
 
 ------------------------------------------------------------------------------------------
 
@@ -234,6 +254,10 @@ set_texture:
 draw:
 	Renderer::get_singleton()->draw_sprite(this) 
 
+
+Kényelmi függvény, hogy ne kelljen mindenhol include-olni a renderert.
+Végül nem virtuálisnak csináltam, de nyugodtan át lehet rakni annak,
+jó dolgokat lehet vele csinálni, ha az.
 
 ------------------------------------------------------------------------------------------
 
