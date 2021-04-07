@@ -1,6 +1,65 @@
 
-Írjunk egy renderer oszályt.
+Írjunk egy rajzoló (Renderer) oszályt.
 
+Ez az osztály fogja kezelni az ablakot (SDL_Window), és a renderert (SDL_Renderer) is.
+
+Találhatók ebben az osztályban Sprite, és Texture típusú paraméterek is.
+Ezeket, még nem hoztuk létre, viszont ezeknek majd szüksége lessz a működésükhöz
+az ebben az osztályban található SDL_Renderer-re.
+
+Szóval ezeket a függvényeket csak az után rakjátok bele, 
+miután az adott osztályokat már beimplementáltátok.
+
+------
+
+Ez egy ún. singleton osztály lesz.
+Azaz a programunkban csak egy darabot szabad létrehozni, viszont ezt utána bármikor
+elérhetjük a statikus get_singleton() függvényen keresztül.
+
+c++-ban ez pl így működik:
+Renderer::get_singleton()->present();
+
+Fontos tudni, hogy itt nekünk kell majd egy Renderer-t létrehoznunk a programunk elején.
+Van olyan singleton implementáció, ami automatikusan létrejön az első elérésekor,
+de mivel ez az osztály pl az ablakot is kezeli, ezért itt ezt nem így fogjuk csinálni.
+
+Megj: Sok esetben érdemes a singleton-jainkat a program elején explicit 
+létrehozatnunk, majd a végén töröltetnünk. (new, delete)
+Elég sok problémától kímélhetjük meg magunkat vele.
+(Pl.: a legtöbb játékmotoroknál ez bevett szokás.)
+(Nyilván ebbe az is benne van, hogy egy egy singleton allokáció kisebb megakadásokat
+is eredményezhet, ha annak az osztálynak sokáig tart az inícializációja.)
+
+------
+
+A teljesség kedvéért, c++ példa egy automatikusan létrejövő singletonra:
+Fontos tudni, hogy ez az implementáció thread safe az újabb c++-ban.
+(A fordító rak bele mutexeket! https://www.youtube.com/watch?v=c1gO9aB9nbs&t=1120s)
+
+Renderer &Renderer::get_singleton() {
+	static Renderer r;
+	return r; 
+}
+
+------
+
+Megj.:
+
+a static Renderer *_singleton tagot így kell megcsinálni:
+
+a .h-ban:
+
+class Renderer {
+	//...
+	static Renderer *_singleton;
+}
+
+a .cpp-ben:
+
+Renderer *Renderer::_singleton = nullptr;
+
+Azaz definiálni kell, különben fordítási hibát fogtok kapni.
+(Itt tudunk neki kezdeti paramétert is adni.)
 
 
 |---------------------------------------------------------------------------------------|
@@ -11,7 +70,7 @@
 | + void set_draw_color(const Color &color)                                             |
 | + void clear()                                                                        |
 |                                                                                       |
-| + SDL_BlendMode get_blend_mode() const                                                |
+| + SDL_BlendMode get_blend_mode                                                        |
 | + void set_blend_mode(const SDL_BlendMode mode)                                       |
 |                                                                                       |
 | + void draw_point(const int x, const int y)                                           |
@@ -35,28 +94,28 @@
 | + void draw_sprite(const Sprite &sprite)                                              |
 | + void draw_sprite(const Sprite *sprite)                                              |
 |                                                                                       |
-| + int get_dpi() const                                                                 |
-| + int get_window_size_w() const                                                       |
-| + int get_window_size_h() const                                                       |
-| + int get_size_w() const                                                              |
-| + int get_size_h() const                                                              |
+| + int get_dpi                                                                         |
+| + int get_window_size_w                                                               |
+| + int get_window_size_h                                                               |
+| + int get_size_w                                                                      |
+| + int get_size_h                                                                      |
 | + void set_size(const int w, const int h) const                                       |
 | + void get_size(int *w, int *h) const                                                 |
 |                                                                                       |
-| + float get_scale_w() const                                                           |
-| + float get_scale_h() const                                                           |
+| + float get_scale_w                                                                   |
+| + float get_scale_h                                                                   |
 | + void set_scale(const float w, const float h) const                                  |
 | + void get_scale(float *w, float *h) const                                            |
 |                                                                                       |
-| + bool get_integer_scaling() const                                                    |
+| + bool get_integer_scaling                                                            |
 | + void set_integer_scaling(const bool enable)                                         |
 |                                                                                       |
-| + Rect2 get_viewport() const                                                          |
+| + Rect2 get_viewport                                                                  |
 | + void set_viewport(const Rect2 &rect) const                                          |
 |                                                                                       |
-| + Rect2 get_clip_rect() const                                                         |
+| + Rect2 get_clip_rect                                                                 |
 | + void set_clip_rect(Rect2 *rect) const                                               |
-| + bool clip_rect_enabled() const                                                      |
+| + bool clip_rect_enabled                                                              |
 |                                                                                       |
 | + bool render_target_supported()                                                      |
 |                                                                                       |
@@ -92,66 +151,82 @@
 |---------------------------------------------------------------------------------------|
 
 
+------------------------------------------------------------------------------------------
 
-#include "renderer.h"
-
-#include <cstdio>
-
-#include "math.h"
-
-void Renderer::present() {
+present:
 	SDL_RenderPresent(_renderer)
-}
 
-void Renderer::set_draw_color(const Uint8 r, const Uint8 g, const Uint8 b, const Uint8 a) {
+
+Ez fogja a végén megjeleníteni a képet.
+
+------------------------------------------------------------------------------------------
+
+set_draw_color:
 	SDL_SetRenderDrawColor(_renderer, r, g, b, a)
-}
 
-void Renderer::set_draw_color(const Color &color) {
+------------------------------------------------------------------------------------------
+
+set_draw_color:
 	SDL_SetRenderDrawColor(_renderer, color.r, color.g, color.b, color.a)
-}
 
-void Renderer::clear() {
+------------------------------------------------------------------------------------------
+
+clear:
 	SDL_RenderClear(_renderer)
-}
 
-SDL_BlendMode Renderer::get_blend_mode() const {
+------------------------------------------------------------------------------------------
+
+get_blend_mode:
 	SDL_BlendMode mode
 	SDL_GetRenderDrawBlendMode(_renderer, &mode)
 
 	return mode
-}
-void Renderer::set_blend_mode(const SDL_BlendMode mode) {
+
+
+A blend mode mondja meg, hogy az sdl hogy kezelje az átlátszó képeket.
+
+------------------------------------------------------------------------------------------
+
+set_blend_mode:
 	SDL_SetRenderDrawBlendMode(_renderer, mode)
-}
 
-void Renderer::draw_point(const int x, const int y) {
+------------------------------------------------------------------------------------------
+
+draw_point:
 	SDL_RenderDrawPoint(_renderer, x, y)
-}
-void Renderer::draw_point(const float x, const float y) {
+
+------------------------------------------------------------------------------------------
+
+draw_point:
 	SDL_RenderDrawPointF(_renderer, x, y)
-}
 
-void Renderer::draw_line(const int x1, const int x2, const int y1, const int y2) {
+------------------------------------------------------------------------------------------
+
+draw_line:
 	SDL_RenderDrawLine(_renderer, x1, x2, y1, y2)
-}
-void Renderer::draw_line(const float x1, const float x2, const float y1, const float y2) {
-	SDL_RenderDrawLineF(_renderer, x1, x2, y1, y2)
-}
 
-void Renderer::draw_rect(const Rect2 &rect) {
+------------------------------------------------------------------------------------------
+
+draw_line:
+	SDL_RenderDrawLineF(_renderer, x1, x2, y1, y2)
+
+------------------------------------------------------------------------------------------
+
+draw_rect:
 	SDL_Rect r = rect.as_rect()
 
 	SDL_RenderDrawRect(_renderer, &r)
-}
 
-void Renderer::draw_fill_rect(const Rect2 &rect) {
+------------------------------------------------------------------------------------------
+
+draw_fill_rect:
 	SDL_Rect r = rect.as_rect()
 
 	SDL_RenderFillRect(_renderer, &r)
-}
 
-void Renderer::draw_texture(const Texture &texture, const Rect2 &dst_rect) {
+------------------------------------------------------------------------------------------
+
+draw_texture(const Texture &texture, const Rect2 &dst_rect):
 	SDL_Rect sr
 
 	sr.x = 0
@@ -162,14 +237,19 @@ void Renderer::draw_texture(const Texture &texture, const Rect2 &dst_rect) {
 	SDL_Rect dr = dst_rect.as_rect()
 
 	SDL_RenderCopy(_renderer, texture.get_texture(), &sr, &dr)
-}
-void Renderer::draw_texture(const Texture &texture, const Rect2 &src_rect, const Rect2 &dst_rect) {
+
+------------------------------------------------------------------------------------------
+
+draw_texture(const Texture &texture, const Rect2 &src_rect, const Rect2 &dst_rect):
 	SDL_Rect sr = src_rect.as_rect()
 	SDL_Rect dr = dst_rect.as_rect()
 
 	SDL_RenderCopy(_renderer, texture.get_texture(), &sr, &dr)
-}
-void Renderer::draw_texture(const Texture &texture, const Rect2 &src_rect, const Rect2 &dst_rect, const double angle, const float cx, const float cy, const SDL_RendererFlip flip) {
+
+------------------------------------------------------------------------------------------
+
+draw_texture(const Texture &texture, const Rect2 &src_rect, const Rect2 &dst_rect, 
+                const double angle, const float cx, const float cy, const SDL_RendererFlip flip):
 	SDL_Rect sr = src_rect.as_rect()
 	SDL_FRect dr = dst_rect.as_frect()
 
@@ -179,25 +259,26 @@ void Renderer::draw_texture(const Texture &texture, const Rect2 &src_rect, const
 	p.y = cy
 
 	SDL_RenderCopyExF(_renderer, texture.get_texture(), &sr, &dr, angle, &p, flip)
-}
 
-void Renderer::draw_sprite(const Sprite &sprite) {
+------------------------------------------------------------------------------------------
+
+draw_sprite(const Sprite &sprite):
 	Texture *t = sprite.get_texture()
 
-	if (!t) {
+	if (!t):
 		return
-	}
+	
 
 	t->set_color_mod(sprite.get_color_mod())
 
 	double angle = sprite.get_angle()
 
-	if (Math::is_zero_approx(angle)) {
+	if (Math::is_zero_approx(angle)):
 		SDL_Rect sr = sprite.get_texture_clip_rect().as_rect()
 		SDL_Rect dr = sprite.get_transform().as_rect()
 
 		SDL_RenderCopy(_renderer, t->get_texture(), &sr, &dr)
-	} else {
+	else:
 		SDL_Rect sr = sprite.get_texture_clip_rect().as_rect()
 		SDL_FRect dr = sprite.get_transform().as_frect()
 
@@ -207,29 +288,28 @@ void Renderer::draw_sprite(const Sprite &sprite) {
 		p.y = sprite.get_anchor_y()
 
 		SDL_RenderCopyExF(_renderer, t->get_texture(), &sr, &dr, angle, &p, sprite.get_flip())
-	}
-}
+	
+------------------------------------------------------------------------------------------
 
-void Renderer::draw_sprite(const Sprite *sprite) {
-	if (!sprite)
+draw_sprite(const Sprite *sprite):
+	if (!sprite):
 		return
 
 	Texture *t = sprite->get_texture()
 
-	if (!t) {
+	if (!t):
 		return
-	}
-
+	
 	t->set_color_mod(sprite->get_color_mod())
 
 	double angle = sprite->get_angle()
 
-	if (Math::is_zero_approx(angle)) {
+	if (Math::is_zero_approx(angle)):
 		SDL_Rect sr = sprite->get_texture_clip_rect().as_rect()
 		SDL_Rect dr = sprite->get_transform().as_rect()
 
 		SDL_RenderCopy(_renderer, t->get_texture(), &sr, &dr)
-	} else {
+	else:
 		SDL_Rect sr = sprite->get_texture_clip_rect().as_rect()
 		SDL_FRect dr = sprite->get_transform().as_frect()
 
@@ -239,186 +319,229 @@ void Renderer::draw_sprite(const Sprite *sprite) {
 		p.y = sprite->get_anchor_y()
 
 		SDL_RenderCopyExF(_renderer, t->get_texture(), &sr, &dr, angle, &p, sprite->get_flip())
-	}
-}
+	
+------------------------------------------------------------------------------------------
 
-int Renderer::get_dpi() const {
+get_dpi:
 	float ddpi
 	float hdpi
 	float vdpi
 
-	if (SDL_GetDisplayDPI(_window_display_index, &ddpi, &hdpi, &vdpi)) {
+	if (SDL_GetDisplayDPI(_window_display_index, &ddpi, &hdpi, &vdpi)):
 		return ddpi
-	}
+	
 
 	//fallback
 	return 1
-}
 
-int Renderer::get_window_size_w() const {
+
+
+dpi = dot per inch. Nagy pixelsőrőségű kijelzőknél lehet haszna.
+
+------------------------------------------------------------------------------------------
+
+get_window_size_w:
 	int w
 	int h
 
 	SDL_GetWindowSize(_window, &w, &h)
 
 	return w
-}
 
-int Renderer::get_window_size_h() const {
+------------------------------------------------------------------------------------------
+
+get_window_size_h:
 	int w
 	int h
 
 	SDL_GetWindowSize(_window, &w, &h)
 
 	return h
-}
 
-int Renderer::get_size_w() const {
+------------------------------------------------------------------------------------------
+
+get_size_w:
 	int w
 	int h
 
 	SDL_RenderGetLogicalSize(_renderer, &w, &h)
 
 	return w
-}
 
-int Renderer::get_size_h() const {
+------------------------------------------------------------------------------------------
+
+get_size_h:
 	int w
 	int h
 
 	SDL_RenderGetLogicalSize(_renderer, &w, &h)
 
 	return h
-}
 
-void Renderer::get_size(int *w, int *h) const {
+------------------------------------------------------------------------------------------
+
+get_size:
 	SDL_RenderGetLogicalSize(_renderer, w, h)
-}
 
-void Renderer::set_size(const int w, const int h) const {
+------------------------------------------------------------------------------------------
+
+set_size:
 	SDL_RenderSetLogicalSize(_renderer, w, h)
-}
 
-float Renderer::get_scale_w() const {
+------------------------------------------------------------------------------------------
+
+get_scale_w:
 	float w
 	float h
 
 	SDL_RenderGetScale(_renderer, &w, &h)
 
 	return w
-}
-float Renderer::get_scale_h() const {
+
+------------------------------------------------------------------------------------------
+
+get_scale_h:
 	float w
 	float h
 
 	SDL_RenderGetScale(_renderer, &w, &h)
 
 	return h
-}
-void Renderer::set_scale(const float w, const float h) const {
+
+------------------------------------------------------------------------------------------
+
+set_scale:
 	SDL_RenderSetScale(_renderer, w, h)
-}
-void Renderer::get_scale(float *w, float *h) const {
+
+------------------------------------------------------------------------------------------
+
+get_scale:
 	SDL_RenderGetScale(_renderer, w, h)
-}
 
-bool Renderer::get_integer_scaling() const {
+------------------------------------------------------------------------------------------
+
+get_integer_scaling:
 	return SDL_RenderGetIntegerScale(_renderer)
-}
-void Renderer::set_integer_scaling(const bool enable) {
-	if (enable)
-		SDL_RenderSetIntegerScale(_renderer, SDL_TRUE)
-	else
-		SDL_RenderSetIntegerScale(_renderer, SDL_FALSE)
-}
 
-Rect2 Renderer::get_viewport() const {
+------------------------------------------------------------------------------------------
+
+set_integer_scaling:
+	if (enable):
+		SDL_RenderSetIntegerScale(_renderer, SDL_TRUE)
+	else:
+		SDL_RenderSetIntegerScale(_renderer, SDL_FALSE)
+
+------------------------------------------------------------------------------------------
+
+get_viewport:
 	SDL_Rect r
 
 	SDL_RenderGetViewport(_renderer, &r)
 
 	return Rect2(r.x, r.y, r.w, r.h)
-}
-void Renderer::set_viewport(const Rect2 &rect) const {
+
+------------------------------------------------------------------------------------------
+
+set_viewport:
 	SDL_Rect r = rect.as_rect()
 
 	SDL_RenderSetViewport(_renderer, &r)
-}
 
-Rect2 Renderer::get_clip_rect() const {
+------------------------------------------------------------------------------------------
+
+get_clip_rect:
 	SDL_Rect r
 
 	SDL_RenderGetClipRect(_renderer, &r)
 
 	return Rect2(r.x, r.y, r.w, r.h)
-}
-void Renderer::set_clip_rect(Rect2 *rect) const {
-	if (rect) {
+
+
+A beállított clip rect-en belüli pixelek fognak az ablakban megjelenni. Alapból
+0, 0, get_screen_width(), get_screen_heigth().
+
+A kamera ezt fogja állítgatni.
+
+------------------------------------------------------------------------------------------
+
+set_clip_rect:
+	if (rect):
 		SDL_Rect r = rect->as_rect()
 
 		SDL_RenderSetClipRect(_renderer, &r)
-	} else {
+	else:
 		SDL_RenderSetClipRect(_renderer, nullptr)
-	}
-}
-bool Renderer::clip_rect_enabled() const {
+
+------------------------------------------------------------------------------------------
+
+clip_rect_enabled:
 	return SDL_RenderIsClipEnabled(_renderer)
-}
 
-bool Renderer::render_target_supported() {
+------------------------------------------------------------------------------------------
+
+render_target_supported:
 	return SDL_RenderTargetSupported(_renderer)
-}
 
-SDL_Texture *Renderer::get_render_target() {
+------------------------------------------------------------------------------------------
+
+get_render_target:
 	return SDL_GetRenderTarget(_renderer)
-}
-void Renderer::set_render_target(Texture *texture) {
-	if (texture) {
-		SDL_SetRenderTarget(_renderer, texture->get_texture())
-	} else {
-		SDL_SetRenderTarget(_renderer, nullptr)
-	}
-}
 
-void Renderer::initialize() {
-	if (SDL_Init(_flags) != 0) {
+------------------------------------------------------------------------------------------
+
+set_render_target:
+	if (texture):
+		SDL_SetRenderTarget(_renderer, texture->get_texture())
+	else:
+		SDL_SetRenderTarget(_renderer, nullptr)
+
+Így lehet textúrára rajzolni.
+
+------------------------------------------------------------------------------------------
+
+initialize:
+	if (SDL_Init(_flags) != 0):
 		printf("SDL_Init() hiba!\n")
 
 		return
-	}
+	
 
-	if (SDL_CreateWindowAndRenderer(_initial_window_width, _initial_window_height, _window_flags, &_window, &_renderer) != 0) {
+	if (SDL_CreateWindowAndRenderer(_initial_window_width, _initial_window_height, _window_flags, &_window, &_renderer) != 0):
 		printf("SDL_CreateWindowAndRenderer() hiba!\n")
 
 		return
-	}
+	
 
 	_window_display_index = SDL_GetWindowDisplayIndex(_window)
-}
 
-void Renderer::destroy() {
-	if (_window)
+------------------------------------------------------------------------------------------
+
+destroy:
+	if (_window):
 		SDL_DestroyWindow(_window)
 
-	if (_renderer)
+	if (_renderer):
 		SDL_DestroyRenderer(_renderer)
 
 	_window = nullptr
 	_renderer = nullptr
-}
 
-SDL_Window *Renderer::get_window() {
+------------------------------------------------------------------------------------------
+
+get_window:
 	return _window
-}
 
-SDL_Renderer *Renderer::get_renderer() {
+------------------------------------------------------------------------------------------
+
+get_renderer:
 	return _renderer
-}
 
-Renderer::Renderer() {
-	if (_singleton) {
-		printf("Renderer::Renderer(): _singleton is not null!\n")
-	}
+------------------------------------------------------------------------------------------
+
+Renderer():
+	if (_singleton):
+		printf("Renderer(): _singleton is not null!\n")
+	
 
 	_initial_window_width = 640
 	_initial_window_height = 480
@@ -429,12 +552,13 @@ Renderer::Renderer() {
 	_window_flags = SDL_WINDOW_SHOWN
 
 	initialize()
-}
 
-Renderer::Renderer(unsigned int flags, unsigned int window_flags, int initial_window_width, int initial_window_height) {
-	if (_singleton) {
-		printf("Renderer::Renderer(flags): _singleton is not null!\n")
-	}
+------------------------------------------------------------------------------------------
+
+Renderer(unsigned int flags, unsigned int window_flags, int initial_window_width, int initial_window_height):
+	if (_singleton):
+		printf("Renderer(flags): _singleton is not null!\n")
+	
 
 	_initial_window_width = initial_window_width
 	_initial_window_height = initial_window_height
@@ -445,20 +569,21 @@ Renderer::Renderer(unsigned int flags, unsigned int window_flags, int initial_wi
 	_window_flags = window_flags
 
 	initialize()
-}
 
-Renderer::~Renderer() {
-	if (_singleton != this) {
-		printf("Renderer::~Renderer(): _singleton is not this!\n")
-	}
+------------------------------------------------------------------------------------------
+
+~Renderer:
+	if (_singleton != this):
+		printf("~Renderer(): _singleton is not this!\n")
+	
 
 	_singleton = nullptr
 
 	destroy()
-}
 
-Renderer *Renderer::get_singleton() {
+------------------------------------------------------------------------------------------
+
+get_singleton:
 	return _singleton
-}
 
-Renderer *Renderer::_singleton = nullptr
+------------------------------------------------------------------------------------------
