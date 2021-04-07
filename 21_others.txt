@@ -1,0 +1,129 @@
+
+Egyéb feladatok.
+
+Ezeket már nem fejtettem ki teljesen, csak "guideline"-okat, és ötleteket írok róluk.
+
+
+============================== AnimatedSprite ==============================
+
+Animált Sprite.
+
+Azaz egy olyan Sprite osztály, amelynek van update(float delta) metódusa,
+és vagy van egy Sprite vectorja, amiben Sprite-okat lehet eltárolni,
+vagy a megadott textúrát tudja x és y darabra osztva kirajzolni.
+(Nyilván nem kell annyi textúrát létrehozni, elég csak a clip_rect-et
+állítani a megfelelő időben.)
+
+Kell neki még egy változó, amivel az animáció sebességét lehet állítani.
+
+És minden (animáció sebesség) időnként képkockát fog váltani.
+
+A kipróbálásához pl lehet OpenGameArt-on "sprite sheet"-eket keresni.
+
+
+============================== TileMap ==============================
+
+Egy olyan osztály, amelyben vagy egy 2d-s int tömb (vagy természetesen 1ds,
+vagy akár lehet régiókra is osztani, azaz sok 2ds-tömb), és van egy tile_size
+változója (Lehet x, y külön is).
+
+Illetve van benne egy sprite tömb, (De lehet akár map is),
+és képes kirajzolni magát, méghozzá úgy, hogy tile_size méretű 
+rácson a 2ds int tömb alapján a rácsra a sprite-okat ráhelyezi.
+
+A Sprite-okat nem muszály clip-eltetni vele tile_size méretre.
+
+Valószínűleg egyszerűbben érthető, ha rákerestek keresőben a "tile map"
+szóra, és/vagy ránéztek pl a Tiled-re (https://www.mapeditor.org/).
+
+A kipróbálásához pl lehet OpenGameArt-on "tile set"-eket keresni.
+
+
+============================== BitmapFont ==============================
+
+Megj.: Majdnem teljesen ugyan az, mint a TileMap! Ha azt megcsináltátok,
+csak alakítsátok át ezzé.
+
+Ez egy olyan osztály, amely szöveg kiírását fogja tudni elvégezni, az
+ablakonkra. (Lehet, hogy meglepő, de szövegek megfelelő kirajzolása
+meglepően nehéz feladat! Sőt! Valójában szinte biztos, hogy ehhez hasonló 
+módszert alkalmaz szinte minden program, ugyanis betűk kirajzolgatása
+a font fájlokból idő és processzor igényes, és ezzel a módszerrel
+egyszerűen optimalizálható. Amúgy, az dsl-nek van egy sdl_ttf nevű
+kiegészítő könyvtára, az is ugyan ezt csinálja a háttérben!.)
+
+Nyilván, a legeszerűbb mód a szövegek kiírására, ha ugyan azt csináljuk,
+mint a TileMapnál, csak kicsit erre a célra átalakítva.
+
+-------
+
+Lehet úgy csinálni, hogy van egy vektorunk, amiben Sprite*-okat tudunk
+tárolni. Akár be is allokáltathatunk 256-os méretre.
+És egyesével beállítgatjuk a megfelelő helyre a megfelelő Sprite-ot.
+
+(A char típus a háttérben unsigned 8 bites int! Azaz simán lehet vele
+indexelni! (Ha a fordító esetleg nyavajogna, akkor triviálisan 
+átcastolható pl int-é!))
+
+Ennek a megoldásnak előnye, hogy a betűk lehetnek más méretűek,
+illetve, hogy kevesebb átlátszó pixelt kell majd rajzoltatni.
+Viszont hátránya, hogy sok kód létrehozni egy példányt belőle.
+
+-------
+
+Másik megoldás, hogy azt mondjuk, hogy fix méretű betűtípust használunk
+(Monospace font).
+
+Ekkor csak a betűk méreteit kell megadni, illetve, egy stringet,
+amely tartalmazza a karakteketet, a megfelelő sorrendben,
+és máris létrehozható egy példány.
+
+-------
+
+Ami függvények mindenképp legyenek:
+
+get_width(String s) -> Megmondja, hogy mekkora lesz a megadott szöveh szélessége
+get_height(String s) -> Megmondja, hogy mekkora lesz a megadott szöveh magassága
+draw(String s, int x, int y) -> kiírja a szöveget a megadott helyre
+draw_centered(String s, int x, int y) -> kiírja a szöveget a megadott helyre, középre
+                                           igazítottan.
+
+
+Valószínűleg egyszerűbb, ha magatok összedobtok egy egyszerű teszt képet,
+de rá is lehet keresni "bitmap font" okra az interneten, nagyon sok van belőlük.
+
+
+============================== Widget készlet ==============================
+
+============================== Notepad ==============================
+
+============================== Táblázatkezelő ==============================
+
+============================== Json szerkesztő ==============================
+
+
+============================== XML szerkesztő ==============================
+
+============================== Webböngésző ==============================
+
+
+
+============================== Snake játék ==============================
+
+
+============================== Tankos játék ==============================
+
+
+============================== Ugrálós játék ==============================
+
+
+============================== Ponk klón ==============================
+
+
+============================== Monopolys programhoz gui ==============================
+
+
+============================== Raycaster ==============================
+
+
+
