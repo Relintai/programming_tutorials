@@ -1,4 +1,9 @@
 
+Csináljunk, egy Kamera (Camera) osztályt.
+
+Ez az osztály fogja segíteni a Renderer clip_rect-jét kezelni.
+
+
 |---------------------------------------------------------------------------------------|
 | class Camera                                                                          |
 |---------------------------------------------------------------------------------------|
@@ -10,7 +15,7 @@
 | + bool integer_scaling                                                                |
 | + float scale_w                                                                       |
 | + float scale_h                                                                       |
-| +  viewport                                                                           |
+| + Rect2 viewport                                                                      |
 | + Rect2 clip_rect                                                                     |
 |---------------------------------------------------------------------------------------|
 
@@ -23,6 +28,9 @@ bind:
 
     Renderer::get_singleton()->set_viewport(viewport)
     Renderer::get_singleton()->set_clip_rect(&clip_rect)
+
+
+Ezt kell meghívni, hogy a kamera aktív legyen.
 
 ------------------------------------------------------------------------------------------
 
