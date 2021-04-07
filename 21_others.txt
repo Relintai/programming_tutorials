@@ -3,8 +3,23 @@ Egyéb feladatok.
 
 Ezeket már nem fejtettem ki teljesen, csak "guideline"-okat, és ötleteket írok róluk.
 
+============================== Asset DB ==============================
 
-============================== AnimatedSprite ==============================
+Egy olyan osztály, amely képes tárolni, és elérhetővé tenni (Singleton),
+a betöltött pl Textúrákat, és egyéb több helyen szükséges resource-okat.
+
+Lehet pl map-okat rakni bele, string kulccsal, de pl lehet vectort, ami structokat 
+tárol, amikbe string név és resource típus van (lehget pl template, de akár
+minden típoushoz lehet kézzel is cisnálni.), de lehet például enum, vagy konstans
+int kulcsokat is használni, stringek helyett.
+
+A program elején töltsétek be a szükséges dolgokat, és innen legyenek elérhetőek.
+
+(Nyilván közbe is lehet betöltögetni, de nem lessz rá szükség ilyen egyszerű
+programoknál.)
+
+
+============================== Animated Sprite ==============================
 
 Animált Sprite.
 
@@ -21,7 +36,7 @@ Kell neki még egy változó, amivel az animáció sebességét lehet állítani
 A kipróbálásához pl lehet OpenGameArt-on "sprite sheet"-eket keresni.
 
 
-============================== TileMap ==============================
+============================== Tile Map ==============================
 
 Egy olyan osztály, amelyben vagy egy 2d-s int tömb (vagy természetesen 1ds,
 vagy akár lehet régiókra is osztani, azaz sok 2ds-tömb), és van egy tile_size
@@ -39,7 +54,7 @@ szóra, és/vagy ránéztek pl a Tiled-re (https://www.mapeditor.org/).
 A kipróbálásához pl lehet OpenGameArt-on "tile set"-eket keresni.
 
 
-============================== BitmapFont ==============================
+============================== Bitmap Font ==============================
 
 Megj.: Majdnem teljesen ugyan az, mint a TileMap! Ha azt megcsináltátok,
 csak alakítsátok át ezzé.
@@ -94,6 +109,10 @@ de rá is lehet keresni "bitmap font" okra az interneten, nagyon sok van belől�
 
 
 ============================== Widget készlet ==============================
+
+Írjunk egy egyszerű Widget készletet.
+
+Megj.: Nagyon hasznos, ha 
 
 ============================== Notepad ==============================
 
