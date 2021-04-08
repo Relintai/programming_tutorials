@@ -1,0 +1,101 @@
+# depslib dependency file v1.0
+1599463259 source:/home/relintai/Documents/intro/intro/main.cpp
+	<iostream>
+	"thread_creation.h"
+	"thread_class.h"
+	"thread_class_params.h"
+	"thread_problem.h"
+	"lock_guard_demo.h"
+	"unique_lock_demo.h"
+	"atomic_count.h"
+
+1599459950 /home/relintai/Documents/intro/intro/thread_creation.h
+	<iostream>
+	<thread>
+
+1599460219 /home/relintai/Documents/intro/intro/thread_class.h
+	<iostream>
+	<thread>
+
+1599461074 /home/relintai/Documents/intro/intro/thread_class_params.h
+	<iostream>
+	<thread>
+	<functional>
+
+1599461958 /home/relintai/Documents/intro/intro/thread_problem.h
+	<iostream>
+	<thread>
+
+1599462734 /home/relintai/Documents/intro/intro/lock_guard_demo.h
+	<iostream>
+	<thread>
+	<mutex>
+
+1599463121 /home/relintai/Documents/intro/intro/unique_lock_demo.h
+	<iostream>
+	<thread>
+	<mutex>
+
+1599463292 /home/relintai/Documents/intro/intro/atomic_count.h
+	<iostream>
+	<thread>
+	<atomic>
+
+1599720227 source:/home/relintai/Documents/intro/01_intro_code/main.cpp
+	<iostream>
+	"thread_creation.h"
+	"thread_class.h"
+	"thread_class_params.h"
+	"thread_problem.h"
+	"lock_guard_demo.h"
+	"unique_lock_demo.h"
+	"semaphore_demo.h"
+	"atomic_count.h"
+
+1599718476 /home/relintai/Documents/intro/01_intro_code/thread_creation.h
+	<iostream>
+	<thread>
+
+1599718581 /home/relintai/Documents/intro/01_intro_code/thread_class.h
+	<iostream>
+	<thread>
+
+1599718598 /home/relintai/Documents/intro/01_intro_code/thread_class_params.h
+	<iostream>
+	<thread>
+	<functional>
+
+1599718626 /home/relintai/Documents/intro/01_intro_code/thread_problem.h
+	<iostream>
+	<thread>
+
+1599718428 /home/relintai/Documents/intro/01_intro_code/lock_guard_demo.h
+	<iostream>
+	<thread>
+	<mutex>
+
+1599718649 /home/relintai/Documents/intro/01_intro_code/unique_lock_demo.h
+	<iostream>
+	<thread>
+	<mutex>
+
+1599720449 /home/relintai/Documents/intro/01_intro_code/semaphore_demo.h
+	<iostream>
+	<thread>
+	<functional>
+	<chrono>
+	<stdlib.h>
+	<time.h>
+	"semaphore.h"
+
+1599720277 /home/relintai/Documents/intro/01_intro_code/semaphore.h
+	<mutex>
+	<condition_variable>
+	<thread>
+	<iostream>
+
+1599718364 /home/relintai/Documents/intro/01_intro_code/atomic_count.h
+	<iostream>
+	<thread>
+	<atomic>
+

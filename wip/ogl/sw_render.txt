@@ -1,0 +1,187 @@
+
+double buffer
+windowed mode etc igy megy -> kép kiiszámol bufferbe swap
+render resolution -> scale
+
+framebuffer
+pixelek, color values rgb bztes
+per pixel transparencz
+
+2d koord -> 1d coord
+
+
+window
+
+sw render
+pixelek
+cpun kiszámol
+
+//raycaster
+
+hardware render //gpu
+
+ogl, ogl es, dx, vulkan, metal, etc 
+
+sok mag
+milzen magok nem cpou
+mother of all multithreading
+
+
+gpunak feldolgozható formátumra alakítjuk -> vertexek texek etc
+
+visszakapjuk a framet
+
+meshek -> megmutat , plussz 2ds guival is
+triket tud rajzolni
+
+gpunak feldolgozható formátum
+
+a gpu gzakorlatilag 3szögetek tud csak kirajzolni. -> rendering api függő
+
+koordináta rendszer -> mi választjuk meg -> egy kamera gyakorlatilag mátrixtranzformáció -> fogunk 4ds mátrixot ->  relativitás -> a lényeg
+hogy egy 3ds v 2ds modell a kamerához képest jó helyen legyen -> cam mátrixxal megszorozunk egy objektum minden vertexét -> 
+úgy lehet értelmezni, hogy odaviszi az origóhoz őket -> és a megadott képernyőnkön a megadott mátrixal pont az lessz kirajzolva amit akarunk
+
+-> left handed right handed 
+
+0 
+   \
+I    \
+       \
+1   --   2
+
+-> koordináta rendzser Ó kamerától függ, hogy végül mekkora lessz a képer nyőn -> ált fizikai mértékegységeket használnak
+-> az eredméyn ugyan az, mert úgy van megcsinálva
+
+vertex
+
+index -> indices -> lehet 2d v 3d is -> de mindig 1ds tömb -> [ 0, 1, 0, 0, 1, 0 ] vagy [ 0, 1, 0, 0, 0, 0, 1, 0, 0 ]
+
+tömb -> [0, 1, 2] v [ 0, 2, 3 ] -> nem ugyan az! -> winding order
+
+face culling 
+mi mondjuk meg a winding ordert -> cw, ccw
+->mi mondjuk meg, hogy legyen e face vulling és hogy melyik -> backface, frontface, off 
+-> pl cel shader outline -> backface 
+
+összekötés-> sorrend nem mindegy -> culling
+
+efficiensebb, de nem mindig lehet (texture atlas):
+
+0   --   3
+   \
+I    \   I
+       \
+1   --   2
+
+[0, 1, 2, 0, 2, 3] 
+
+
+0,3   --   5
+   \
+I    \   I
+       \
+1   --   2, 4
+
+[0, 1, 2, 3, 4, 5] 
+
+
+vertex egyéb adadtok -> minden vertexhez 1 bejegyzés tartozik a tömbből
+uv, uvx, color, normal etc lehet saját
+több tömb
+
+uv map:
+textúrát feltöltjük gpoura
+
+0,0   --   1,0
+    \
+I     \     I
+        \
+0,1   --   1,1
+
+-> minecraft
+
+-> csálunk tömböket
+
+shaderek:
+script program ami a gpun fut
+
+vertex, fragment
+
+vertex: minden vertre
+vannak változói amiket bepopulál a gpu a beállításoknak megfelelően -> vec3 uv -> meg,monjuk hogy glAddArr(uv arr, size, shader param)
+
+frag minden fragment
+
+azaz minden virtuális pixelre, amin az aktuális 3ds modell látható
+
+zbufffer
+egy tömb ami a pixelek jelenlegi mélységét tárolja
+z fighting
+->note átlátszóság 
+
+skybox -> csak kirajzoljuk alapnak, meg buffer töröl
+ lazered render -> skzbox, etc -> pl portal,
+
+shderek :
+gl 2.0+
+
+pl videókártya hads törés etc 
+
+újabbakba van compzute shader, cuda etc
+
+
+gl 1.0 foixed pipeline
+
+immediate mode render
+nem annyira optimális
+eqvivalens azzal mintha mutex lenne  vs megy a thread a háttérbven
+
+jó debugra
+áll a gpu, cpu küldés overhead etc
+de könnyebb most 
+
+
+
+
+//app
+
+
+mainloop
+
+show
+
+//framerate independency
+delta = 0;
+
+start = time()
+input()
+update(delta)
+render()
+
+slduration = (1/60) - time() - starty()
+if (slduration > 0)
+    sleep(slduration)
+
+
+delta= time() - starty()
+
+
+capped framreate, not capped, maybe vsync
+
+//animations
+mozgókép -> hogy megy
+
+input-> kari update poz
+process -> pl dobozok update, mob update
+render
+
+
+//gui upaz, de van
+bool shoiuld_render = false;
+
+input-> minden updateli magát in pőlace -> más optimalizáció, az elemek újrarenderelhetik magukat néha -> sw főleg
+process -> pl van animáció, lehet hogy kimarad
+
+if shoiuld_render:
+    render

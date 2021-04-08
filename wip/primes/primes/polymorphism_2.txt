@@ -1,0 +1,167 @@
+
+class PrimeTest
+{
+    thread *t;
+    bool is_prime;
+    uint32_t num;
+    bool finished;
+};
+
+
+class PrimeTestB : public PrimeTest
+{
+    int c;
+};
+
+------------------ ekvivalens: ------------
+
+class PrimeTest
+{
+    thread *t;
+    bool is_prime;
+    uint32_t num;
+    bool finished;
+};
+
+//a compiler tudja, hogy hasznalhato a Primetest helyen
+class PrimeTestB
+{
+    thread *t;
+    bool is_prime;
+    uint32_t num;
+    bool finished;
+    int c;
+};
+
+viszont!
+
+
+PrimeTest a memóriában:
+
+---------------------------------------------------------------------------
+| 4b t | 1b is_prime + (3b packing) | 4b num | 1b finished + (3b packing) |
+---------------------------------------------------------------------------
+(16b)
+
+PrimeTestB a memóriában:
+
+----------------------------------------------------------------------------------
+| 4b t | 1b is_prime + (3b packing) | 4b num | 1b finished + (3b packing) | 4b c |
+----------------------------------------------------------------------------------
+(17b)!
+
+vector<PrimeTest> prime_tests;
+
+vektor dinamikus tömb! a háttélrben csinál egy (itt) PrimeTest típusú tömböt:
+-----------------------------------------------------
+16b PrimeTest | 16b PrimeTest | 16b PrimeTest | ....
+----------------------------------------------------
+
+a háttérben elemszám * 16B méretű tömb
+
+PrimeTestB 17B!
+nem lehet belerakni!
+
+
+megoldás:
+pointer!
+
+vector<PrimeTest *> prime_tests;
+
+Egy pointer egy számot tárol, egy memóriacímet jelent
+pl gondolhatunk rá úgy mint egy 64 bites uint, egy 64 bites rendszeren
+(32 bites rendszerek -> 4gb memória limit!)
+
+------------------------------------
+4B PrimeTest * | 4B PrimeTest * | ....
+-----------------------------------
+
+PrimeTestB * -> 4B
+
+megj típusok nem számítanak gépi kódban, ezekkel a mi munkánkat segíti a compiler
+
+
+//Érdekesség
+//Típusok? Gépi kódban nincsenek típusok! A típusokat a compiler fordítás közbe használja, hogy segítsen nekünk, a gépi mkódnak fogalma sincs gépi kódrókl!
+Sőt:
+
+stuct PrimeTest
+{
+    thread *t;
+    bool is_prime;
+    uint32_t num;
+    bool finished;
+};
+
+Értelmezhető tömbként! Nemcsakhogy értzelmezhető,, a gépi kódban egy tömb!
+
+PrimeTest t;
+
+t.is_prime ekvivalens t[1] ekvivalens (&t)+1  (t -nek lekérjük a címét, és megnöveljük 1el!)
+
+//assembly függvényhívás
+
+P:
+...
+ret //automatán visszamegy a megfelelő helyre R-be (stack)
+
+R:
+call P  //rárakja a visszatérési címet a stackre
+
+argumentumok?
+
+Rá kell rakni a stackre függvényhívás előtt
+
+Azaz függvénypointereket nagyon egyszerű implementálni!
+
+void *tf;
+
+tf = &TestClass::_thread_func;
+
+tf(arg1, arg2, etc);
+
+A compiler triviálisan meg tudja hívni!
+
+Mi van ha nem jók a paraméterek?
+
+A program valószínűleg crashelni fog, de nem feltétlenül.
+
+(function<> amit használtunk erre való, hogy a compiler le tudja ellenőrizni, hogy jó függvény legyen egy megadott pőointerhez használva)
+
+Szóval:
+
+virtuális függvények?
+
+stuct PrimeTest
+{
+    thread *t;
+    bool is_prime;
+    uint32_t num;
+    bool finished;
+    //compiler berakosgatja a virtuális fvket ide. Az implementáció más, de ilyen is lehetne
+    //google: vtable
+    void *virtual_prime_test_launch;
+};
+
+Amikor mi ezt csináljuk:
+
+PrimeTest t;
+
+a compiler automatán meghívja a konstruktort.
+
+pl.:
+
+prime_test_PrimeTest(&t);
+
+És a kompiler berakja a konstruktorba a megfelelő függvénypointer beállításokat.
+
+pl high level kódként:
+
+t->virtual_prime_test_launch = &prime_test_launch;
+
+Amikor meg akarjuk hívni ezt a fvt, a compiler átrakja a hívást pointer dereferenciára.
+
+pl:
+
+t->virtual_prime_test_launch(t, 43);
+

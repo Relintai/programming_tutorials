@@ -1,0 +1,41 @@
+
+
+//Java
+
+//java.util.concurrent.atomic
+
+//pl
+import java.util.concurrent.atomic.AtomicInteger;
+
+private AtomicInteger c = new AtomicInteger(0);
+c.incrementAndGet();
+c.decrementAndGet();
+c.get();
+
+//c#
+
+volatile
+
+-The volatile keyword can be applied to fields of these types:
+-Reference types.
+-Pointer types (in an unsafe context). Note that although the pointer itself can be volatile, the object that it points to cannot. In other words, you cannot declare a "pointer to volatile."
+-Simple types such as sbyte, byte, short, ushort, int, uint, char, float, and bool.
+-An enum type with one of the following base types: byte, sbyte, short, ushort, int, or uint.
+-Generic type parameters known to be reference types.
+-IntPtr and UIntPtr.
+
+public volatile int sharedStorage;
+
+volatile int sharedStorage;
+
+//python
+
+https://pypi.org/project/atomic/
+
+
+pl
+
+from atomic import AtomicLong
+atomic = AtomicLong(0)
+atomic += 1
+atomic.value

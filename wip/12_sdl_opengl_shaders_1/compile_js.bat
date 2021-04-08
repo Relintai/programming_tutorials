@@ -1,0 +1,6 @@
+
+rem source ~/SDKs/emsdk/emsdk_env.sh
+
+
+em++ main.cpp -o bin/game_js.html -s USE_SDL=2
+

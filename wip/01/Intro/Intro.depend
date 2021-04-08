@@ -1,0 +1,63 @@
+# depslib dependency file v1.0
+1599434026 source:/home/relintai/Projects/parall/01/Intro/main.cpp
+	<iostream>
+	"thread_intro.h"
+	"thread_class_intro.h"
+	"thread_class_params.h"
+	"thread_problem_count.h"
+	"thread_problem_cout.h"
+	"lock_guard_count.h"
+	"unique_lock_coun.h"
+	"atomic_count.h"
+	"semaphore.h"
+	"semaphore_demo.h"
+
+1599428289 /home/relintai/Projects/parall/01/Intro/thread_intro.h
+	<iostream>
+	<thread>
+
+1599428574 /home/relintai/Projects/parall/01/Intro/thread_class_intro.h
+	<iostream>
+	<thread>
+
+1599429735 /home/relintai/Projects/parall/01/Intro/thread_class_params.h
+	<iostream>
+	<thread>
+	<functional>
+
+1599432373 /home/relintai/Projects/parall/01/Intro/thread_problem_count.h
+	<iostream>
+	<thread>
+
+1599431337 /home/relintai/Projects/parall/01/Intro/thread_problem_cout.h
+	<iostream>
+	<thread>
+	<chrono>
+
+1599431703 /home/relintai/Projects/parall/01/Intro/lock_guard_count.h
+	<iostream>
+	<thread>
+	<mutex>
+
+1599432086 /home/relintai/Projects/parall/01/Intro/unique_lock_coun.h
+	<iostream>
+	<thread>
+	<mutex>
+
+1599432258 /home/relintai/Projects/parall/01/Intro/atomic_count.h
+	<iostream>
+	<thread>
+	<atomic>
+
+1599434154 /home/relintai/Projects/parall/01/Intro/semaphore.h
+	<mutex>
+	<condition_variable>
+	<thread>
+
+1599434296 /home/relintai/Projects/parall/01/Intro/semaphore_demo.h
+	<iostream>
+	<thread>
+	<functional>
+	<stdlib.h>
+	<time.h>
+

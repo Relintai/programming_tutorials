@@ -1,0 +1,47 @@
+
+1. 
+
+a. multithread tilemap
+
+"végtelen" terep -> chunkok
+szálakon lehet generálni
+
+b. ugyanez 3d ben -> terrarin / terep
+
+c. voxel engine
+
+
+2. ThreadPool
+
+pl:
+
+class Worker {
+    Thread * thread;
+    condition_variable cv;
+};
+
+class ThreadPool {
+
+    void add_job(Job *job); -> lehet föggvény pointerrel is stb
+
+
+    vector<Worker *> workers; -> létre van hozva x előre
+    vector<Job *> job_queue;
+};
+
+
+full threadpool implementáció + teszt program
+nem kell gui
+
+pl lehet a prímes csak threadpoolba adogatja be a prímeket
+
+és írogatja konzolba ami történik
+
+3. Konténerek
+
+Konténer könyvből port
++ gui app ami teszteli
+valami statisztikát írjon ki
+
+pl 100 threaddel beszúrogatás + threadek amik vesznek ki belőle folyton
+

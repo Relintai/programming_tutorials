@@ -1,0 +1,10 @@
+
+Változott:
+
+Kiszedtem az SDL2-2.0.12-srcl könyvtárat, és a scriptekbe visszaírtam SDL2-2.0.12-src -re.
+
+Azért nem működött, mert a virtualbox átmásolta a fájlokhoz tartozó alternatív streameket is,
+és a build rendszer ezeket is le akarta fordítani.
+
+Alternatív fájl stream:
+https://www.youtube.com/watch?v=kZ-jjtl-Cg4

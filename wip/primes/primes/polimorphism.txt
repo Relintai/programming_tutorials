@@ -1,0 +1,82 @@
+//copy paste prime
+
+//orig ptest
+
+class PrimeTest {
+public:
+    thread *t;
+    bool is_prime;
+    uint32_t num;
+    bool finished;
+
+    void launch(uint32_t p_num) {
+...
+    }
+
+    static void _thread_func(PrimeTest *c) {
+        c->check();
+    }
+
+    void check() {
+...
+    }
+
+    void print() {
+...
+    }
+
+    PrimeTest() {
+...
+    }
+
+    ~PrimeTest() {
+...
+    }
+};
+
+
+//leegyszerűsítve
+// class ekvivalent:
+//regen c++ makr=kkal volt implementalva c felett
+//jelenleg ez a lepes ki van hagyva
+
+stuct PrimeTest
+{
+    thread *t;
+    bool is_prime;
+    uint32_t num;
+    bool finished;
+};
+
+//Fuggvenyek mashol vannak a memoriaban!
+
+virtual void prime_test_launch(PrimeTest * this, uint32_t p_num)
+{
+...
+}
+
+//static, a compiler nem nyult hozza
+static void prime_test__thread_func(PrimeTest *c)
+{
+    c->check();
+}
+
+void prime_test_check(PrimeTest * this)
+{
+...
+}
+
+void prime_test_print(PrimeTest * this)
+{
+...
+}
+
+prime_test_PrimeTest(PrimeTest *this)
+{
+...
+}
+
+prime_test_~PrimeTest(PrimeTest *this)
+{
+...
+}

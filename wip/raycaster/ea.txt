@@ -1,0 +1,66 @@
+
+Compilerek, fodytás parancssorból
+
+
+primes lefordít
+amibe 3 class van
+parancssorból
+
+aztán sdl
+
++ ez
+
+Compilerek
+
+G++ / gcc
+
+gnu project, stallman
+
+clang
+
+Apple, más architektúra
+rust, etc
+open source
+clangd autocomplete
+
+msvc
+
+vcvarsall
+kapcsolók
+
+mingw
+
+linux, windows win exe 
+codeblocks
+
+emscripten
+
+c-c++ -> js
+unitz is használja
+
+osxcross
+
+linux->osx cross compile
+lehet vele iphonera is
+
+build rendszerek
+skell script
+make
+cmake
+scons
+ninja
+
+autocomplete / compiledb
+
+SDL bemutat
+platformok
+
+main.cpp
+megmutat
+
+compilerek csálása
+
+
+msvc sol megnzit
+x64, release
+copy

@@ -1,0 +1,228 @@
+==================================================================================================================================================
+NETWORKING
+==================================================================================================================================================
+
+Bármikor küldhetünk üzenetet bármilyen gépnek, ha van címünk -> hogy fogadja e a gép, az más kérdés.
+
+Üzenetet hogy küldjük el?
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+Internet Protocol!
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+Maga az adat:
+
+        Csomagokva (Packet)-be van összerakva, és az internet protocol ezt tudja átvinni, a megfelelő gépre.
+
+        /************************************************************/
+        /*** IP Packet definition         ***/
+        /************************************************************/
+        #typedef unsigned int uint;
+        #typedef unsigned char uchar;
+
+        struct ip_packet {
+                uint version:4;  /* 4-bit version [note] */
+                uint header_len:4; /* header length in words [note] */
+                uint serve_type:8; /* how to service packet [note] */
+                uint packet_len:16; /* total size of packet in bytes */
+                uint ID:16;   /* packet ID [note] */
+                uint __reserved:1; /* always zero */
+                uint dont_frag:1; /* flag to permit fragmentation */
+                uint more_frags:1; /* flag for "more frags to follow"*/
+                uint frag_offset:13; /* to help reassembly */
+                uint time_to_live:8; /* permitted router hop cnt [note] */
+                uint protocol:8;  /* ICMP, UDP, TCP [note] */
+                uint hdr_chksum:16; /* ones-comp. checksum of header */
+                uint IPv4_source:32; /* IP address of originator */
+                uint IPv4_dest:32; /* IP address of destination */
+                uchar options[ ];  /* up to 40 bytes [note] */
+                uchar data[ ];  /* message data up to 64KB [note] */
+        };
+
+        Egy memóriablokként kell felfogni, és ez megy át az interneten.
+
+        Közbe módosulhat a tartalma -> pl NAT. (Network Address Translation)
+
+Ethernet:
+
+        A csomagok plusszban egy Frame-be vannak belerakva, hogy át lehessen küldeni őket magán a hálózaton:
+
+        Több féle frame létezik, pl:
+
+        https://www.ionos.com/digitalguide/server/know-how/ethernet-frame/
+
+               Building block                     Size                               Function
+        PreambleStart frame delimiter (SFD) 	8 bytes         Synchronization of the receiversBit sequence that initiates the frame
+        Destination address (MAC)               6 bytes         Hardware address of the destination network adapter
+        Source address (MAC)                    6 bytes         Hardware address of the source network adapter
+        Tag                                     4 bytes         Optional VLAN tag for integration in VLAN networks (IEEE 802.1q)
+        Type                                    2 bytes         Ethernet II: labeling of layer 3 protocols
+        Length                                  2 bytes         Length information about the record
+        Destination service access point (DSAP) 1 byte 	        Individual address of the addressed service access point
+        Source service access point (SSAP) 	1 byte 	        Source address of the sending device
+        Control 	                        1 byte 	        Defines the LLC frame (logical link)
+        SNAP                                    5 bytes         Field for the definition of the organizationally unique identifier (OUI) of the manufacturer and the protocol number (like "Type")
+        Data                                    44-1,500 bytes  The data to be transmitted
+        Frame check sequence (FCS)              4 bytes         Checksum that computes the entire frame
+        Inter frame gap (IFS)                  	- 	        Transmission break of 9.6 μs 
+
+        Itt a MAC cím a lényeg.
+
+        Fontos tudni, hogy gyárilag két gépnek nem szabad, hogy azonos legyen a MAC címe.
+
+Azaz:
+
+        Amikor programozunk, két gép között a kapcsolat csak virtuális. (Timerek.) (Nyilván van, hogy a hardwerbe van bele építve, illetve van erre optimalizáció.)
+        Bármikor amikor csomagot küldünk valakinek, ha megkaphatja, meg fogja kapni. DOS/DDOS!
+        Amikor a programunkba kapcsolatot létesítünk valakivel, az gyakorlatilag azt jelenti, hogy a kernel át fogja adni a csomagokat a programunknak.
+        Ha ezeket a csomagokat tudjuk manipulálni, mások nevében tudunk üzenetet küldeni, amire a választ már ők fogják megkapni! DOS/DDOS Amplification!
+        Csomagok érkezhetnek rossz sorrendben, illetve el is veszhetnek!
+
+        Defending from DDoS Attacks - Cloudflare: https://www.youtube.com/watch?v=kjs3KZtFeTM
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+Internet Protocol Rétegek:
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+1. Physical layer    ------ IEEE 802.3 IEEE 802.11 IEEE 802.15 IEEE 802.16 IEEE 1394 ITU-T G.hn PHY USB Bluetooth RS-232 RS-449 ------
+
+        Bitek egyik gépről a másikra átvitele, valahogy.
+
+2. Data Link layer    ------ ARP NDP OSPF Tunnels (L2TP) PPP MAC (Ethernet Wi-Fi DSL ISDN FDDI) ------
+
+        Magának az adatnak két node közötti átvitele, csinálhat hibajavítást is.
+
+  ---- Address Resolution Protocol (ARP) (IPv4), Neighbor Discovery Protocol (NDP, ND) (IPv6)
+
+        Címek felderítése (pl MAC cím),
+
+  ---- Tunneling protocol
+
+        Hálózatok közti kommunikációt teszi lehetővé.
+
+3. Internet layer    ------ IP IPv4 IPv6 ICMP ICMPv6 ECN IGMP IPsec more... ------
+
+4. Transport layer    ------ TCP UDP DCCP SCTP RSVP more... ------
+
+    https://en.wikipedia.org/wiki/User_Datagram_Protocol 
+    bal oldal
+
+  ---- TCP
+
+        -Minden csomagra figyel, hogy megérkezzen.
+        -Minden csomagra figyel, hogy a megfelelő sorrendben érkezzen meg. (Az app szemszögéből)
+        -Ha egy csomag kimarad / elveszik újra lekéri a szervertől.
+        -TCP Three-way handshake -> SYN, SYN/ACK, ACK
+
+        -Néhány TCP specifikus támadás -> SYN flood, ACK flood, TCP Reset -> más nevében küldenek TCP reset csomagot
+
+  ---- UDP
+
+        -Gyors
+        -Csomag elveszhet -> QoS, hibák etc
+        -Csomagok más sorrendben érkezhetnek meg -> routing változás pl
+        -Egy gép csak megnyithat UDP csatornát, és küldhet adatot
+
+        ...
+
+
+5. Session layer    ------ Named pipe NetBIOS SAP PPTP RTP SOCKS SPDY ------
+
+        Szessziókat lehet vele létrehozni két gép között. Nyilván erre már akkor is szükség van, ha az adat amit küldeni akarunk,
+        nem fér el egy packet-ben. pl letöltések, vagy appoknál nyitva hagyjuk a kapcoslatot.
+
+        Ugyanúgy packet-eket küldözgetünk! Egy idő után timeout. -> pl egy gép netje elmegy. -> Van ilyen ping packet is.
+
+6. Presentation layer    ------ MIME XDR ASN.1 ASCII PGP ------
+
+        Formázza az adatot az applikációs rétegnek. Pl megcsinálhat bit konverziót (Big endian, little endian).
+
+7. Application layer    ------ BGP DHCP DNS FTP HTTP HTTPS IMAP LDAP MGCP MQTT NNTP NTP POP PTP ONC/RPC RTP RTSP RIP SIP SMTP SNMP SSH Telnet TLS/SSL XMPP more... ------
+
+---- HTTP - Hypertext Transfer Protocol
+
+        https://code.tutsplus.com/tutorials/http-headers-for-dummies--net-8039
+
+        browser:
+
+                GET /tutorials/other/top-20-mysql-best-practices/ HTTP/1.1
+                Host: net.tutsplus.com
+                User-Agent: Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET CLR 3.5.30729)
+                Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+                Accept-Language: en-us,en;q=0.5
+                Accept-Encoding: gzip,deflate
+                Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+                Keep-Alive: 300
+                Connection: keep-alive
+                Cookie: PHPSESSID=r2t5uvjq435r4q7ib3vtdjq120
+                Pragma: no-cache
+                Cache-Control: no-cache
+
+        Response:
+
+                HTTP/1.x 200 OK
+                Transfer-Encoding: chunked
+                Date: Sat, 28 Nov 2009 04:36:25 GMT
+                Server: LiteSpeed
+                Connection: close
+                X-Powered-By: W3 Total Cache/0.8
+                Pragma: public
+                Expires: Sat, 28 Nov 2009 05:36:25 GMT
+                Etag: "pub1259380237;gz"
+                Cache-Control: max-age=3600, public
+                Content-Type: text/html; charset=UTF-8
+                Last-Modified: Sat, 28 Nov 2009 03:50:37 GMT
+                X-Pingback: https://net.tutsplus.com/xmlrpc.php
+                Content-Encoding: gzip
+                Vary: Accept-Encoding, Cookie, User-Agent
+                
+                <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                <head>
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+                <title>Top 20+ MySQL Best Practices - Nettuts+</title>
+                <!-- ... rest of the html ... -->
+
+
+        HTTP stateless -> Egzsyer megnyitunk egy kapcsolatot, kérés, válasz, kapcsolat bezár.
+        De vannak sütik, ezekkel el lehet dolgokat menteni. -> GET Headerbe elküldésbe kerül.
+
+        Azaz triviális bármilyen nyelven webszervert/weblapot írni!
+
+        https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
+
+
+---- Saját
+
+        Csatolakozunk egy szerverhez, és küldünk egy ilyet:
+
+                01|username|password_hash
+
+                01 -> CLIENT_PACKET_LOGIN enum érték
+
+        Válasz:
+
+                01|1
+
+                01 -> SERVER_PACKET_LOGIN_RESULT enum érték
+                1 ->  OK
+
+        Vagy:
+
+                Kliens->szerver:
+
+                14|134.123|112.23|15.3
+
+                14 -> SERVER_PACKET_NEW_PLAYER_POSITION enum érték
+                utána x, y, z koordináták ->  szerver frissíti a kliens karakteréne a helyzetét, és elküldi minden más kliensnek:
+
+                17|3|134.123|112.23|15.3
+
+                17 -> CLIENT_PACKET_NEW_PLAYER_POSITION enum érték
+                utána player id, x, y, z koordináták
+
+        stb 
+
+        Ha ez UDPn megy (Tipikusan ez amit UDP vel szoktak küldeni) -> kell timestamp, hogy el lehessen dobni, ha régebbi később ér oda
+
+

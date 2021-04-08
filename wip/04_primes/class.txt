@@ -1,0 +1,180 @@
+
+class PrimeFactorization
+{
+    public:
+        virtual void launch(uint64_t p_num);
+        void check();
+        void print();
+
+        PrimeFactorization();
+        virtual ~PrimeFactorization();
+
+        bool is_prime;
+        uint64_t num;
+        bool finished;
+};
+
+//c stílus
+
+struct PrimeFactorization {
+        bool is_prime;
+        uint64_t num;
+        bool finished;
+};
+
+void prime_factorizatin_launch(PrimeFactorization *p, uint64_t p_num);
+void prime_factorizatin_check(PrimeFactorization *p);
+void prime_factorizatin_print(PrimeFactorization *p);
+
+prime_factorizatin_PrimeFactorization(PrimeFactorization *p);
+prime_factorizatin_PrimeFactorization_del(PrimeFactorization *p);
+
+prime_factorizatin_PrimeFactorization();
+
+//memória
+
+struct PrimeFactorization {
+        bool is_prime;
+        uint64_t num;
+        bool finished;
+};
+
+
+------------------------------------------------------------------------------------------
+(1B) (8B valószínű) bool is_prime | (8B) uint64_t num | (1B) (8B valószínű) bool finihed |
+------------------------------------------------------------------------------------------
+
+PrimeFactorization pf; -> 3x8B memóriaterület
+van címe
+
+pf.is_prime -> (pf címe)
+pf.num -> (pf címe) + 8B
+pf.finished -> (pf címe) + 2x8B
+
+// öröklődés
+
+
+class PrimeFactorization {
+        bool is_prime;
+        uint64_t num;
+        bool finished;
+};
+
+class PrimeFactorization : PrimeFactorizationDerived {
+        bool c;
+};
+
+//lesz:
+
+struct PrimeFactorization {
+        bool is_prime;
+        uint64_t num;
+        bool finished;
+};
+
+struct PrimeFactorizationDerived {
+        bool is_prime;
+        uint64_t num;
+        bool finished;
+        bool c;
+};
+
+PrimeFactorization
+------------------------------------------------------------------------------------------
+(1B) (8B valószínű) bool is_prime | (8B) uint64_t num | (1B) (8B valószínű) bool finihed |
+------------------------------------------------------------------------------------------
+
+
+PrimeFactorizationDerived
+----------------------------------------------------------------------------------------------------
+(1B) (8B valószínű) bool is_prime | (8B) uint64_t num | (1B) bool finihed | (1B) (8B valószínű) c  |
+----------------------------------------------------------------------------------------------------
+
+PrimeFactorization pf; -> 3x8B memóriaterület
+van címe
+
+pf.is_prime -> (pf címe)
+pf.num -> (pf címe) + 8B
+pf.finished -> (pf címe) + 2x8B
+
+
+pf.c -> -compiler- hibát dob!
+
+
+//függvények + öröklődés
+
+//c++
+
+class PrimeFactorization {
+        bool is_prime;
+        uint64_t num;
+        bool finished;
+
+        virtual void fv();
+};
+
+class PrimeFactorization : PrimeFactorizationDerived {
+        bool c;
+};
+
+//c
+
+struct PrimeFactorization {
+        bool is_prime;
+        uint64_t num;
+        bool finished;
+        void *virtual_prime_factorization_fv_impl;
+};
+
+class PrimeFactorizationDerived {
+        bool is_prime;
+        uint64_t num;
+        bool finished;
+        void *virtual_prime_factorization_fv_impl;
+
+        bool c;
+};
+
+void virtual_prime_factorization_fv();
+
+prime_factorizatin_PrimeFactorization();
+//beállítja a megfelelő virtual_prime_factorization_fv_impl-b a megfelelő fvt.
+
+PrimeFactorization pf; -> compiler meghívja a virtual_prime_factorization_fv fvt.
+
+//assembly fv hívás
+
+P:
+...
+ret
+
+
+R:
+...
+call P
+
+
+push
+pop
+
+//
+
+new, vagy c malloc
+
+//
+
+PrimeFactorization data[4];
+
+------------------------------------------------------------------------------------------
+(1B) (8B valószínű) bool is_prime | (8B) uint64_t num | (1B) (8B valószínű) bool finihed |    x4
+------------------------------------------------------------------------------------------
+
+
+x. elem: PrimeFactorization méret * x
+
+
+PrimeFactorization *data[4];
+
+--------------------------
+(8B) PrimeFactorization * | x4
+--------------------------
