@@ -117,28 +117,180 @@ Megj.: Ha már van használható BitmapFont osztályotok, midnenképp használj�
 fel itt, ha nincs akkor sincs probléma, akkor viszont minden szöveget kézzel
 kell megcisnálni, és betölteni képekként.
 
+Sokféleképpen lehet widget készletet készíteni. Itt egy megoldást fogok
+ismertetni, a lehetőségek közül. 
+
+(
+Egyéb típusú implementációk közül érdemes utánanézni az ú.n. Immedaite 
+Mode Gui-knak. 
+
+(pl https://github.com/ocornut/imgui - A Unity is ezt 
+használja a régi GUI rendszereként, és az editor scriptelésére.)
+
+Pontos magyarázat (angol): https://www.youtube.com/watch?v=Z1qyvQsjK5Y
+
+Ezek implementálhatók osztályok felhasználása nélkül is,
+és amúgy nagyon jól kezelhetőek.
+
+Ha valakinek ez a stílus jobban tetszik, akkor ezt csinálja!
+
+Megj.: Az alul ismertetett osztályok ugyanúgy felhasználhatók
+ennek az implementálására is, csak így akkor statikus függvényekkel
+lesznek tele.
+)
+
+----------
+
+A mi widget készletünk úgy fog kinézni, hogy van egy ős Widget osztály,
+amely tartalmaz egy Widget* vektort - Ezeket gyerekeknek / child fogom hívni.
+
+Minden másik Widget ebből származik le.
+
+Az alap ötlet az, hogy elég a legfelső widgetet eltárolni, és annak adogatni
+az eventeket, annak hívogathi a frissítés metódusát, etc, és akkor
+az meghívja az összes gyerekének az ugyanilyan efüggvényeit, etc...
+
+Lesznek olyan Widgetek is, amelyek kezelik a gyekrekeik méretét.
+Így nagyon egyszerűen készíthetőek meglepően bonyolult guik is,
+alig néhány kis widget osztály elkészítésével.
+
+Azaz:
+
+Pl egy egyszerű középen levő játékmenü felépítése:
+
+Container (Ezt a külső Scene osztály hozza létre, és méretezgeti folyton az ablakmérethez, ha az változik)
+  CenteredAspectContainer
+    PanelContainer
+      VBoxContainer
+        LabelButton
+        LabelButton
+        LabelButton
+        LabelButton
+
+Pl a notepad program elékszítése, egy felső menüsávval (Popup menük nélkül):
+
+Container (Ezt a külső Scene osztály hozza létre, és méretezgeti folyton az ablakmérethez, ha az változik)
+  VBoxContainer
+    PanelContainer - Felső menüsáv grafikás háttere
+      HBoxContainer
+        LabelButton - pl mentés
+        LabelButton - pl kilépés gomb etc
+        LabelButton
+        LabelButton
+    TextEdit - Ez nem lesz benne az alab WIdget készletbe
+
+Még egy fontosabb dolog, hosszú távon érdemes megoldani, hogy ha egy Widget felhasznál egy eventet,
+akkor már azt az eventet ne dolgozzuk fel tovább, mert azzal csak cpu időt vesztegetünk.
+Sőt, később arra is hasznos lesz, ha ezt beimplementáljátok, hogy ha a Widget készlet nem használja 
+fel az eventet, csak akkor kapják meg a program más részei.
+
+Ezt nyilván sokféleképp meg lehet oldani, egyik lehetséges mőd, ha a Widgetek handle_event() virtuális 
+függvényei ha true-t adnak vissza, akkor felhasználták az eventet, és nem folytatódik tovább a gyereket 
+végigellenőrzése, sőt pl a Scene maga is tudni fogja, hogy az event fel lett használva.
+
+Megj.: Erre a típusú widget készletre nagyon szemléletes példa a Godot nevű játékmotorben található.
+(A Widget-et itt Control-nak hívják!)
+
+----------
+
 
 Widget
+------
+
+Legyen benne egy Widget* -at tartalmazó vektor.
+
+Legyen benne virtuális: update(float delta), bool handle_event(SDL_Event/írhattok sajátot), render(),
+és resize() függvények.
+
+Hasonlít a Button-ra a 23_sdl_button.txt-ből.
+
+Tárolja a saját méretét.
+
+Alapból nem rajzol ki semmit.
+
 
 Container : Widget
+------------------
+
+Olyan Widget, amely a saját méretéhez állítja a gyerekei méretét.
+
+
+CenteredAspectContainer : Container
+-----------------------------------
+
+Olyan Widget, amely a saját méretéhez állítja a gyerekei méretét, 
+de úgy, hogy középre igazítja őket, és megadható,
+hogy hány százalék-al legyenek kisebbek az x-en, és y tengelyen.
+
 
 PanelContainer : Container
+--------------------------
+
+Egy sima containre, annyi különbséggel, hogy rajzol egy hátteret
+a render() metódusában.
+
 
 HBoxContainer : Container
+-------------------------
+
+A gyerekeit egymás mellé rendezi vízszintesen.
+
+Azaz:
+
+|-----------|
+|W1|W2|W3|W4|
+|-----------|
+
 
 VBoxContainer : Container
+-------------------------
+
+Ugyan az, mint a HBoxContainer, csak függőlegesen rendezi egymás mellé a gyerekeit.
+
 
 Label : Widget
+--------------
+
+Egy szöveget ír ki.
+Megcisnálhatjátok, hogy ha a szöveg túl lóg rajta, akkor azokat a karaktereket már ne írja ki.
+
 
 Button : Widget
+---------------
+
+Gomb widget.
+Gyakorlatilag ugyan az, mint a 23_sdl_widgetes példa gombja.
+
 
 LabelButton : Button
+--------------------
+
+Egy gomb, amyl képes szöveget kiíratni magára.
+
+(Ekvivalens azzal, mintha lenne egy rejtett, nem kitörölhető label gyereke.)
+
 
 ImageButton : Button
+--------------------
+
+Egy gomb, amely re rakható egy kép.
+
 
 Image : Widget
+--------------
+
+Egy képet kirajzoló Widget.
 
 
+Megj.:
+A teljesen kiforrot ilyen felépítésű widget készletekben, általában van
+a minimum méretet meghatározó változó, és olyan is, amely megengedi
+a widget vízszintes/horizontális nyújtását. Ilyenkor pl a VBoxContainer
+az mindent a minimum méretére méretez be, és utána kinyújtja
+a maradék helyre az összes egyéb widgetet, amelynél ez be van kapcsolva.
+Így pl elég egyszerű status bar-okat csinálni.
+Számunkra ez nem olyan fontos, de ha valaki érdekes feladatnak látja, 
+nyugodtan csinálja meg.
 
 
 ============================== Notepad ==============================
