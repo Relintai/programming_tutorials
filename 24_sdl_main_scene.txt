@@ -1,3 +1,22 @@
+
+
+class MainScene : public Scene {
+public:
+	void event(const SDL_Event &ev);
+	void update(float delta);
+	void render();
+
+	MainScene();
+	~MainScene();
+
+	Camera *_camera;
+	Image *_image;
+	Texture *_texture;
+	Sprite *_sprite;
+	int _dir;
+};
+
+
 #include "main_scene.h"
 
 #include "renderer.h"
@@ -45,3 +64,27 @@ MainScene::~MainScene() {
 	delete _image;
 	delete _camera;
 }
+
+
+
+
+
+
+#ifndef IMPL_APPLICATION_H
+#define IMPL_APPLICATION_H
+
+#include "application.h"
+
+#include "main_scene.h"
+
+class ImplApplication : public Application {
+public:
+    ImplApplication() : Application() {
+        scene = new MainScene();
+    }
+    ~ImplApplication() {
+        delete scene;
+    }
+};
+
+#endif

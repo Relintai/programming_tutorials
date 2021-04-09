@@ -21,6 +21,7 @@ public:
 	Image *_image;
 	Texture *_texture;
 	Sprite *_sprite;
+	int _dir;
 };
 
 #endif
