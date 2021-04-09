@@ -1,134 +1,187 @@
 
+Írjunk egy gomb (Button) osztályt.
 
-#include <functional>
+Látjátok, hogy az UML diagramba raktam egy nem standard ábrázolást.
+Itt csak az a lényeg, hogy innen elég 1 megoldást választani.
+Az itteni változók függvénymutatók letárolására valók.
+Nem olyan szépek sajnos, mert mindkét esetben statikus függvényt lehet csak 
+beléjük rakni, (vagy lambda függvényt - lást kicsit lejjebb -), viszont
+a tagfüggvények eoltárolására a kód ennél jóval rosszabbul néz ki, ezért
+úgy döntöttem, hogy azt nem rakom bele. Akit érdekel keresgéljen rá.
+Érdemes a <functional> (std::functional) dokumentációját is nézegetni,
+ott is van sok infó erről.
+(Igazából ajánlom, hogy próbálgassatok ki több más módszert is, mert
+elég sok van.)
 
-class Button {
-public:
-    enum ButtonState {
-        BUTTON_STATE_UP,
-        BUTTON_STATE_HOVER,
-        BUTTON_STATE_DOWN,
-        BUTTON_STATE_OFF,
+Lambda függvény == Anoním függvény == név nélküli függvény
+
+így kell lértehozni:
+
+[ capture clause ] (parameters) -> return-type  
+{   
+   definition of method   
+}
+
+[ Az ide rakott változók elérhetőek lesznek majd a függvényben ] (paraméterek) -> visszatérési típus
+{   
+   kód
+}
+
+Nyilván, mivel nincs neve, ezért nem igazán lehet csak úgy meghívogatni, kivéve,
+ha eltároljuk egy függvénymutatóban!
+
+Azaz az A verzióval az on_click változóba így lehet egy lambda függvényt belerakni: 
+
+void Application::test() {
+    button->on_click = []() -> void { printf("Click lambda!"); };
+
+    button->on_click = [this]() -> void {
+		/* itt lehet majd használni a test() függvényben elérhető "this" pointert. */ 
+	    printf("Click lambda!"); 
     };
 
-	void event(const SDL_Event &ev);
-	void update(float delta);
-	void render();
+    int a = 10;
+    button->on_click = [a]() -> void { 
+        /* itt lehet majd használni a test() függvényben elérhető "a" változót. */ 
+	    printf("Click lambda!"); 
+	};
 
-    //ver a: (Csak statikus fv állítható be rá)
-    std::function<void(void)> on_click;
+	button->on_click = [&]() -> void { 
+        /* itt lehet majd használni a test() függvényben elérhető összes változót. */ 
+	    printf("Click lambda!"); 
+	};
+}
 
-    //ver b: (Képes osztályok függvényeit is meghívni)
-    //Meg lehet oldani sokféleképp, egyik sem annyira szép sajnos
-    //mindneképp érdemes lenne setter mögé rejteni ezeket
-    void* cls;
-    std::function<void(void*)> on_click_member;
+Ez az include kelleni fog: #include <functional>
 
-    Button();
-    virtual ~Button();
+És akkor az osztály:
 
-    ButtonState state;
-
-	Rect2 transform;
-
-    Sprite *up;
-    Sprite *down;
-    Sprite *hover;
-    Sprite *off;
-};
+|---------------------------------------------------------------------------------------|
+| class Button                                                                          |
+|---------------------------------------------------------------------------------------|
+| + enum ButtonState { BUTTON_STATE_UP, BUTTON_STATE_HOVER,                             |
+|                    BUTTON_STATE_DOWN, BUTTON_STATE_OFF }                              |
+|                                                                                       |
+| + void event(const SDL_Event &ev)                                                     |
+| + void update(float delta)                                                            |
+| + void render()                                                                       |
+|                                                                                       |
+|  -----------------------------------------------------------------                    |
+| | A.Verzió: (Csak statikus fv állítható be rá)                   |                    |
+| | + std::function<void(void)> on_click                           |                    |
+| |     ------------------------------------------------           |                    |
+| | B Verzió: (Képes osztályok függvényeit is meghívni)            |                    |
+| | Meg lehet oldani sokféleképp, egyik sem annyira szép sajnos    |                    |
+| | mindneképp érdemes lenne setter mögé rejteni ezeket            |                    |
+| | + void* cls                                                    |                    |
+| | + std::function<void(void*)> on_click_member                   |                    |
+| ------------------------------------------------------------------                    |
+|                                                                                       |
+| + Button()                                                                            |
+| + virtual ~Button()                                                                   |
+|                                                                                       |
+| + ButtonState state                                                                   |
+|                                                                                       |
+| + Rect2 transform                                                                     |
+|                                                                                       |
+| + Sprite *up                                                                          |
+| + Sprite *down                                                                        |
+| + Sprite *hover                                                                       |
+| + Sprite *off                                                                         |
+|---------------------------------------------------------------------------------------|
 
 
 #include "button.h"
 
 #include "math.h"
 
-void Button::event(const SDL_Event &ev) {
-	if (state == BUTTON_STATE_OFF) {
-		return;
-	}
+void Button::event(const SDL_Event &ev) 
+	if (state == BUTTON_STATE_OFF) 
+		return
+	 
 
-	switch (ev.type) {
-		case SDL_MOUSEMOTION: {
-			int x = ev.motion.x;
-			int y = ev.motion.y;
+	switch (ev.type) 
+		case SDL_MOUSEMOTION: 
+			int x = ev.motion.x
+			int y = ev.motion.y
 
-			if (transform.x < x && transform.x + transform.w > x && transform.y < y && transform.y + transform.w > y) {
-				state = BUTTON_STATE_HOVER;
-			} else {
-				state = BUTTON_STATE_UP;
-			}
+			if (transform.x < x && transform.x + transform.w > x && transform.y < y && transform.y + transform.w > y) 
+				state = BUTTON_STATE_HOVER
+			  else 
+				state = BUTTON_STATE_UP
+			 
 
-			break;
-		}
-		case SDL_MOUSEBUTTONDOWN: {
-			int x = ev.motion.x;
-			int y = ev.motion.y;
+			break
+		 
+		case SDL_MOUSEBUTTONDOWN: 
+			int x = ev.motion.x
+			int y = ev.motion.y
 
-			if (transform.x < x && transform.x + transform.w > x && transform.y < y && transform.y + transform.w > y) {
-				state = BUTTON_STATE_DOWN;
-			}
+			if (transform.x < x && transform.x + transform.w > x && transform.y < y && transform.y + transform.w > y) 
+				state = BUTTON_STATE_DOWN
+			 
 
-			break;
-		}
-		case SDL_MOUSEBUTTONUP: {
-			int x = ev.motion.x;
-			int y = ev.motion.y;
+			break
+		 
+		case SDL_MOUSEBUTTONUP: 
+			int x = ev.motion.x
+			int y = ev.motion.y
 
-			if (transform.x < x && transform.x + transform.w > x && transform.y < y && transform.y + transform.w > y) {
-				state = BUTTON_STATE_HOVER;
+			if (transform.x < x && transform.x + transform.w > x && transform.y < y && transform.y + transform.w > y) 
+				state = BUTTON_STATE_HOVER
 
-				if (on_click) {
-					on_click();
-				}
+				if (on_click) 
+					on_click()
+				 
 
-				if (on_click_member) {
-					on_click_member(cls);
-				}
-			} else {
-				state = BUTTON_STATE_UP;
-			}
+				if (on_click_member) 
+					on_click_member(cls)
+				 
+			  else 
+				state = BUTTON_STATE_UP
+			 
 
-			break;
-		}
-	}
-}
+			break
+		 
+	 
+ 
 
-void Button::update(float delta) {
-}
+void Button::update(float delta) 
+ 
 
-void Button::render() {
-	if (state == BUTTON_STATE_UP) {
-		if (up) {
-			up->set_transform(transform);
-			up->draw();
-		}
-	} else if (state == BUTTON_STATE_HOVER) {
-		if (hover) {
-			hover->set_transform(transform);
-			hover->draw();
-		}
-	} else if (state == BUTTON_STATE_DOWN) {
-		if (down) {
-			down->set_transform(transform);
-			down->draw();
-		}
-	} else if (state == BUTTON_STATE_OFF) {
-		if (off) {
-			off->set_transform(transform);
-			off->draw();
-		}
-	}
-}
+void Button::render() 
+	if (state == BUTTON_STATE_UP) 
+		if (up) 
+			up->set_transform(transform)
+			up->draw()
+		 
+	  else if (state == BUTTON_STATE_HOVER) 
+		if (hover) 
+			hover->set_transform(transform)
+			hover->draw()
+		 
+	  else if (state == BUTTON_STATE_DOWN) 
+		if (down) 
+			down->set_transform(transform)
+			down->draw()
+		 
+	  else if (state == BUTTON_STATE_OFF) 
+		if (off) 
+			off->set_transform(transform)
+			off->draw()
+		 
+	 
+ 
 
-Button::Button() {
-	state = BUTTON_STATE_UP;
+Button::Button() 
+	state = BUTTON_STATE_UP
 
-	up = nullptr;
-	down = nullptr;
-	hover = nullptr;
-	off = nullptr;
-}
+	up = nullptr
+	down = nullptr
+	hover = nullptr
+	off = nullptr
+ 
 
-Button::~Button() {
-}
+Button::~Button() 
+ 
 

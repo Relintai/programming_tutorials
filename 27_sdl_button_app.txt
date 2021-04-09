@@ -1,5 +1,5 @@
 
-class MainScene : public Scene {
+class MainScene : public Scene:
 public:
 	void event(const SDL_Event &ev);
 	void update(float delta);
@@ -22,7 +22,7 @@ public:
 	Button *b1;
 	Button *b2;
 	Button *b3;
-};
+;
 
 
 #include "main_scene.h"
@@ -34,16 +34,16 @@ public:
 
 #include <stdio.h>
 
-void MainScene::event(const SDL_Event &ev) {
+void MainScene::event(const SDL_Event &ev):
 	b1->event(ev);
 	b2->event(ev);
 	b3->event(ev);
-}
 
-void MainScene::update(float delta) {
-}
 
-void MainScene::render() {
+void MainScene::update(float delta):
+
+
+void MainScene::render():
 	Renderer::get_singleton()->clear();
 
 	_camera->bind();
@@ -51,22 +51,22 @@ void MainScene::render() {
 	b1->render();
 	b2->render();
 	b3->render();
-}
 
-void MainScene::on_first_button_clicked() {
+
+void MainScene::on_first_button_clicked():
 	printf("Click!\n");
-}
 
-void MainScene::on_first_button_clicked_member(void* cls) {
-	if (cls) {
+
+void MainScene::on_first_button_clicked_member(void* cls):
+	if (cls):
 		reinterpret_cast<MainScene*>(cls)->member_print();
-	}
-}
-void MainScene::member_print() {
-	printf("Click Member!\n");
-}
+	
 
-MainScene::MainScene() {
+void MainScene::member_print():
+	printf("Click Member!\n");
+
+
+MainScene::MainScene():
 	_camera = new Camera();
 	_image = new Image("ti.bmp");
 	_texture = new Texture(_image);
@@ -90,9 +90,9 @@ MainScene::MainScene() {
 	b3->hover = new Sprite(_texture, Color(200, 200, 200));
 	b3->cls = this;
 	b3->on_click_member = MainScene::on_first_button_clicked_member;
-}
 
-MainScene::~MainScene() {
+
+MainScene::~MainScene():
 	_texture->free();
 	_image->free();
 
@@ -112,6 +112,6 @@ MainScene::~MainScene() {
 	delete _texture;
 	delete _image;
 	delete _camera;
-}
+
 
 

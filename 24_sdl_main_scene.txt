@@ -1,20 +1,21 @@
 
 
-class MainScene : public Scene {
-public:
-	void event(const SDL_Event &ev);
-	void update(float delta);
-	void render();
-
-	MainScene();
-	~MainScene();
-
-	Camera *_camera;
-	Image *_image;
-	Texture *_texture;
-	Sprite *_sprite;
-	int _dir;
-};
+|---------------------------------------------------------------------------------------|
+| class MainScene : public Scene                                                        |
+|---------------------------------------------------------------------------------------|
+| + void event(const SDL_Event &ev)                                                     |
+| + void update(float delta)                                                            |
+| + void render()                                                                       |
+|                                                                                       |
+| + MainScene()                                                                         |
+| + ~MainScene()                                                                        |
+|                                                                                       |
+| + Camera *_camera                                                                     |
+| + Image *_image                                                                       |
+| + Texture *_texture                                                                   |
+| + Sprite *_sprite                                                                     |
+| + int _dir                                                                            |
+|---------------------------------------------------------------------------------------|
 
 
 #include "main_scene.h"
@@ -22,48 +23,48 @@ public:
 #include "renderer.h"
 
 
-void MainScene::event(const SDL_Event &ev) {
-}
+void MainScene::event(const SDL_Event &ev):
 
-void MainScene::update(float delta) {
-}
 
-void MainScene::render() {
-	Renderer::get_singleton()->clear();
+void MainScene::update(float delta):
 
-	_camera->viewport.x += _dir;
+
+void MainScene::render():
+	Renderer::get_singleton()->clear()
+
+	_camera->viewport.x += _dir
 
 	if (_camera->viewport.x <= -100)
-		_dir = 1;
+		_dir = 1
 	else if (_camera->viewport.x >= 100)
-		_dir = -1;
+		_dir = -1
 
-	_camera->bind();
+	_camera->bind()
 
-	_sprite->draw();
-}
+	_sprite->draw()
 
-MainScene::MainScene() {
-	_camera =  new Camera();
-	_image = new Image("ti.bmp");
-	_texture = new Texture(_image);
-	_sprite = new Sprite(_texture);
 
-	_sprite->set_x(30);
-	_sprite->set_y(30);
+MainScene::MainScene():
+	_camera =  new Camera()
+	_image = new Image("ti.bmp")
+	_texture = new Texture(_image)
+	_sprite = new Sprite(_texture)
 
-	_dir = 1;
-}
+	_sprite->set_x(30)
+	_sprite->set_y(30)
 
-MainScene::~MainScene() {
-	_texture->free();
-	_image->free();
+	_dir = 1
 
-	delete _sprite;
-	delete _texture;
-	delete _image;
-	delete _camera;
-}
+
+MainScene::~MainScene():
+	_texture->free()
+	_image->free()
+
+	delete _sprite
+	delete _texture
+	delete _image
+	delete _camera
+
 
 
 
@@ -77,14 +78,14 @@ MainScene::~MainScene() {
 
 #include "main_scene.h"
 
-class ImplApplication : public Application {
+class ImplApplication : public Application:
 public:
-    ImplApplication() : Application() {
-        scene = new MainScene();
-    }
-    ~ImplApplication() {
-        delete scene;
-    }
-};
+    ImplApplication() : Application():
+        scene = new MainScene()
+    
+    ~ImplApplication():
+        delete scene
+    
+
 
 #endif

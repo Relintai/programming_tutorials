@@ -49,7 +49,10 @@ MainScene::MainScene() {
 	b1->up = new Sprite(_texture);
 	b1->down = new Sprite(_texture, Color(100, 100, 100));
 	b1->hover = new Sprite(_texture, Color(200, 200, 200));
-	b1->on_click = MainScene::on_first_button_clicked;
+	
+	//b1->on_click = MainScene::on_first_button_clicked;
+
+	b1->on_click = []() -> void { printf("Click lambda!"); };
 
 	b2 = new Button();
 	b2->transform = Rect2(0, 110, 100, 100);
