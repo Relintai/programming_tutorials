@@ -19,6 +19,18 @@ A program elején töltsétek be a szükséges dolgokat, és innen legyenek elé
 (Nyilván közbe is lehet betöltögetni, de nem lessz rá szükség ilyen egyszerű
 programoknál.)
 
+============================== Input ==============================
+
+Egy olyan osztály, amely eltárolja, hogy melyik
+gombok vannak épp lenyomva, és ez bármikor megkérdezhető belőle (Singleton).
+
+Esetleg eltárolhatja az egér jelenlegi helyzetét is, illetve kezelhet joystick,
+és touch inputot is.
+
+Ugye, hogyha van egy ilyen osztályunk, akkor pl a 25_sdl_input_app.txt nál
+látható implementáció sokat egyszerűsödik, mert nem kell ott megjegyezni,
+hogy a megfelelő gombok le vannak-e nyomva. Sőt, egy ilyen osztállyal
+a gombok központilag átírhatók.
 
 ============================== Animated Sprite ==============================
 
