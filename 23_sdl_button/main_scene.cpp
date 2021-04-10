@@ -52,7 +52,11 @@ MainScene::MainScene() {
 	
 	//b1->on_click = MainScene::on_first_button_clicked;
 
-	b1->on_click = []() -> void { printf("Click lambda!"); };
+	//a verzió lambda 1 (this-nélkül):
+	//b1->on_click = []() -> void { printf("Click lambda!"); };
+
+	//a verzió lambda 2 (this-el):
+	b1->on_click = [this]() -> void { this->member_print(); };
 
 	b2 = new Button();
 	b2->transform = Rect2(0, 110, 100, 100);
