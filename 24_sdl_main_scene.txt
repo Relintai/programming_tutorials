@@ -1,4 +1,9 @@
 
+Implementájunk egy Scene-t, ami kirajzol valamit a képernyőre. Például az esetünkben egy Sprite-ot.
+
+Az ApplicationImpl már kész, az fog ebből egyet csinálni, és beállítani aktívnak.
+
+Itt az UML diagram:
 
 |---------------------------------------------------------------------------------------|
 | class MainScene : public Scene                                                        |
@@ -17,13 +22,19 @@
 | + int _dir                                                                            |
 |---------------------------------------------------------------------------------------|
 
+A függvények pszeudokódja:
 
+-----------
 
 void event(const SDL_Event &ev):
 	return
 
+-----------
+
 void update(float delta):
 	return
+
+-----------
 
 void render():
 	Renderer::get_singleton()->clear()
@@ -39,6 +50,7 @@ void render():
 
 	_sprite->draw()
 
+-----------
 
 MainScene():
 	_camera =  new Camera()
@@ -51,6 +63,7 @@ MainScene():
 
 	_dir = 1
 
+-----------
 
 ~MainScene():
 	_texture->free()
@@ -61,27 +74,4 @@ MainScene():
 	delete _image
 	delete _camera
 
-
-
-
-
-
-
-#ifndef IMPL_APPLICATION_H
-#define IMPL_APPLICATION_H
-
-#include "application.h"
-
-#include "main_scene.h"
-
-class ImplApplication : public Application:
-public:
-    ImplApplication() : Application():
-        scene = new MainScene()
-    
-    ~ImplApplication():
-        delete scene
-    
-
-
-#endif
+-----------
