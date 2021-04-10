@@ -6,6 +6,8 @@ Ennek a leszármazottai fogják tartalmazni a lehetséges Scene-eket,
 illetve van egy aktív Scene változója, amely Scene-nek ő fogja meghívni
 a megfelelő időben a virtuális függvényeit. (event, render, update).
 
+Singleton!
+
 ---------
 
 A main_loop() metódusa egyetlen meghívásra megcsinál egy kör program
