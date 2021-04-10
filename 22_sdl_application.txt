@@ -1,4 +1,101 @@
 
+Írjunk, egy Application osztályt.
+
+Erre úgy érdemes gondolni, mint a program fő osztálya. 
+Ennek a leszármazottai fogják tartalmazni a lehetséges Scene-eket,
+illetve van egy aktív Scene változója, amely Scene-nek ő fogja meghívni
+a megfelelő időben a virtuális függvényeit. (event, render, update).
+
+---------
+
+A main_loop() metódusa egyetlen meghívásra megcsinál egy kör program
+iterációt. Ez 4 dolgot jelent, először a bementek feldolgozását 
+(elküldi őket a scene-nek!), majd a frissítést (scene->update(delta)),
+majd a rajzolást, hogy a jelenlegi legújabb belső állapot alapján
+legyen újrarajzolva a képernyő, majd a delta változó karbantartását 
+végzi el, és ha szükséges, akkor pihenteti a program futását SDL_Delay-el.
+(Hogy max a target_fps-nyi képkockát rajzoltassunk ki, a képernyőre.)
+
+----
+
+A delta változóra ú.n. "framerate independent" vagy magyarul képkocka 
+sebességtől független számolások elvégzéséhez van szükség. 
+
+(Talán láttatok már régi játékokat, amik modern számítógépeken
+elindítva - valószínűleg már csak dosboxban - nagyon gyorsan futnak. 
+Ez azért van, mert amikor anno fejlesztették őket, ezeket a számolásokat
+nem végeztették el a programmal, hanem csak fixért ékekkel módosították
+a játék objektumainak pl. a helyzetét. Azaz ezek a játékok csak akkor
+működnek jól, ha a fejlesztett kjörnyezet fps számával futnak, egyébként
+gyorsabbak, vagy lassabbak lesznek. 
+(Ugye ekkor még csak 1-2 féle számítógép volt, és nem minden esetben gondoltak 
+rá, hogy ezt is figyelembe kell venni. - Vagy például a fejlesztőnek 
+csak konzolos fejlesztési tapasztalata volt, ott pedig ilyet alapfeltételt 
+gond nélkül lehetett használni. 
+
+Mellesleg, úgy hallottam, hogy néhány mai konzolos játék netkódjában még mindíg 
+előfordulnak hasonló alapfeltevések - csak itt az, hogy a konzolt úgyse lehet 
+feltörni, azaz nincs anti-cheat. -)
+
+Ez a gyakorlatban csak annyit jelent, hogy ha valamit képkocka sebesség
+dependencia nélkül szeretnétek kiszámolni, akkor azt az értéket csak
+meg kell szorozni a delta változóval. (A delta egy float, amely az 
+előző képkocka óta eltelt időt MÁSODPERCBEN tárolja (relatíve kis szám)).
+
+----
+
+A program futásának pihentetése az SDL_Delay-el:
+
+Viszont nem szabad elfelejteni, hogy kirajzolni, maximum a monitor 
+frissítési rátájával tudunk (vsync-nek hívják), mivel ennél többet 
+úgysem fogunk tudni megjeleníteni.
+
+Természetesen vannak olyanok, akik preferálják, ha kikapcsolható.
+Ha valaki akarja építse bele egy bool-al ezt a funkcionalitást.
+(Természetesen az is működik, ha csak a target fps nagyon nagyra 
+van állítva.)
+
+Azt amúgy nem szabad elfelejteni, hogy több munka elvégeztetése a 
+számítógéppel magasabb áramfogyasztást is eredményez, amely azt jelenti, 
+hogy például egy telefont jóval hamarabb le tudunk meríteni, ha
+sokat fölöslegesen dolgoztatjuk a cput! 
+
+(Például egy limitálatlan üres loop is képes lehet kimaxolni egy cpu core-t!)
+
+Amúgy mostanában telefonokon / laptopokon simán több mint megfelezhetjük 
+az üzemidejét, ha ilyenre nem figyelünk!
+
+Ne feledjük el, hogy az sdl alapú programjaink, mind elindíthatóak telefonokon!
+(És elég sok más platformon. - Ha C++ ba írtátok őket, akkor minden sdl2-által
+támogatott platformon használható lesz a program. - plusz ti is írhattok saját
+SDL platformot /Nem olyan nehéz/.)
+
+Amúgy, ezt tudja alapból az SDL is csinálni, de szemléletesebb, ha mi írjuk meg.
+
+----
+
+Még egy fontos dolog, a main_loop() ról, hogy nem tartalmazza magát a ciklust!
+(Valószínűleg jobb lenne iterate()-nek hívni emiatt, de a hangzatosság
+miatt meghagytam main_loop() nak.)
+
+Erre azért van szükség, mivel az sdl fordítható emscripten-el is,
+és ilyenkor az emscriptennek kell tudnia meghívni a fő ciklus egy iterációját.
+(Az emscripten képes javascriptté fordítani c++ kódot. - böngészőkben fog futni!)
+A böngészők felépítése miatt nem lehet javascript kódba végtelen ciklust 
+csinálni, mert akkor befagy az adott tab.
+
+---------
+
+Ne felehjtsétek el, hogy a statikus változót is definiálni kell a .cpp fájlban!
+
+így: Application* Application::_instance = nullptr;
+
+Szükség lessz az std::chrono könyvtárra! (Elég a .cpp-fájlban is beincludeolni.)
+Így: #include <chrono>
+
+---------
+
+Akkor az Application osztály UML diagramja:
 
 |---------------------------------------------------------------------------------------|
 | class Application                                                                     |
@@ -24,11 +121,9 @@
 | # static Application* _instance                                                       |
 |---------------------------------------------------------------------------------------|
 
+ÉS a függvények pszeudokódjai:
 
-
-Application* Application::_instance = nullptr
-
-#include <chrono>
+------------------------------------------------------------------------------------------
 
 void Application::event(const SDL_Event &current_event):
 	switch (current_event.type):
@@ -36,27 +131,28 @@ void Application::event(const SDL_Event &current_event):
 			running = false
 			break
 	
-    
     scene->event(current_event)
 
+------------------------------------------------------------------------------------------
 
 void Application::update(float delta):
     scene->update(delta)
+
+------------------------------------------------------------------------------------------
 
 void Application::render():
     scene->render()
 
 	Renderer::get_singleton()->present()
 
+------------------------------------------------------------------------------------------
 
 void Application::main_loop():
 	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now()
 
-	//handle input
 	SDL_Event current_event
 	while (SDL_PollEvent(&current_event)):
 		event(current_event)
-	
 
 	update(frame_delta)
 	render()
@@ -78,7 +174,7 @@ void Application::main_loop():
 	 else:
 		frame_delta = t
 	
-
+------------------------------------------------------------------------------------------
 
 Application::Application():
     running = true
@@ -87,10 +183,14 @@ Application::Application():
     scene = nullptr
     _instance = this
 
+------------------------------------------------------------------------------------------
+
 Application::~Application():
     _instance = nullptr
 
+------------------------------------------------------------------------------------------
 
 Application* Application::get_singleton():
     return _instance
 
+------------------------------------------------------------------------------------------
