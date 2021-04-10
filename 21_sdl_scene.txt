@@ -1,4 +1,31 @@
 
+Írjunk egy Scene osztályt.
+
+Erre az osztályra úgy érdemes gondolni, mint egy alprogramrészre / képernyőre.
+
+Játékoknál pl lehetne egy MenuScenea menü, és egy GameScene a játék maga.
+
+Pl notepad programnál elég csak egy ilyet, mondjuk egy MainScene.
+
+De például, ha csináltok a notepadhoz egy splashscreent, akkor az is
+lehetne egy scene, illetve ha csináltok, egy projekt választót, akkor azt is
+érdemes lesz külön scene-ként megírni.
+
+---------
+
+Ez egy abstract osztály, ugyanis van benne be nem implementált virtuális függvény.
+Ez azt jelenti, hogy nem lehet majd belőle példányt létrehozni, csak olyan 
+leszármazottjából, amelyben már minden ilyen függvény implementált.
+
+Más nyelvekben (pl java, vagy c#, ilyen osztály létrehozására létetik egy külön abstract
+kulcsszó. - pl.: abstract class Scene { ... } -)
+
+Ha valakinek úgy jobban tetszik, akkort nyugodtan csinálhat üres implementációkat 
+ezekhez a függvényekhez. Nyilván ennek is van előnye, ugyanis ekkor nem feltétlen 
+kell mindegyik ilyen függvényt leszármazottban létrehozni, csak azt, ami éppen 
+szükséges.
+
+---------
 
 |---------------------------------------------------------------------------------------|
 | class Scene                                                                           |
