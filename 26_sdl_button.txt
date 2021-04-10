@@ -92,7 +92,7 @@ Ez az include kelleni fog: #include <functional>
 
 ------------------------------------------------------------------------------------------
 
-void Button::event(const SDL_Event &ev):
+void event(const SDL_Event &ev):
 	if (state == BUTTON_STATE_OFF):
 		return
 	 
@@ -136,12 +136,12 @@ void Button::event(const SDL_Event &ev):
 		 
 ------------------------------------------------------------------------------------------
 
-void Button::update(float delta):
+void update(float delta):
     return
  
 ------------------------------------------------------------------------------------------
 
-void Button::render():
+void render():
 	if (state == BUTTON_STATE_UP):
 		if (up):
 			up->set_transform(transform)
@@ -164,7 +164,7 @@ void Button::render():
 		 
 ------------------------------------------------------------------------------------------
 
-Button::Button():
+Button():
 	state = BUTTON_STATE_UP
 
 	up = nullptr
@@ -174,7 +174,7 @@ Button::Button():
 
 ------------------------------------------------------------------------------------------ 
 
-Button::~Button():
+~Button():
     return
  
 ------------------------------------------------------------------------------------------

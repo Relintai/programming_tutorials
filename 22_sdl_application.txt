@@ -88,7 +88,7 @@ csinálni, mert akkor befagy az adott tab.
 
 Ne felehjtsétek el, hogy a statikus változót is definiálni kell a .cpp fájlban!
 
-így: Application* Application::_instance = nullptr;
+így: Application* _instance = nullptr;
 
 Szükség lessz az std::chrono könyvtárra! (Elég a .cpp-fájlban is beincludeolni.)
 Így: #include <chrono>
@@ -125,7 +125,7 @@ Akkor az Application osztály UML diagramja:
 
 ------------------------------------------------------------------------------------------
 
-void Application::event(const SDL_Event &current_event):
+void event(const SDL_Event &current_event):
 	switch (current_event.type):
 		case SDL_QUIT:
 			running = false
@@ -135,19 +135,19 @@ void Application::event(const SDL_Event &current_event):
 
 ------------------------------------------------------------------------------------------
 
-void Application::update(float delta):
+void update(float delta):
     scene->update(delta)
 
 ------------------------------------------------------------------------------------------
 
-void Application::render():
+void render():
     scene->render()
 
 	Renderer::get_singleton()->present()
 
 ------------------------------------------------------------------------------------------
 
-void Application::main_loop():
+void main_loop():
 	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now()
 
 	SDL_Event current_event
@@ -176,7 +176,7 @@ void Application::main_loop():
 	
 ------------------------------------------------------------------------------------------
 
-Application::Application():
+Application():
     running = true
     target_fps = 60
 
@@ -185,12 +185,12 @@ Application::Application():
 
 ------------------------------------------------------------------------------------------
 
-Application::~Application():
+~Application():
     _instance = nullptr
 
 ------------------------------------------------------------------------------------------
 
-Application* Application::get_singleton():
+Application* get_singleton():
     return _instance
 
 ------------------------------------------------------------------------------------------

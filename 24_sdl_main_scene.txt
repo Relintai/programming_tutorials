@@ -18,18 +18,14 @@
 |---------------------------------------------------------------------------------------|
 
 
-#include "main_scene.h"
 
-#include "renderer.h"
+void event(const SDL_Event &ev):
+	return
 
+void update(float delta):
+	return
 
-void MainScene::event(const SDL_Event &ev):
-
-
-void MainScene::update(float delta):
-
-
-void MainScene::render():
+void render():
 	Renderer::get_singleton()->clear()
 
 	_camera->viewport.x += _dir
@@ -44,7 +40,7 @@ void MainScene::render():
 	_sprite->draw()
 
 
-MainScene::MainScene():
+MainScene():
 	_camera =  new Camera()
 	_image = new Image("ti.bmp")
 	_texture = new Texture(_image)
@@ -56,7 +52,7 @@ MainScene::MainScene():
 	_dir = 1
 
 
-MainScene::~MainScene():
+~MainScene():
 	_texture->free()
 	_image->free()
 
