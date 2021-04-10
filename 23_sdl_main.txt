@@ -1,30 +1,56 @@
 
+Írjuk meg a main függvényünket, illetve egy applikáció leszármazott osztályt, amelyre szükségünk lesz.
 
-#include "application.h"
-#include "renderer.h"
+Kezdjük az ImplApplication osztállyal.
 
-#include "impl_application.h"
+------------------------------------------------------------------------------------------
 
-Renderer *renderer = nullptr;
-Application *application = nullptr;
+Elég csak headernek csinálni.
+A kódban levő MainScene-t, a következő txt-be készítjük el.
+
+|---------------------------------------------------------------------------------------|
+| class ImplApplication : public Application                                            |
+|---------------------------------------------------------------------------------------|
+| + ImplApplication()                                                                   |
+| + ~ImplApplication()                                                                  |
+|---------------------------------------------------------------------------------------|
+
+Az implementáció:
+
+ImplApplication() : Application():
+    scene = new MainScene()
+
+- itt hívassuk meg az ős konstruktort! -
+
+~ImplApplication():
+    delete scene
+    
+	
+------------------------------------------------------------------------------------------
+
+Folytassuk a main függvénnyel. Itt egy nagyon egyszerű implementáció:
+
+Renderer *renderer = nullptr
+Application *application = nullptr
 
 int main(int argc, char *argv[]):
-	renderer = new Renderer();
-	application = new ImplApplication();
+	renderer = new Renderer()
+	application = new ImplApplication()
 
 	while (application->running):
-		application->main_loop();
+		application->main_loop()
 	
+	delete application
+	delete renderer
 
-	delete application;
-	delete renderer;
-
-	return 0;
-
+	return 0
 
 
+------------------------------------------------------------------------------------------
 
+Main függvény 2.0:
 
+Ey m\k0dik emscripten/el is.
 
 
 #ifdef __EMSCRIPTEN__
@@ -37,27 +63,26 @@ int main(int argc, char *argv[]):
 #include "impl_application.h"
 #define APPLICATION_CLASS ImplApplication
 
-Renderer *renderer = nullptr;
-Application *application = nullptr;
+Renderer *renderer = nullptr
+Application *application = nullptr
 
-void handle_frame():
-	application->main_loop();
+void handle_frame() {
+	application->main_loop()
+}
 
-
-int main(int argc, char *argv[]):
-	renderer = new Renderer();
-	application = new APPLICATION_CLASS();
+int main(int argc, char *argv[]) {
+	renderer = new Renderer()
+	application = new APPLICATION_CLASS()
 
 #ifdef __EMSCRIPTEN__
-	emscripten_set_main_loop(handle_frame, 0, 1);
+	emscripten_set_main_loop(handle_frame, 0, 1)
 #else
 	while (application->running):
-		application->main_loop();
-	
+		application->main_loop()
 #endif
 
-	delete application;
-	delete renderer;
+	delete application
+	delete renderer
 
-	return 0;
-
+	return 0
+}
