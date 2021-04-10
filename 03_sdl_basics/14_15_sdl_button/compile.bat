@@ -23,9 +23,9 @@ if not defined FOUND (
     set GPP="C:\Program Files\CodeBlocks\MinGW\bin\g++"
 )
 
-set SDL2_CFLAGS=-I..\lib\SDL2\include\SDL2
-set SDL2_LIBS=-L..\lib\SDL2\lib -lmingw32 -lSDL2main -lSDL2.dll -luser32 -lgdi32 -lwinmm -ldxguid
-XCOPY ..\lib\SDL2\bin\*.dll bin /D /Y
+set SDL2_CFLAGS=-I..\..\lib\SDL2\include\SDL2
+set SDL2_LIBS=-L..\..\lib\SDL2\lib -lmingw32 -lSDL2main -lSDL2.dll -luser32 -lgdi32 -lwinmm -ldxguid
+XCOPY ..\..\lib\SDL2\bin\*.dll bin /D /Y
 
 
 %GPP% -Wall %VER% -c math.cpp -o obj/math.o
