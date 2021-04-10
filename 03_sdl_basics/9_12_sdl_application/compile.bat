@@ -20,7 +20,7 @@ set GPP=%GPP%
 for %%X in (%GPP%.exe) do (set FOUND=%%~$PATH:X)
 
 if not defined FOUND (
-    set GPP="C:\Program Files\CodeBlocks\MinGW\bin\%GPP%"
+    set GPP="C:\Program Files\CodeBlocks\MinGW\bin\g++"
 )
 
 set SDL2_CFLAGS=-I..\..\lib\SDL2\include\SDL2
