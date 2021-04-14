@@ -31,6 +31,8 @@ XCOPY ..\..\lib\SDL2\bin\*.dll bin /D /Y
 %GPP% -Wall %VER% -c math.cpp -o obj/math.o
 %GPP% -Wall %VER% %SDL2_CFLAGS% -c rect2.cpp -o obj/rect2.o
 %GPP% -Wall %VER% %SDL2_CFLAGS% -c color.cpp -o obj/color.o
+%GPP% -Wall %VER% %SDL2_CFLAGS% -c vector2.cpp -o obj/vector2.o
+%GPP% -Wall %VER% %SDL2_CFLAGS% -c vector3.cpp -o obj/vector3.o
 %GPP% -Wall %VER% -c string.cpp -o obj/string.o
 
 %GPP% -Wall %VER% %SDL2_CFLAGS% -c renderer.cpp -o obj/renderer.o 
@@ -48,4 +50,4 @@ XCOPY ..\..\lib\SDL2\bin\*.dll bin /D /Y
 
 %GPP% -Wall %VER% %SDL2_CFLAGS% -c main.cpp -o obj/main.o
 
-%GPP% -o bin/program obj/math.o obj/rect2.o obj/color.o obj/string.o obj/renderer.o obj/image.o obj/texture.o obj/sprite.o obj/font.o obj/camera.o obj/button.o obj/scene.o obj/application.o obj/main_scene.o   obj/main.o %SDL2_LIBS%
+%GPP% -o bin/program obj/math.o obj/rect2.o obj/color.o obj/vector2.o obj/vector3.o obj/string.o obj/renderer.o obj/image.o obj/texture.o obj/sprite.o obj/font.o obj/camera.o obj/button.o obj/scene.o obj/application.o obj/main_scene.o   obj/main.o %SDL2_LIBS%
