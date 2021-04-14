@@ -40,7 +40,7 @@ XCOPY ..\..\lib\SDL2\bin\*.dll bin /D /Y
 %GPP% -Wall %VER% %SDL2_CFLAGS% -c texture.cpp -o obj/texture.o 
 %GPP% -Wall %VER% %SDL2_CFLAGS% -c sprite.cpp -o obj/sprite.o 
 %GPP% -Wall %VER% %SDL2_CFLAGS% -c camera.cpp -o obj/camera.o 
-%GPP% -Wall %VER% %SDL2_CFLAGS% -c font.cpp -o obj/font.o 
+%GPP% -Wall %VER% %SDL2_CFLAGS% -c true_type_font.cpp -o obj/true_type_font.o 
 
 %GPP% -Wall %VER% %SDL2_CFLAGS% -c button.cpp -o obj/button.o 
 
@@ -50,4 +50,4 @@ XCOPY ..\..\lib\SDL2\bin\*.dll bin /D /Y
 
 %GPP% -Wall %VER% %SDL2_CFLAGS% -c main.cpp -o obj/main.o
 
-%GPP% -o bin/program obj/math.o obj/rect2.o obj/color.o obj/vector2.o obj/vector3.o obj/string.o obj/renderer.o obj/image.o obj/texture.o obj/sprite.o obj/font.o obj/camera.o obj/button.o obj/scene.o obj/application.o obj/main_scene.o   obj/main.o %SDL2_LIBS%
+%GPP% -o bin/program obj/math.o obj/rect2.o obj/color.o obj/vector2.o obj/vector3.o obj/string.o obj/renderer.o obj/image.o obj/texture.o obj/sprite.o obj/true_type_font.o obj/camera.o obj/button.o obj/scene.o obj/application.o obj/main_scene.o   obj/main.o %SDL2_LIBS%

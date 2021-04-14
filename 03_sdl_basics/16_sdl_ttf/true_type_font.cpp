@@ -1,73 +1,75 @@
-#include "font.h"
+#include "true_type_font.h"
 
-int Font::get_style() {
+int TrueTypeFont::get_style() {
 	return TTF_GetFontStyle(_font);
 }
-void Font::set_style(const int style) {
+void TrueTypeFont::set_style(const int style) {
 	TTF_SetFontStyle(_font, style);
 }
 
-int Font::get_outline() {
+int TrueTypeFont::get_outline() {
 	return TTF_GetFontOutline(_font);
 }
-void Font::set_outline(const int outline) {
+void TrueTypeFont::set_outline(const int outline) {
 	TTF_SetFontOutline(_font, outline);
 }
 
-int Font::get_hinting() {
+int TrueTypeFont::get_hinting() {
 	return TTF_GetFontHinting(_font);
 }
-void Font::set_hinting(const int hinting) {
+void TrueTypeFont::set_hinting(const int hinting) {
 	TTF_SetFontHinting(_font, hinting);
 }
 
-int Font::get_height() {
+int TrueTypeFont::get_height() {
 	return TTF_FontHeight(_font);
 }
-int Font::get_ascent() {
+int TrueTypeFont::get_ascent() {
 	return TTF_FontAscent(_font);
 }
-int Font::get_descent() {
+int TrueTypeFont::get_descent() {
 	return TTF_FontDescent(_font);
 }
-int Font::get_line_skip() {
+int TrueTypeFont::get_line_skip() {
 	return TTF_FontLineSkip(_font);
 }
 
-int Font::get_kerning() {
+int TrueTypeFont::get_kerning() {
 	return TTF_GetFontKerning(_font);
 }
-void Font::set_kerning(const int allowed) {
+void TrueTypeFont::set_kerning(const int allowed) {
 	TTF_SetFontKerning(_font, allowed);
 }
 
-long Font::get_faces() {
+long TrueTypeFont::get_faces() {
 	return TTF_FontFaces(_font);
 }
 
-int Font::get_face_is_fixed_width() {
+int TrueTypeFont::get_face_is_fixed_width() {
 	return TTF_FontFaceIsFixedWidth(_font);
 }
-char *Font::get_face_family_name() {
+
+char *TrueTypeFont::get_face_family_name() {
 	return TTF_FontFaceFamilyName(_font);
 }
-char *Font::get_font_face_style_name() {
+
+char *TrueTypeFont::get_face_style_name() {
 	return TTF_FontFaceStyleName(_font);
 }
 
-bool Font::is_glyph_provided(Uint16 ch) {
+bool TrueTypeFont::is_glyph_provided(Uint16 ch) {
 	return TTF_GlyphIsProvided(_font, ch);
 }
 
-Font::GlyphMetric Font::glyph_metrics(Uint16 ch) {
-	Font::GlyphMetric g;
+TrueTypeFont::GlyphMetric TrueTypeFont::glyph_metrics(Uint16 ch) {
+	TrueTypeFont::GlyphMetric g;
 
 	TTF_GlyphMetrics(_font, ch, &g.minx, &g.maxx, &g.miny, &g.maxy, &g.advance);
 
 	return g;
 }
 
-Vector2 Font::get_size_text(const String &text) {
+Vector2 TrueTypeFont::get_size_text(const String &text) {
 	int w;
 	int h;
 
@@ -76,7 +78,7 @@ Vector2 Font::get_size_text(const String &text) {
 	return Vector2(w, h);
 }
 
-Vector2 Font::get_size_utf8(const String &text) {
+Vector2 TrueTypeFont::get_size_utf8(const String &text) {
 	int w;
 	int h;
 
@@ -85,7 +87,7 @@ Vector2 Font::get_size_utf8(const String &text) {
 	return Vector2(w, h);
 }
 
-Image *Font::render_text_solid(const String &text, const Color &fg) {
+Image *TrueTypeFont::render_text_solid(const String &text, const Color &fg) {
 	if (!_font) {
 		return nullptr;
 	}
@@ -93,7 +95,7 @@ Image *Font::render_text_solid(const String &text, const Color &fg) {
 	return new Image(TTF_RenderText_Solid(_font, text.c_str(), fg.to_sdl_color()));
 }
 
-Image *Font::render_utf8_solid(const String &text, const Color &fg) {
+Image *TrueTypeFont::render_utf8_solid(const String &text, const Color &fg) {
 	if (!_font) {
 		return nullptr;
 	}
@@ -101,7 +103,7 @@ Image *Font::render_utf8_solid(const String &text, const Color &fg) {
 	return new Image(TTF_RenderUTF8_Solid(_font, text.c_str(), fg.to_sdl_color()));
 }
 
-Image *Font::render_glyph_solid(const Uint16 ch, const Color &fg) {
+Image *TrueTypeFont::render_glyph_solid(const Uint16 ch, const Color &fg) {
 	if (!_font) {
 		return nullptr;
 	}
@@ -109,7 +111,7 @@ Image *Font::render_glyph_solid(const Uint16 ch, const Color &fg) {
 	return new Image(TTF_RenderGlyph_Solid(_font, ch, fg.to_sdl_color()));
 }
 
-Image *Font::render_text_shaded(const String &text, const Color &fg, const Color &bg) {
+Image *TrueTypeFont::render_text_shaded(const String &text, const Color &fg, const Color &bg) {
 	if (!_font) {
 		return nullptr;
 	}
@@ -117,7 +119,7 @@ Image *Font::render_text_shaded(const String &text, const Color &fg, const Color
 	return new Image(TTF_RenderText_Shaded(_font, text.c_str(), fg.to_sdl_color(), bg.to_sdl_color()));
 }
 
-Image *Font::render_utf8_shaded(const String &text, const Color &fg, const Color &bg) {
+Image *TrueTypeFont::render_utf8_shaded(const String &text, const Color &fg, const Color &bg) {
 	if (!_font) {
 		return nullptr;
 	}
@@ -125,7 +127,7 @@ Image *Font::render_utf8_shaded(const String &text, const Color &fg, const Color
 	return new Image(TTF_RenderUTF8_Shaded(_font, text.c_str(), fg.to_sdl_color(), bg.to_sdl_color()));
 }
 
-Image *Font::render_glyph_shaded(const Uint16 ch, const Color &fg, const Color &bg) {
+Image *TrueTypeFont::render_glyph_shaded(const Uint16 ch, const Color &fg, const Color &bg) {
 	if (!_font) {
 		return nullptr;
 	}
@@ -133,7 +135,7 @@ Image *Font::render_glyph_shaded(const Uint16 ch, const Color &fg, const Color &
 	return new Image(TTF_RenderGlyph_Shaded(_font, ch, fg.to_sdl_color(), bg.to_sdl_color()));
 }
 
-Image *Font::render_text_blended(const String &text, const Color &fg) {
+Image *TrueTypeFont::render_text_blended(const String &text, const Color &fg) {
 	if (!_font) {
 		return nullptr;
 	}
@@ -141,7 +143,7 @@ Image *Font::render_text_blended(const String &text, const Color &fg) {
 	return new Image(TTF_RenderText_Blended(_font, text.c_str(), fg.to_sdl_color()));
 }
 
-Image *Font::render_utf8_blended(const String &text, const Color &fg) {
+Image *TrueTypeFont::render_utf8_blended(const String &text, const Color &fg) {
 	if (!_font) {
 		return nullptr;
 	}
@@ -149,7 +151,7 @@ Image *Font::render_utf8_blended(const String &text, const Color &fg) {
 	return new Image(TTF_RenderUTF8_Blended(_font, text.c_str(), fg.to_sdl_color()));
 }
 
-Image *Font::render_text_blended_wrapped(const String &text, const Color &fg, Uint32 wrap_length) {
+Image *TrueTypeFont::render_text_blended_wrapped(const String &text, const Color &fg, Uint32 wrap_length) {
 	if (!_font) {
 		return nullptr;
 	}
@@ -157,7 +159,7 @@ Image *Font::render_text_blended_wrapped(const String &text, const Color &fg, Ui
 	return new Image(TTF_RenderText_Blended_Wrapped(_font, text.c_str(), fg.to_sdl_color(), wrap_length));
 }
 
-Image *Font::render_utf8_blended_wrapped(const String &text, const Color &fg, Uint32 wrap_length) {
+Image *TrueTypeFont::render_utf8_blended_wrapped(const String &text, const Color &fg, Uint32 wrap_length) {
 	if (!_font) {
 		return nullptr;
 	}
@@ -165,7 +167,7 @@ Image *Font::render_utf8_blended_wrapped(const String &text, const Color &fg, Ui
 	return new Image(TTF_RenderUTF8_Blended_Wrapped(_font, text.c_str(), fg.to_sdl_color(), wrap_length));
 }
 
-Image *Font::render_glyph_blended(const Uint16 ch, const Color &fg) {
+Image *TrueTypeFont::render_glyph_blended(const Uint16 ch, const Color &fg) {
 	if (!_font) {
 		return nullptr;
 	}
@@ -173,7 +175,7 @@ Image *Font::render_glyph_blended(const Uint16 ch, const Color &fg) {
 	return new Image(TTF_RenderGlyph_Blended(_font, ch, fg.to_sdl_color()));
 }
 
-void Font::load(const String &file_name, const int ptsize, const int index) {
+void TrueTypeFont::load(const String &file_name, const int ptsize, const int index) {
 	if (index == -1) {
 		_font = TTF_OpenFont(file_name.c_str(), ptsize);
 	} else {
@@ -181,7 +183,7 @@ void Font::load(const String &file_name, const int ptsize, const int index) {
 	}
 }
 
-void Font::free() {
+void TrueTypeFont::free() {
 	if (_font) {
 		TTF_CloseFont(_font);
 
@@ -189,16 +191,16 @@ void Font::free() {
 	}
 }
 
-Font::Font() {
+TrueTypeFont::TrueTypeFont() {
 	_font = nullptr;
 }
 
-Font::Font(const String &file_name, const int ptsize, const int index) {
+TrueTypeFont::TrueTypeFont(const String &file_name, const int ptsize, const int index) {
 	_font = nullptr;
 
 	load(file_name, ptsize, index);
 }
 
-Font::~Font() {
+TrueTypeFont::~TrueTypeFont() {
 	free();
 }

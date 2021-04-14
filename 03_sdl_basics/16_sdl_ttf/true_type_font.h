@@ -1,5 +1,5 @@
-#ifndef FONT_H
-#define FONT_H
+#ifndef TURE_TYPE_FONT_H
+#define TURE_TYPE_FONT_H
 
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -9,7 +9,7 @@
 #include "vector2.h"
 #include "image.h"
 
-class Font {
+class TrueTypeFont {
 public:
 	struct GlyphMetric {
 		int minx;
@@ -40,7 +40,7 @@ public:
 
 	int get_face_is_fixed_width();
 	char *get_face_family_name();
-	char *get_font_face_style_name();
+	char *get_face_style_name();
 
 	bool is_glyph_provided(Uint16 ch);
 
@@ -69,9 +69,9 @@ public:
 	void load(const String &file_name, const int ptsize, const int index = -1);
 	void free();
 
-	Font();
-	Font(const String &file_name, const int ptsize, const int index = -1);
-	~Font();
+	TrueTypeFont();
+	TrueTypeFont(const String &file_name, const int ptsize, const int index = -1);
+	~TrueTypeFont();
 
 private:
 	TTF_Font *_font;

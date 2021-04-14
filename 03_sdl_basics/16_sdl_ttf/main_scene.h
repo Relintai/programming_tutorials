@@ -8,7 +8,7 @@
 #include "sprite.h"
 #include "camera.h"
 #include "button.h"
-#include "font.h"
+#include "true_type_font.h"
 
 class MainScene : public Scene {
 public:
@@ -29,7 +29,7 @@ public:
 	Camera *_camera;
 	Image *_image;
 	Texture *_texture;
-	Font *_font;
+	TrueTypeFont *_font;
 	Image *_ii;
 	Texture *_iit;
 	Sprite *_s;
