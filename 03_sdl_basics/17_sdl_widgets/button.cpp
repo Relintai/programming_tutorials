@@ -40,10 +40,6 @@ void Button::event(const SDL_Event &ev) {
 				if (on_click) {
 					on_click();
 				}
-
-				if (on_click_member) {
-					on_click_member(cls);
-				}
 			} else {
 				state = BUTTON_STATE_UP;
 			}

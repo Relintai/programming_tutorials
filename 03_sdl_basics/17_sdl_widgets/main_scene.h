@@ -18,13 +18,6 @@ public:
 	void update(float delta);
 	void render();
 
-	//ver a
-	static void on_first_button_clicked();
-
-	//ver b
-	static void on_first_button_clicked_member(void* cls);
-	void member_print();
-
 	MainScene();
 	~MainScene();
 

@@ -25,22 +25,7 @@ void MainScene::render() {
 	b2->render();
 	b3->render();
 
-	//_s->draw();
-	//_s2->draw();
 	_ts->draw();
-}
-
-void MainScene::on_first_button_clicked() {
-	printf("Click!\n");
-}
-
-void MainScene::on_first_button_clicked_member(void* cls) {
-	if (cls) {
-		reinterpret_cast<MainScene*>(cls)->member_print();
-	}
-}
-void MainScene::member_print() {
-	printf("Click Member!\n");
 }
 
 MainScene::MainScene() {
@@ -64,14 +49,8 @@ MainScene::MainScene() {
 	b1->up = new Sprite(_texture);
 	b1->down = new Sprite(_texture, Color(100, 100, 100));
 	b1->hover = new Sprite(_texture, Color(200, 200, 200));
-	
-	//b1->on_click = MainScene::on_first_button_clicked;
 
-	//a verzió lambda 1 (this-nélkül):
-	//b1->on_click = []() -> void { printf("Click lambda!"); };
-
-	//a verzió lambda 2 (this-el):
-	b1->on_click = [this]() -> void { this->member_print(); };
+	//b1->on_click = [this]() -> void { this->member_print(); };
 
 	b2 = new Button();
 	b2->transform = Rect2(0, 110, 100, 100);
@@ -83,8 +62,6 @@ MainScene::MainScene() {
 	b3->up = new Sprite(_texture);
 	b3->down = new Sprite(_texture, Color(100, 100, 100));
 	b3->hover = new Sprite(_texture, Color(200, 200, 200));
-	b3->cls = this;
-	b3->on_click_member = MainScene::on_first_button_clicked_member;
 }
 
 MainScene::~MainScene() {

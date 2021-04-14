@@ -22,14 +22,7 @@ public:
 	void update(float delta);
 	void render();
 
-    //ver a: (Csak statikus fv állítható be rá)
     std::function<void(void)> on_click;
-
-    //ver b: (Képes osztályok függvényeit is meghívni)
-    //Meg lehet oldani sokféleképp, egyik sem annyira szép sajnos
-    //mindneképp érdemes lenne setter mögé rejteni ezeket
-    void* cls;
-    std::function<void(void*)> on_click_member;
 
     Button();
     virtual ~Button();
