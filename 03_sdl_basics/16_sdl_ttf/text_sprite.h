@@ -1,25 +1,21 @@
-#ifndef TEXT_IMAGE_H
-#define TEXT_IMAGE_H
+#ifndef TEXT_SPRITE_H
+#define TEXT_SPRITE_H
 
 #include <SDL.h>
+
+#include "sprite.h"
 
 #include "color.h"
 #include "image.h"
 #include "string.h"
 #include "true_type_font.h"
 #include "vector2.h"
+#include "text_image.h"
 
-class TextImage {
+class TextSprite : public Sprite {
 public:
-	enum TextType {
-		SOLID,
-		SHADED,
-		BLENDED,
-		BLENDED_WRAPPED
-	};
-
-	TextType get_text_type();
-	void set_text_type(const TextType type);
+	TextImage::TextType get_text_type();
+	void set_text_type(const TextImage::TextType type);
 
 	TrueTypeFont *get_font();
 	void set_font(TrueTypeFont *font);
@@ -40,18 +36,14 @@ public:
 
 	void render_image();
 
-	TextImage();
-	TextImage(TrueTypeFont *font);
-	TextImage(TrueTypeFont *font, const String &text, const Color &fg = Color(), const Color &bg = Color());
-	virtual ~TextImage();
+	TextSprite();
+	TextSprite(TrueTypeFont *font);
+	TextSprite(TrueTypeFont *font, const String &text, const Color &fg = Color(), const Color &bg = Color());
+	virtual ~TextSprite();
 
 private:
-	TrueTypeFont *_font;
-	String _text;
-	Image *_image;
-	TextType _text_type;
-	Color _fg;
-	Color _bg;
+    TextImage *_text_image;
+    Texture *_tex;
 };
 
 #endif

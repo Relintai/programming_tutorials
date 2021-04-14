@@ -10,6 +10,7 @@
 #include "button.h"
 #include "true_type_font.h"
 #include "text_image.h"
+#include "text_sprite.h"
 
 class MainScene : public Scene {
 public:
@@ -37,6 +38,8 @@ public:
 	Sprite *_s;
 	Sprite *_s2;
 	TextImage *_teximg;
+	
+	TextSprite *_ts;
 
 	Button *b1;
 	Button *b2;

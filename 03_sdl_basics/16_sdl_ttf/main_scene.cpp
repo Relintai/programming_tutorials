@@ -25,8 +25,9 @@ void MainScene::render() {
 	b2->render();
 	b3->render();
 
-	_s->draw();
-	_s2->draw();
+	//_s->draw();
+	//_s2->draw();
+	_ts->draw();
 }
 
 void MainScene::on_first_button_clicked() {
@@ -54,6 +55,9 @@ MainScene::MainScene() {
 	_teximg = new TextImage(_font, "daDAdadad");
 	_iit2 = new Texture(_teximg->get_image());
 	_s2 = new Sprite(_iit2);
+
+	_ts = new TextSprite(_font, "Aqqqqqqq", Color(255, 0, 0));
+	_ts->set_y(50);
 
 	b1 = new Button();
 	b1->transform = Rect2(0, 0, 100, 100);
@@ -104,6 +108,8 @@ MainScene::~MainScene() {
 	delete _teximg;
 	delete _s2;
 	delete _iit2;
+
+	delete _ts;
 
 	delete _font;
 	delete _texture;

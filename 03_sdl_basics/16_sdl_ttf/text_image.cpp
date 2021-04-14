@@ -84,7 +84,9 @@ TextImage::TextImage(TrueTypeFont *font) {
 	_text_type = BLENDED;
 	_image = new Image();
 }
-TextImage::TextImage(TrueTypeFont *font, const String &text) {
+TextImage::TextImage(TrueTypeFont *font, const String &text, const Color &fg, const Color &bg) {
+	_bg = bg;
+	_fg = fg;
 	_font = font;
 	_text_type = BLENDED;
 	_text = text;
