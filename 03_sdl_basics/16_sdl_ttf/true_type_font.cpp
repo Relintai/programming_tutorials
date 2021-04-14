@@ -87,92 +87,202 @@ Vector2 TrueTypeFont::get_size_utf8(const String &text) {
 	return Vector2(w, h);
 }
 
-Image *TrueTypeFont::render_text_solid(const String &text, const Color &fg) {
+Image *TrueTypeFont::render_text_solid(const String &text, const Color &fg, Image *img) {
 	if (!_font) {
-		return nullptr;
+		if (img) {
+			img->free();
+		}
+
+		return img;
 	}
 
-	return new Image(TTF_RenderText_Solid(_font, text.c_str(), fg.to_sdl_color()));
+	if (!img) {
+		img = new Image();
+	}
+
+	img->set_surface(TTF_RenderText_Solid(_font, text.c_str(), fg.to_sdl_color()));
+
+	return img;
 }
 
-Image *TrueTypeFont::render_utf8_solid(const String &text, const Color &fg) {
+Image *TrueTypeFont::render_utf8_solid(const String &text, const Color &fg, Image *img) {
 	if (!_font) {
-		return nullptr;
+		if (img) {
+			img->free();
+		}
+
+		return img;
 	}
 
-	return new Image(TTF_RenderUTF8_Solid(_font, text.c_str(), fg.to_sdl_color()));
+	if (!img) {
+		img = new Image();
+	}
+
+	img->set_surface(TTF_RenderUTF8_Solid(_font, text.c_str(), fg.to_sdl_color()));
+
+	return img;
 }
 
-Image *TrueTypeFont::render_glyph_solid(const Uint16 ch, const Color &fg) {
+Image *TrueTypeFont::render_glyph_solid(const Uint16 ch, const Color &fg, Image *img) {
 	if (!_font) {
-		return nullptr;
+		if (img) {
+			img->free();
+		}
+
+		return img;
 	}
 
-	return new Image(TTF_RenderGlyph_Solid(_font, ch, fg.to_sdl_color()));
+	if (!img) {
+		img = new Image();
+	}
+
+	img->set_surface(TTF_RenderGlyph_Solid(_font, ch, fg.to_sdl_color()));
+
+	return img;
 }
 
-Image *TrueTypeFont::render_text_shaded(const String &text, const Color &fg, const Color &bg) {
+Image *TrueTypeFont::render_text_shaded(const String &text, const Color &fg, const Color &bg, Image *img) {
 	if (!_font) {
-		return nullptr;
+		if (img) {
+			img->free();
+		}
+
+		return img;
 	}
 
-	return new Image(TTF_RenderText_Shaded(_font, text.c_str(), fg.to_sdl_color(), bg.to_sdl_color()));
+	if (!img) {
+		img = new Image();
+	}
+
+	img->set_surface(TTF_RenderText_Shaded(_font, text.c_str(), fg.to_sdl_color(), bg.to_sdl_color()));
+
+	return img;
 }
 
-Image *TrueTypeFont::render_utf8_shaded(const String &text, const Color &fg, const Color &bg) {
+Image *TrueTypeFont::render_utf8_shaded(const String &text, const Color &fg, const Color &bg, Image *img) {
 	if (!_font) {
-		return nullptr;
+		if (img) {
+			img->free();
+		}
+
+		return img;
 	}
 
-	return new Image(TTF_RenderUTF8_Shaded(_font, text.c_str(), fg.to_sdl_color(), bg.to_sdl_color()));
+	if (!img) {
+		img = new Image();
+	}
+
+	img->set_surface(TTF_RenderUTF8_Shaded(_font, text.c_str(), fg.to_sdl_color(), bg.to_sdl_color()));
+
+	return img;
 }
 
-Image *TrueTypeFont::render_glyph_shaded(const Uint16 ch, const Color &fg, const Color &bg) {
+Image *TrueTypeFont::render_glyph_shaded(const Uint16 ch, const Color &fg, const Color &bg, Image *img) {
 	if (!_font) {
-		return nullptr;
+		if (img) {
+			img->free();
+		}
+
+		return img;
 	}
 
-	return new Image(TTF_RenderGlyph_Shaded(_font, ch, fg.to_sdl_color(), bg.to_sdl_color()));
+	if (!img) {
+		img = new Image();
+	}
+
+	img->set_surface(TTF_RenderGlyph_Shaded(_font, ch, fg.to_sdl_color(), bg.to_sdl_color()));
+
+	return img;
 }
 
-Image *TrueTypeFont::render_text_blended(const String &text, const Color &fg) {
+Image *TrueTypeFont::render_text_blended(const String &text, const Color &fg, Image *img) {
 	if (!_font) {
-		return nullptr;
+		if (img) {
+			img->free();
+		}
+
+		return img;
 	}
 
-	return new Image(TTF_RenderText_Blended(_font, text.c_str(), fg.to_sdl_color()));
+	if (!img) {
+		img = new Image();
+	}
+
+	img->set_surface(TTF_RenderText_Blended(_font, text.c_str(), fg.to_sdl_color()));
+
+	return img;
 }
 
-Image *TrueTypeFont::render_utf8_blended(const String &text, const Color &fg) {
+Image *TrueTypeFont::render_utf8_blended(const String &text, const Color &fg, Image *img) {
 	if (!_font) {
-		return nullptr;
+		if (img) {
+			img->free();
+		}
+
+		return img;
 	}
 
-	return new Image(TTF_RenderUTF8_Blended(_font, text.c_str(), fg.to_sdl_color()));
+	if (!img) {
+		img = new Image();
+	}
+
+	img->set_surface(TTF_RenderUTF8_Blended(_font, text.c_str(), fg.to_sdl_color()));
+
+	return img;
 }
 
-Image *TrueTypeFont::render_text_blended_wrapped(const String &text, const Color &fg, Uint32 wrap_length) {
+Image *TrueTypeFont::render_text_blended_wrapped(const String &text, const Color &fg, Uint32 wrap_length, Image *img) {
 	if (!_font) {
-		return nullptr;
+		if (img) {
+			img->free();
+		}
+
+		return img;
 	}
 
-	return new Image(TTF_RenderText_Blended_Wrapped(_font, text.c_str(), fg.to_sdl_color(), wrap_length));
+	if (!img) {
+		img = new Image();
+	}
+
+	img->set_surface(TTF_RenderText_Blended_Wrapped(_font, text.c_str(), fg.to_sdl_color(), wrap_length));
+
+	return img;
 }
 
-Image *TrueTypeFont::render_utf8_blended_wrapped(const String &text, const Color &fg, Uint32 wrap_length) {
+Image *TrueTypeFont::render_utf8_blended_wrapped(const String &text, const Color &fg, Uint32 wrap_length, Image *img) {
 	if (!_font) {
-		return nullptr;
+		if (img) {
+			img->free();
+		}
+
+		return img;
 	}
 
-	return new Image(TTF_RenderUTF8_Blended_Wrapped(_font, text.c_str(), fg.to_sdl_color(), wrap_length));
+	if (!img) {
+		img = new Image();
+	}
+
+	img->set_surface(TTF_RenderUTF8_Blended_Wrapped(_font, text.c_str(), fg.to_sdl_color(), wrap_length));
+
+	return img;
 }
 
-Image *TrueTypeFont::render_glyph_blended(const Uint16 ch, const Color &fg) {
+Image *TrueTypeFont::render_glyph_blended(const Uint16 ch, const Color &fg, Image *img) {
 	if (!_font) {
-		return nullptr;
+		if (img) {
+			img->free();
+		}
+
+		return img;
 	}
 
-	return new Image(TTF_RenderGlyph_Blended(_font, ch, fg.to_sdl_color()));
+	if (!img) {
+		img = new Image();
+	}
+
+	img->set_surface(TTF_RenderGlyph_Blended(_font, ch, fg.to_sdl_color()));
+
+	return img;
 }
 
 void TrueTypeFont::load(const String &file_name, const int ptsize, const int index) {

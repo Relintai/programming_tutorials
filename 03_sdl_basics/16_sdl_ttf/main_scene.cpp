@@ -26,6 +26,7 @@ void MainScene::render() {
 	b3->render();
 
 	_s->draw();
+	_s2->draw();
 }
 
 void MainScene::on_first_button_clicked() {
@@ -49,6 +50,10 @@ MainScene::MainScene() {
 	_ii = _font->render_text_blended("Adsdsda", Color(255, 0, 0, 255));
 	_iit = new Texture(_ii);
 	_s = new Sprite(_iit);
+
+	_teximg = new TextImage(_font, "daDAdadad");
+	_iit2 = new Texture(_teximg->get_image());
+	_s2 = new Sprite(_iit2);
 
 	b1 = new Button();
 	b1->transform = Rect2(0, 0, 100, 100);
@@ -95,6 +100,10 @@ MainScene::~MainScene() {
 	delete _s;
 	delete _iit;
 	delete _ii;
+
+	delete _teximg;
+	delete _s2;
+	delete _iit2;
 
 	delete _font;
 	delete _texture;

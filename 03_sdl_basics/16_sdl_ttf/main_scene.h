@@ -9,6 +9,7 @@
 #include "camera.h"
 #include "button.h"
 #include "true_type_font.h"
+#include "text_image.h"
 
 class MainScene : public Scene {
 public:
@@ -32,7 +33,10 @@ public:
 	TrueTypeFont *_font;
 	Image *_ii;
 	Texture *_iit;
+	Texture *_iit2;
 	Sprite *_s;
+	Sprite *_s2;
+	TextImage *_teximg;
 
 	Button *b1;
 	Button *b2;

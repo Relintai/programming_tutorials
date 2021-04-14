@@ -25,8 +25,9 @@ g++ -Wall -g $(sdl2-config --cflags) -c image.cpp -o obj/image.o
 g++ -Wall -g $(sdl2-config --cflags) -c texture.cpp -o obj/texture.o 
 g++ -Wall -g $(sdl2-config --cflags) -c sprite.cpp -o obj/sprite.o 
 g++ -Wall -g $(sdl2-config --cflags) -c camera.cpp -o obj/camera.o 
+g++ -Wall -g $(sdl2-config --cflags) -c text_image.cpp -o obj/text_image.o 
 
-g++ -Wall -g $(sdl2-config --cflags) -c true_type_font.cpp -o obj/true_type_font.o 
+g++ -Wall -g $(sdl2-config --cflags) -c true_type_font.cpp -o obj/true_type_font.o
 
 g++ -Wall -g $(sdl2-config --cflags) -c button.cpp -o obj/button.o 
 
@@ -36,5 +37,5 @@ g++ -Wall -g $(sdl2-config --cflags) -c main_scene.cpp -o obj/main_scene.o
 
 g++ -Wall -g $(sdl2-config --cflags) -c main.cpp -o obj/main.o
 
-g++ -o bin/program obj/math.o obj/rect2.o obj/color.o obj/vector2.o obj/vector3.o obj/string.o obj/renderer.o obj/image.o obj/texture.o obj/sprite.o obj/camera.o obj/true_type_font.o obj/button.o obj/scene.o obj/application.o obj/main_scene.o   obj/main.o $(sdl2-config --libs) -lSDL2_ttf 
+g++ -o bin/program obj/math.o obj/rect2.o obj/color.o obj/vector2.o obj/vector3.o obj/string.o obj/renderer.o obj/image.o obj/texture.o obj/sprite.o obj/camera.o obj/text_image.o obj/true_type_font.o obj/button.o obj/scene.o obj/application.o obj/main_scene.o   obj/main.o $(sdl2-config --libs) -lSDL2_ttf 
 

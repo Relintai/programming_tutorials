@@ -221,6 +221,15 @@ SDL_Surface *Image::get_surface() {
 
 void Image::set_surface(SDL_Surface *surface) {
 	_surface = surface;
+
+	if (_surface != nullptr && _surface->format->format != SDL_PIXELFORMAT_RGBA8888) {
+		//Nem ARGB8888 as formátum, konvertáljuk át
+		SDL_Surface *n = SDL_ConvertSurfaceFormat(_surface, SDL_PIXELFORMAT_RGBA8888, 0);
+
+		free();
+
+		_surface = n;
+	}
 }
 
 Image::Image() {
