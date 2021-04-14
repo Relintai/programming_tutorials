@@ -2,7 +2,7 @@
 
 #include <cstdio>
 
-#include "math.h"
+#include "core/math.h"
 
 void Renderer::present() {
 	SDL_RenderPresent(_renderer);

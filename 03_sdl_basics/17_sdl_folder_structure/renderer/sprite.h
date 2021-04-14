@@ -3,9 +3,9 @@
 
 #include <SDL.h>
 
-#include "rect2.h"
+#include "core/rect2.h"
 #include "texture.h"
-#include "color.h"
+#include "core/color.h"
 
 class Sprite {
 public:

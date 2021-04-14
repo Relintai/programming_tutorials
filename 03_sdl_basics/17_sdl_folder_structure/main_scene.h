@@ -3,14 +3,14 @@
 
 #include "scene.h"
 
-#include "image.h"
-#include "texture.h"
-#include "sprite.h"
-#include "camera.h"
-#include "button.h"
-#include "true_type_font.h"
-#include "text_image.h"
-#include "text_sprite.h"
+#include "renderer/image.h"
+#include "renderer/texture.h"
+#include "renderer/sprite.h"
+#include "renderer/camera.h"
+#include "renderer/button.h"
+#include "renderer/true_type_font.h"
+#include "renderer/text_image.h"
+#include "renderer/text_sprite.h"
 
 class MainScene : public Scene {
 public:

@@ -3,11 +3,11 @@
 
 #include <SDL.h>
 
-#include "color.h"
+#include "core/color.h"
 #include "image.h"
-#include "string.h"
+#include "core/string.h"
 #include "true_type_font.h"
-#include "vector2.h"
+#include "core/vector2.h"
 
 class TextImage {
 public:

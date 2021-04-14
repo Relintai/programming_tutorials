@@ -5,7 +5,7 @@
 #include <SDL_ttf.h>
 
 #include "application.h"
-#include "renderer.h"
+#include "renderer/renderer.h"
 
 #include "impl_application.h"
 #define APPLICATION_CLASS ImplApplication

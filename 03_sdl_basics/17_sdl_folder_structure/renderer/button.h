@@ -4,7 +4,7 @@
 
 #include <SDL.h>
 
-#include "rect2.h"
+#include "core/rect2.h"
 #include "sprite.h"
 
 #include <functional>

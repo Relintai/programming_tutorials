@@ -1,10 +1,10 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include "color.h"
-#include "rect2.h"
-#include "string.h"
-#include "vector.h"
+#include "core/color.h"
+#include "core/rect2.h"
+#include "core/string.h"
+#include "core/vector.h"
 #include <SDL.h>
 
 class Image {

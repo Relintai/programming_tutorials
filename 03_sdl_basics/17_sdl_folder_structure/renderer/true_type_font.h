@@ -4,9 +4,9 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 
-#include "color.h"
-#include "string.h"
-#include "vector2.h"
+#include "core/color.h"
+#include "core/string.h"
+#include "core/vector2.h"
 #include "image.h"
 
 class TrueTypeFont {

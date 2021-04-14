@@ -1,7 +1,7 @@
 #include "main_scene.h"
 
-#include "rect2.h"
-#include "renderer.h"
+#include "core/rect2.h"
+#include "renderer/renderer.h"
 
 #include <SDL.h>
 

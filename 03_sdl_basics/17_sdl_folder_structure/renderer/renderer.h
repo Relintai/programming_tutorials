@@ -1,8 +1,8 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include "color.h"
-#include "rect2.h"
+#include "core/color.h"
+#include "core/rect2.h"
 #include "sprite.h"
 #include "texture.h"
 
