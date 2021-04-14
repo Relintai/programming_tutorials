@@ -16,6 +16,8 @@ fi
 g++ -Wall -g -c math.cpp -o obj/math.o
 g++ -Wall -g $(sdl2-config --cflags) -c rect2.cpp -o obj/rect2.o
 g++ -Wall -g $(sdl2-config --cflags) -c color.cpp -o obj/color.o
+g++ -Wall -g $(sdl2-config --cflags) -c vector2.cpp -o obj/vector2.o
+g++ -Wall -g $(sdl2-config --cflags) -c vector3.cpp -o obj/vector3.o
 g++ -Wall -g -c string.cpp -o obj/string.o
 
 g++ -Wall -g $(sdl2-config --cflags) -c renderer.cpp -o obj/renderer.o 
@@ -34,5 +36,5 @@ g++ -Wall -g $(sdl2-config --cflags) -c main_scene.cpp -o obj/main_scene.o
 
 g++ -Wall -g $(sdl2-config --cflags) -c main.cpp -o obj/main.o
 
-g++ -o bin/program obj/math.o obj/rect2.o obj/color.o obj/string.o obj/renderer.o obj/image.o obj/texture.o obj/sprite.o obj/camera.o obj/font.o obj/button.o obj/scene.o obj/application.o obj/main_scene.o   obj/main.o $(sdl2-config --libs) -lSDL2_ttf 
+g++ -o bin/program obj/math.o obj/rect2.o obj/color.o obj/vector2.o obj/vector3.o obj/string.o obj/renderer.o obj/image.o obj/texture.o obj/sprite.o obj/camera.o obj/font.o obj/button.o obj/scene.o obj/application.o obj/main_scene.o   obj/main.o $(sdl2-config --libs) -lSDL2_ttf 
 

@@ -46,7 +46,7 @@ MainScene::MainScene() {
 	_image = new Image("ti.bmp");
 	_texture = new Texture(_image);
 	_font = new Font("./DejaVuSans.ttf", 16);
-	_ii = new Image(_font->render_blended("Adsdsda", Color(255, 0, 0, 255)));
+	_ii = _font->render_text_blended("Adsdsda", Color(255, 0, 0, 255));
 	_iit = new Texture(_ii);
 	_s = new Sprite(_iit);
 
