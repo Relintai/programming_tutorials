@@ -1,2 +1,0 @@
-
-aplication.h, sdl.int.h -> át kellett rakni a #define SDL_MAIN_HANDLED -t androidhoz.
